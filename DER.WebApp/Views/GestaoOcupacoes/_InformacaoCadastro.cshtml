@@ -1,0 +1,269 @@
+﻿@model DER.WebApp.ViewModels.GestaoOcupacoes.GestaoOcupacoesViewModel
+@{
+    ViewBag.Title = "SGFD - Cadastro de Ocupações";
+
+    var htmlAttributes = new Dictionary<string, object>
+    {
+        { "class" , "form-control"},
+        { "data_input", "" },     
+    };    
+    var htmlAttributesClient = new Dictionary<string, object>
+    {
+        { "class" , "form-control"},
+        { "data_input", "" },     
+    };    
+    var htmlAttributesData = new Dictionary<string, object>
+    {
+        { "type" , "date"},
+        { "class" , "form-control"},
+        { "data_input", "" },     
+        { "data_toggle", "tooltip"},     
+        { "title", "DD/MM/AAAA" },     
+        { "min", "1900-01-01" },     
+        { "max", "9999-12-31" },         
+    };
+    var htmlAttributesDataClient = new Dictionary<string, object>(htmlAttributesData);
+    var disabledReadOnly = "";
+    var disabledReadOnlyBtn = "";
+    if (ViewBag.IsUsuarioAdm==false || ViewBag.situacao == "Deferida")
+    {   
+        disabledReadOnly = "disabled=\"disabled\"";
+        htmlAttributes.Add("disabled", "disabled");
+        htmlAttributesData.Add("disabled", "disabled");
+    }
+    if (ViewBag.situacao == "Deferida")
+    {   
+        disabledReadOnlyBtn = "disabled=\"disabled\"";
+        htmlAttributesClient.Add("disabled", "disabled");
+        htmlAttributesDataClient.Add("disabled", "disabled");
+    }
+    var htmlAttributesText = new Dictionary<string, object>(htmlAttributes);
+    htmlAttributesText.Add("maxlength", 50);
+    var htmlAttributesReadOnlyText = new { htmlAttributes=htmlAttributesText};
+    var htmlAttributesReadOnlyCombo = htmlAttributes;
+    var htmlAttributesReadOnlyData = new { htmlAttributes=htmlAttributesData};
+    var htmlAttributesReadOnlyDataClient = new { htmlAttributes=htmlAttributesDataClient};
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <fieldset>
+            @{
+                if (ViewBag.origem == "transferencia")
+                {
+                    <legend>Informações do Cadastro do Sucessor</legend>
+                }
+                else
+                {
+                    <legend>Informações do Cadastro</legend>
+                }
+            }
+            <div class="form-group row">
+                <div class="col-md-3">
+                    @{
+                        if (ViewBag.origem == "transferencia")
+                        {
+                            <label class="col-form-label"> Interessado Sucessor* </label>
+                        }
+                        else
+                        {
+                            <label class="col-form-label"> Interessado * </label>
+                        }
+                    }
+                    @Html.EditorFor(Model => Model.Interessado, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 250, @disabled = true } })
+                    @Html.ValidationMessageFor(m => m.Interessado, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-3" style="top:8px">
+                    <label class="col-form-label"></label>
+                    @if (!ViewBag.SomenteVisualizar)
+                    {
+                        <button class="btn btn-primary center-block" onclick="controller.buscarInteressadosComponent.ModalBuscarInteressado();" type="button" id="btnBuscarInteressado" @disabledReadOnlyBtn>
+                            <i class="fa fa-search"></i>
+                            <span>Buscar Interessado</span>
+                        </button>
+                    }
+                    <div class="modal fade" id="modalBuscarInteressado" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content" style="margin-left:150px; width:800px;">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h3 class="modal-title text-center"><b data-title="">Buscar Interessado Cadastrado</b></h3>
+                                </div>
+                                <form>
+                                    <div class="modal-body form-group form-body">
+                                        <fieldset>
+                                            <legend>Buscar Interessado</legend>
+                                            <div class="form-group row">
+                                                <div class="col-md-6">
+                                                    <label class="col-form-label">Interessado</label>
+                                                    @Html.EditorFor(Model => Model.Interessado, new { htmlAttributes = new { @class = "form-control", @data_input = "", @id = "InteressadoBuscar", @name = "InteressadoBuscar" } })
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label class="col-form-label">Município</label>
+                                                    @Html.DropDownListFor(model => model.MunicipioId, Model.Municipios, "Selecione", new { @class = "form-control", @data_input = "" })
+                                                    @Html.ValidationMessageFor(m => m.MunicipioId, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-6">
+                                                    <label class="col-form-label">CPF / CNPJ</label>
+
+                                                    @if (Model.Id != 0)
+                                                    {
+                                                        if (Model.NaturezaJuridicaId == (int)DER.WebApp.Domain.Models.Enum.NaturezaEnum.PessoaFisica)
+                                                        {
+                                                            @Html.EditorFor(Model => Model.CpfCNPJ, new { htmlAttributes = new { @class = "form-control", @data_mask = "000.000.000-00", @data_input = "", @maxlength = 18, @onkeypress = "mascaraMutuario(this,cpfCnpj)", onchange = "ValidarCNPJ(this,cpfCnpj)" } }) @*, disabled = "disabled"*@
+                                                        }
+                                                        else
+                                                        {
+                                                            @Html.EditorFor(Model => Model.CpfCNPJ, new { htmlAttributes = new { @class = "form-control", @data_mask = "00.000.000/0000-00", @data_input = "", @maxlength = 18, @onkeypress = "mascaraMutuario(this,cpfCnpj)", onchange = "ValidarCNPJ(this,cpfCnpj)" } }) @*, disabled = "disabled"*@
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.EditorFor(Model => Model.CpfCNPJ, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 18, @onkeypress = "mascaraMutuario(this,cpfCnpj)", onchange = "ValidarCNPJ(this,cpfCnpj)" } }) @*, disabled = "disabled"*@
+                                                    }
+
+                                                    @*@Html.ValidationMessageFor(m => m.CpfCNPJ, "", new { @class = "text-danger" })*@
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label class="col-form-label">Estado</label>
+                                                    @Html.DropDownListFor(model => model.EstadoId, Model.Estados, "Selecione", new { @class = "form-control", @data_input = "" })
+                                                    @Html.ValidationMessageFor(m => m.EstadoId, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-6">
+                                                    <label class="col-form-label">Tipo</label>
+                                                    @Html.DropDownListFor(model => model.TipoInteressadoId, Model.TiposInteressados, "Selecione", new { @class = "form-control", @data_input = "" })
+                                                    @Html.ValidationMessageFor(m => m.TipoInteressadoId, "", new { @class = "text-danger" })
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label class="col-form-label">Natureza</label>
+                                                    @Html.DropDownListFor(model => model.NaturezaJuridicaId, Model.NaturezasJuridicas, "Selecione", new { @class = "form-control", @data_input = "" })
+                                                    @Html.ValidationMessageFor(m => m.NaturezaJuridicaId, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <a href="#" class="btn btn-primary right" onclick="controller.buscarInteressadosComponent.PesquisarInteressado();">
+                                                    <i class="fa fa-search"></i>
+                                                    <span>Buscar</span>
+                                                </a>
+                                            </div>
+                                            <div class="list">
+                                                <table class="table table-striped" id="dtConsultaContatos">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">Interessado</th>
+                                                            <th scope="col">Tipo</th>
+                                                            <th scope="col">Natureza</th>
+                                                            <th scope="col">CPF/CNPJ</th>
+                                                            <th scope="col">Opções</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="bodyConsultaContatos"></tbody>
+                                                </table>
+                                            </div>
+                                        </fieldset>
+                                        <fieldset>
+                                            <legend>Interessados Vinculados</legend>
+                                            <div class="list">
+                                                <table class="table table-striped" id="dtAdicionaContatos">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">Interessado</th>
+                                                            <th scope="col">Tipo</th>
+                                                            <th scope="col">Natureza</th>
+                                                            <th scope="col">CPF/CNPJ</th>
+                                                            <th scope="col">Opções</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="bodyAdicionaContatos"></tbody>
+                                                </table>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-primary" data-dismiss="modal" onclick="controller.buscarInteressadosComponent.SalvarInteressado();" type="button"><i class="fa fa-user-plus"></i>Adicionar Interessado</button>
+                                        <button type="button" id="btnFecharInteressados" name="btnFecharInteressados" data-dismiss="modal" class="btn btn-primary">Fechar</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="col-form-label">Regional *</label>
+                    @Html.DropDownListFor(model => model.RegionalId, Model.Regionais, "Selecione", @htmlAttributesClient)
+                    @Html.ValidationMessageFor(m => m.RegionalId, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-3 right">
+                    <label class="col-form-label">Residência de Conservação *</label>
+                    @Html.DropDownListFor(model => model.ResidenciaConservacaoId, Model.ResidenciaConservacoes, "Selecione", @htmlAttributesClient)
+                    @Html.ValidationMessageFor(m => m.ResidenciaConservacaoId, "", new { @class = "text-danger" })
+                </div>
+
+            </div>
+
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <label class="col-form-label">Número do Protocolo de @ViewBag.origemLabel</label>
+                    @Html.EditorFor(Model => Model.NumeroSPDOC, @htmlAttributesReadOnlyText)
+                    @Html.ValidationMessageFor(m => m.NumeroSPDOC, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-3">
+                    <label class="col-form-label">Número do Processo de @ViewBag.origemLabel</label>
+                    @Html.EditorFor(Model => Model.NumeroProcesso, @htmlAttributesReadOnlyText)
+                    @Html.ValidationMessageFor(m => m.NumeroProcesso, "", new { @class = "text-danger" })
+                </div>
+
+                @{
+                    if (ViewBag.origem == "regularizacao")
+                    {
+                        <div class="col-md-3 right">
+                            <label class="col-form-label">Data da Provável Implantação</label>
+                            @Html.EditorFor(Model => Model.DataImplantacao, @htmlAttributesReadOnlyData)
+                            @Html.ValidationMessageFor(m => m.DataImplantacao, "", new { @class = "text-danger" })
+                        </div>
+                    }
+                }
+
+            </div>
+
+            <div class="form-group row">
+                <div class="col-md-3" id="divNumeroContrato">
+                    <label class="col-form-label">Origem da Solicitação *</label>
+                    @Html.DropDownListFor(model => model.OrigemSolicitacaoId, Model.OrigemSolicitacoes, "Selecione", new { @class = "form-control", @data_input = "", @disabled="disabled" })
+                    @Html.ValidationMessageFor(m => m.OrigemSolicitacaoId, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-3">
+                    <label class="col-form-label">Situação da Solicitação *</label>
+                    @Html.DropDownListFor(model => model.SituacaoSolicitacaoId, Model.SituacaoSolitacoes, "Em Análise", new { @class = "form-control", @data_input = "", @disabled="disabled" })
+                    @Html.ValidationMessageFor(m => m.SituacaoSolicitacaoId, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-3">
+                    <label class="col-form-label">Situação da Ocupação</label>
+                    @Html.DropDownListFor(model => model.SituacaoOcupacaoId, Model.SituacaoOcupacoes, "Selecione", @htmlAttributesReadOnlyCombo)
+                    @Html.ValidationMessageFor(m => m.SituacaoOcupacaoId, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-3 right">
+                    <label class="col-form-label">Data da Solicitação *</label>
+                    @Html.EditorFor(Model => Model.DataCadastro, @htmlAttributesReadOnlyDataClient)
+                    @Html.ValidationMessageFor(m => m.DataCadastro, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div hidden>
+                @Html.EditorFor(Model => Model.Id, new { htmlAttributes = new { @class = "form-control", @data_input = "" } })
+            </div>
+
+        </fieldset>
+    </div>
+</div>

@@ -1,0 +1,32 @@
+﻿/*Place all custom styles here*/
+legend {
+    display: block;
+    width: unset;
+    padding: 0;
+    margin-bottom: 0px;
+    font-size: 18px;
+    font-weight: bold;
+    line-height: inherit;
+    color: #333;
+    border: 0;
+    border-bottom: none;
+}
+
+fieldset {
+    padding: .35em .625em .75em;
+    margin: 0 2px;
+    border: 1px solid #ccc;
+}
+
+.checkbox-list {
+    border: 1px solid #ccc;
+    height: 100%;
+    max-height: 400px;
+    padding: 5px;
+    overflow-y: scroll;
+}
+
+.customButton { 
+    color: #fff !important;
+    
+}

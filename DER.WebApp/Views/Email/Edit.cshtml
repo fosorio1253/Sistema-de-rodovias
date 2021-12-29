@@ -1,0 +1,59 @@
+﻿@model DER.WebApp.Domain.Models.Emails
+@{
+
+    ViewBag.Title = "SGFD - Edição de email";
+}
+
+<section class="content">
+    <section class="content-header">
+        <div>
+            <h1>Email</h1>
+            <button type="submit" class="btn btn-primary" onclick="Salvar()" id="btnSalvar">
+                <i class="fa fa-save"></i>
+                <span>Salvar</span>
+            </button>
+            <a href="/Email/List" class="btn btn-primary">
+                <i class="fa fa-arrow-left"></i>
+                <span>Voltar</span>
+            </a>
+        </div>
+
+        <ol class="breadcrumb">
+            <li><i class="fa fa-home"></i><a href="/Home/Index"> Home </a></li>
+            <li><a href="/Email/List">Listar email </a></li>
+        </ol>
+    </section>
+    <section class="jumbotron">
+        @using (Html.BeginForm("Salvar", "Email", FormMethod.Post, new { id = "email" }))
+        {
+            @Html.HiddenFor(model => model.Id, new { data_input = "" })
+            <div class="container">
+                <div class="form-group row">
+                    <label class="col-sm-12">Corpo do email (aceita tags HTML) *</label>
+                    <div class="col-sm-12">
+                        @Html.TextAreaFor(model => model.CorpoEmail, new { @class = "form-control", @maxlength = 50000, @cols = 80, @rows = 10 })
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-12">Destinatário</label>
+                    <div class="col-sm-12">
+                        @Html.TextBoxFor(model => model.Destinatario, new { @class = "form-control", @data_input = "", @maxlength = 50000 })
+                    </div>
+                </div>
+            </div>
+        }
+    </section>
+</section>
+
+<script>
+    function Salvar() {
+        var response = POST("/Email/Update", JSON.stringify({ Id: $('#Id').val(), CorpoEmail: $('#CorpoEmail').val(), Destinatario: $('#Destinatario').val() }));
+        swal({
+            type: 'success',
+            title: 'Sucesso',
+            text: response.message
+        }).then((result) => {
+            window.location.href = "/Email/List";
+        });
+    }
+</script>

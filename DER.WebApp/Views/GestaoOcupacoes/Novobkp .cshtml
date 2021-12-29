@@ -1,0 +1,1652 @@
+﻿@model DER.WebApp.ViewModels.GestaoOcupacoes.GestaoOcupacoesViewModel
+@{
+    ViewBag.Title = "SGFD - Cadastro de Ocupações";
+}
+
+<section class="content">
+    <section class="content-header">
+        <div>
+            <h1>Visualizando Cadastro de Ocupação</h1>
+
+            <button onclick="controller.save()" class="btn btn-primary" id="btnSalvar">
+                <i class="fa fa-save"></i>
+                <span>Salvar</span>
+            </button>
+
+            <a href="/GestaoOcupacoes/List" class="btn btn-primary">
+                <i class="fa fa-arrow-left"></i>
+                <span>Voltar</span>
+            </a>
+
+            <button class="btn btn-primary">
+
+                <i class="fa fa-download"></i>
+                @if (Model.Regulamento != null)
+                {
+                    @Html.ActionLink("Baixar Regulamento Vigente", "DownloadRegulamentoNorma", new { fileName = Model.Regulamento }, new { @class = "customButton" })
+                }
+                else
+                {
+                    <a href="javascript:alert('Entre em contato com o administrador para fazer o Upload do Regulamento!');" class="customButton">Você precisa realizar o Upload do Regulamento Vigente</a>
+                }
+            </button>
+
+            <button class="btn btn-primary">
+                <i class="fa fa-download"></i>
+                @if (Model.Norma != null)
+                {
+                    @Html.ActionLink("Baixar Normas Vigentes", "DownloadRegulamentoNorma", new { fileName = Model.Norma }, new { @class = "customButton" }) }
+                else
+                {
+                    <a href="javascript:alert('Entre em contato com o administrador para fazer o Upload das Normas!');" class="customButton">Você precisa realizar o Upload das Normas Vigentes</a>
+                }
+            </button>
+
+        </div>
+
+        <ol class="breadcrumb">
+            <li><i class="fa fa-home"></i><a href="/Home/Index"> Home </a></li>
+            <li><a href="/GestaoOcupacoes/List">Listar Gestão de Ocupações </a></li>
+            <li class="active"><a> Cadastro </a></li>
+        </ol>
+    </section>
+    <section class="jumbotron">
+
+        @using (Html.BeginForm("Salvar", "GestaoOcupacoes", FormMethod.Post, new { id = "gestaoOcupacoes" }))
+        {
+            <li class="active"><a> Última alteração por: @ViewBag.Usuario em  @ViewBag.DataAtualizacao.</a></li>
+
+
+            <fieldset>
+                <legend>Informações do Cadastro</legend>
+
+                @*<button onclick="HabilitarCampos(event)" class="btn btn-primary right hide" id="btnEditar">
+                        <i class="fa fa-pencil"></i>
+                        <span>Editar</span>
+                    </button>*@
+                <br />
+                <br />
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <div class="form-group row">
+
+                            <div class="col-md-3">
+                                <label class="col-form-label">Interessado *</label>
+                                @Html.EditorFor(Model => Model.Interessado, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 250, @disabled = true } })
+                                @Html.ValidationMessageFor(m => m.Interessado, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="col-md-3" style="top:8px">
+                                <label class="col-form-label"></label>
+                                @if (!ViewBag.SomenteVisualizar)
+                                {
+                                    <button class="btn btn-primary center-block" onclick="controller.buscarInteressadosComponent.ModalBuscarInteressado();" type="button" id="btnBuscarInteressado">
+                                        <i class="fa fa-search"></i>
+                                        <span>Buscar Interessado</span>
+                                    </button>
+                                }
+                                <div class="modal fade" id="modalBuscarInteressado" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                    <div class="modal-dialog modal-lg" role="document">
+                                        <div class="modal-content" style="margin-left:150px; width:800px;">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                <h3 class="modal-title text-center"><b data-title="">Buscar Interessado Cadastrado</b></h3>
+                                            </div>
+                                            <form>
+                                                <div class="modal-body form-group form-body">
+                                                    <fieldset>
+                                                        <legend>Buscar Interessado</legend>
+                                                        <div class="form-group row">
+                                                            <div class="col-md-6">
+                                                                <label class="col-form-label">Interessado</label>
+                                                                @Html.EditorFor(Model => Model.Interessado, new { htmlAttributes = new { @class = "form-control", @data_input = "", @id = "InteressadoBuscar", @name = "InteressadoBuscar" } })
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label class="col-form-label">Município</label>
+                                                                @Html.DropDownListFor(model => model.MunicipioId, Model.Municipios, "Selecione", new { @class = "form-control", @data_input = "" })
+                                                                @Html.ValidationMessageFor(m => m.MunicipioId, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <div class="col-md-6">
+                                                                <label class="col-form-label">CPF / CNPJ</label>
+
+                                                                @if (Model.Id != 0)
+                                                                {
+                                                                    if (Model.NaturezaJuridicaId == (int)DER.WebApp.Domain.Models.Enum.NaturezaEnum.PessoaFisica)
+                                                                    {
+                                                                        @Html.EditorFor(Model => Model.CpfCNPJ, new { htmlAttributes = new { @class = "form-control", @data_mask = "000.000.000-00", @data_input = "", @maxlength = 18, @onkeypress = "mascaraMutuario(this,cpfCnpj)", onchange = "ValidarCNPJ(this,cpfCnpj)" } }) @*, disabled = "disabled"*@
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        @Html.EditorFor(Model => Model.CpfCNPJ, new { htmlAttributes = new { @class = "form-control", @data_mask = "00.000.000/0000-00", @data_input = "", @maxlength = 18, @onkeypress = "mascaraMutuario(this,cpfCnpj)", onchange = "ValidarCNPJ(this,cpfCnpj)" } }) @*, disabled = "disabled"*@
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    @Html.EditorFor(Model => Model.CpfCNPJ, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 18, @onkeypress = "mascaraMutuario(this,cpfCnpj)", onchange = "ValidarCNPJ(this,cpfCnpj)" } }) @*, disabled = "disabled"*@
+                                                                }
+
+                                                                @*@Html.ValidationMessageFor(m => m.CpfCNPJ, "", new { @class = "text-danger" })*@
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label class="col-form-label">Estado</label>
+                                                                @Html.DropDownListFor(model => model.EstadoId, Model.Estados, "Selecione", new { @class = "form-control", @data_input = "" })
+                                                                @Html.ValidationMessageFor(m => m.EstadoId, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <div class="col-md-6">
+                                                                <label class="col-form-label">Tipo</label>
+                                                                @Html.DropDownListFor(model => model.TipoInteressadoId, Model.TiposInteressados, "Selecione", new { @class = "form-control", @data_input = "" })
+                                                                @Html.ValidationMessageFor(m => m.TipoInteressadoId, "", new { @class = "text-danger" })
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label class="col-form-label">Natureza</label>
+                                                                @Html.DropDownListFor(model => model.NaturezaJuridicaId, Model.NaturezasJuridicas, "Selecione", new { @class = "form-control", @data_input = "" })
+                                                                @Html.ValidationMessageFor(m => m.NaturezaJuridicaId, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <a href="#" class="btn btn-primary right" onclick="controller.buscarInteressadosComponent.PesquisarInteressado();">
+                                                                <i class="fa fa-search"></i>
+                                                                <span>Buscar</span>
+                                                            </a>
+                                                        </div>
+                                                        <div class="list">
+                                                            <table class="table table-striped" id="dtConsultaContatos">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th scope="col">Interessado</th>
+                                                                        <th scope="col">Tipo</th>
+                                                                        <th scope="col">Natureza</th>
+                                                                        <th scope="col">CPF/CNPJ</th>
+                                                                        <th scope="col">Opções</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody id="bodyConsultaContatos"></tbody>
+                                                            </table>
+                                                        </div>
+                                                    </fieldset>
+                                                    <fieldset>
+                                                        <legend>Interessados Vinculados</legend>
+                                                        <div class="list">
+                                                            <table class="table table-striped" id="dtAdicionaContatos">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th scope="col">Interessado</th>
+                                                                        <th scope="col">Tipo</th>
+                                                                        <th scope="col">Natureza</th>
+                                                                        <th scope="col">CPF/CNPJ</th>
+                                                                        <th scope="col">Opções</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody id="bodyAdicionaContatos"></tbody>
+                                                            </table>
+                                                        </div>
+                                                    </fieldset>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button class="btn btn-primary" data-dismiss="modal" onclick="controller.buscarInteressadosComponent.SalvarInteressado();" type="button"><i class="fa fa-user-plus"></i>Adicionar Interessado</button>
+                                                    <button type="button" id="btnFecharInteressados" name="btnFecharInteressados" data-dismiss="modal" class="btn btn-primary">Fechar</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="col-form-label">Regional *</label>
+                                @Html.DropDownListFor(model => model.RegionalId, Model.Regionais, "Selecione", new { @class = "form-control", @data_input = "" })
+                                @Html.ValidationMessageFor(m => m.RegionalId, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="col-md-3 right">
+                                <label class="col-form-label">Residência de Conservação *</label>
+                                @Html.DropDownListFor(model => model.ResidenciaConservacaoId, Model.ResidenciaConservacoes, "Selecione", new { @class = "form-control", @data_input = "" })
+                                @Html.ValidationMessageFor(m => m.ResidenciaConservacaoId, "", new { @class = "text-danger" })
+                            </div>
+
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <label class="col-form-label">Número do Protocolo</label>
+                                @Html.EditorFor(Model => Model.NumeroSPDOC, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 50 } })
+                                @Html.ValidationMessageFor(m => m.NumeroSPDOC, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="col-form-label">Número do Processo</label>
+                                @Html.EditorFor(Model => Model.NumeroProcesso, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 50 } })
+                                @Html.ValidationMessageFor(m => m.NumeroProcesso, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="col-md-3 right">
+                                <label class="col-form-label">Data da Provável Implantação</label>
+                                @Html.EditorFor(Model => Model.DataImplantacao, new { htmlAttributes = new { @type = "date", @class = "form-control", @data_input = "", @data_toggle = "tooltip", title = "DD/MM/AAAA", @value = "111111-08-09", @min = "1900-01-01", @max = "9999-12-31" } })
+                                @Html.ValidationMessageFor(m => m.DataImplantacao, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-md-3" id="divNumeroContrato">
+                                <label class="col-form-label">Origem da Solicitação *</label>
+                                @Html.DropDownListFor(model => model.OrigemSolicitacaoId, Model.OrigemSolicitacoes, "Selecione", new { @class = "form-control", @data_input = "" })
+                                @Html.ValidationMessageFor(m => m.OrigemSolicitacaoId, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="col-form-label">Situação da Solicitação *</label>
+                                @Html.DropDownListFor(model => model.SituacaoSolicitacaoId, Model.SituacaoSolitacoes, "Em Análise", new { @class = "form-control", @data_input = "" })
+                                @Html.ValidationMessageFor(m => m.SituacaoSolicitacaoId, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="col-form-label">Situação da Ocupação</label>
+                                @Html.DropDownListFor(model => model.SituacaoOcupacaoId, Model.SituacaoOcupacoes, "Selecione", new { @class = "form-control", @data_input = "" })
+                                @Html.ValidationMessageFor(m => m.SituacaoOcupacaoId, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="col-md-3 right">
+                                <label class="col-form-label">Data da Solicitação *</label>
+                                @Html.EditorFor(Model => Model.DataCadastro, new { htmlAttributes = new { @type = "date", @class = "form-control", @data_input = "", @data_toggle = "tooltip", title = "DD/MM/AAAA", @value = "111111-08-09", @min = "1900-01-01", @max = "9999-12-31" } })
+                                @Html.ValidationMessageFor(m => m.DataCadastro, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div hidden>
+                            @Html.EditorFor(Model => Model.Id, new { htmlAttributes = new { @class = "form-control", @data_input = "" } })
+                        </div>
+                        <br />
+                        <div class="row center-block">
+                            <div class="col-md-12">
+                                <div class="card card-primary card-tabs">
+                                    <div class="card-header p-0 pt-1">
+                                        <ul class="nav nav-tabs" id="gestao-ocupacao-tab" role="tablist">
+                                            <li class="nav-item active">
+                                                <a class="nav-link active" id="gestao-ocupacao-ocupacao-tab" data-toggle="pill" href="#gestao-ocupacao-ocupacao" role="tab" aria-controls="gestao-ocupacao-ocupacao" aria-selected="true">Ocupação *</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" id="gestao-ocupacao-trecho-tab" data-toggle="pill" href="#gestao-ocupacao-trecho" role="tab" aria-controls="gestao-ocupacao-trecho" aria-selected="false">Trecho Solicitado *</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" id="gestao-ocupacao-documentos-tab" data-toggle="pill" href="#gestao-ocupacao-documentos" role="tab" aria-controls="gestao-ocupacao-documentos" aria-selected="false">Documentos *</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" id="gestao-ocupacao-tep-tab" data-toggle="pill" href="#gestao-ocupacao-tep" role="tab" aria-controls="gestao-ocupacao-tep" aria-selected="false">PEP</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" id="gestao-ocupacao-ocorrencias-tab" data-toggle="pill" href="#gestao-ocupacao-ocorrencias" role="tab" aria-controls="gestao-ocupacao-ocorrencias" aria-selected="false">Ocorrências</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" id="gestao-ocupacao-parecer-tab" data-toggle="pill" href="#gestao-ocupacao-parecer" role="tab" aria-controls="gestao-ocupacao-parecer" aria-selected="false">Parecer</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" id="gestao-ocupacao-remuneracao-tab" data-toggle="pill" href="#gestao-ocupacao-remuneracao" role="tab" aria-controls="gestao-ocupacao-remuneracao" aria-selected="false">Remuneração</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" id="gestao-ocupacao-deferimento-tab" data-toggle="pill" href="#gestao-ocupacao-deferimento" role="tab" aria-controls="gestao-ocupacao-deferimento" aria-selected="false">Deferimento</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" id="gestao-ocupacao-notificacao-tab" data-toggle="pill" href="#gestao-ocupacao-notificacao" role="tab" aria-controls="gestao-ocupacao-notificacao" aria-selected="false">Notificações</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="tab-content" id="gestao-ocupacao-tabContent">
+                                            <br />
+
+                                            <div class="tab-pane fade active in" id="gestao-ocupacao-ocupacao" role="tabpanel" aria-labelledby="gestao-ocupacao-ocupacao-tab">
+                                                <div class="col-md-8">
+                                                    <label class="col-form-label">Assunto *</label>
+                                                    @Html.EditorFor(Model => Model.Assunto, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 250 } })
+                                                    @Html.ValidationMessageFor(m => m.Assunto, "", new { @class = "text-danger" })
+
+                                                    <br />
+
+                                                    <label class="col-form-label">Observação</label>
+                                                    @Html.EditorFor(Model => Model.Observacao, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 250 } })
+                                                    @Html.ValidationMessageFor(m => m.Observacao, "", new { @class = "text-danger" })
+                                                </div>
+
+                                            </div>
+
+                                            <div class="tab-pane fade" id="gestao-ocupacao-trecho" role="tabpanel" aria-labelledby="gestao-ocupacao-trecho-tab">
+                                                <div class="list">
+                                                    <button class="btn btn-primary right" onclick="controller.trechosComponent.ModalTrechoAdd();" type="button" id="adicionarTrecho">
+                                                        <i class="fa fa-comment"></i>
+                                                        <span>Adicionar Trecho</span>
+                                                    </button>
+                                                    <br />
+                                                    <br />
+
+                                                    <table class="table table-striped" id="dtTrechos">
+                                                        <thead>
+                                                            <tr>
+                                                                <th scope="col">Trecho</th>
+                                                                <th scope="col">Tipo de Implantação</th>
+                                                                <th scope="col">Tipo de Passagem</th>
+                                                                <th scope="col">Lado</th>
+                                                                <th scope="col">Rodovia</th>
+                                                                <th scope="col">KmInicial</th>
+                                                                <th scope="col">KmFinal</th>
+                                                                <th scope="col">Extensão</th>
+                                                                <th scope="col">Localização</th>
+                                                                <th scope="col">Opções</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="bodyTrecho">
+                                                            @if (Model.ListaTrecho != null && Model.ListaTrecho.Count > 0)
+                                                            {
+                                                                int linha = 0;
+
+                                                                foreach (var item in Model.ListaTrecho)
+                                                                {
+                                                                    string trechoId = "trecho" + @linha;
+                                                                    string lado = "lado" + @linha;
+                                                                    string kmInicialId = "kmInicial" + @linha;
+                                                                    string kmInicial = @item.KmInicial.ToString();
+                                                                    if (!string.IsNullOrEmpty(@item.KmInicialMetragem.ToString())) kmInicial = kmInicial + "+" + @item.KmInicialMetragem.ToString();
+                                                                    string kmFinalId = "kmFinal" + @linha;
+                                                                    string kmFinal = @item.KmFinal.ToString();
+                                                                    if (!string.IsNullOrEmpty(@item.KmFinalMetragem.ToString())) kmFinal = kmFinal + "+" + @item.KmFinalMetragem.ToString();
+                                                                    string extensao = "extensao" + @linha;
+                                                                    <tr>
+                                                                        <td class="leftText"><span id='@trechoId'>@item.Id</span></td>
+                                                                        <td class="leftText"><span id='@item.TipoImplantacao.TipoImplantacaoId'>@item.TipoImplantacao.Nome</span></td>
+                                                                        <td class="leftText"><span id='@item.TipoPassagem.TipoPassagemId'>@item.TipoPassagem.Nome</span></td>
+                                                                        <td class="leftText"><span id='@lado'>@item.Lado.Nome</span></td>
+                                                                        <td class="leftText"><span id='@item.Rodovia.RodoviaId'>@item.Rodovia.Nome</span></td>
+                                                                        <td class="leftText"><span id='@kmInicialId'>@kmInicial</span></td>
+                                                                        <td class="leftText"><span id='@kmFinalId'>@kmFinal</span></td>
+                                                                        <td class="leftText"><span id='@extensao'>@item.Extensao</span></td>
+                                                                        <td class="leftText"><span id='@item.Localizacao.LocalizacaoId'>@item.Localizacao.Nome</span></td>
+                                                                        <td>
+                                                                            <button type='button' onclick="controller.trechosComponent.VisualizarTrecho('@linha')" class="btn btn-link" title="Visualizar"><i class="fa fa-search"></i></button>
+                                                                            <button type='button' onclick="controller.trechosComponent.EditarTrecho('@linha')" class="btn btn-link editarTrecho hide" title="Editar"><i class="fa fa-pencil"></i></button>
+                                                                            <button type='button' onclick='controller.trechosComponent.ExcluirTrecho(@linha);' class='btn btn-link excluirTrecho hide'><i class='fa fa-trash' title='Excluir'></i></button>
+                                                                        </td>
+                                                                    </tr>
+                                                                    linha++;
+                                                                }
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                    <br /><br /><br /><br /><br />
+                                                    <!-- <div class="resumotrecho" style="margin-left:200px; width:550px;"> -->
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="card-body table-responsive p-0">
+                                                                <table class="table table-hover text-nowrap">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th></th>
+                                                                            <th>Faixa de Domínio</th>
+                                                                            <th>Non Aedificandi</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td>Extensão Total da Ocupação Longitudinal</td>
+                                                                            <td id="extTotalDominioLongitudinal">0</td>
+                                                                            <td id="extTotalNonAedificandiLongitudinal">0</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>Extensão Total da Ocupação Transversal</td>
+                                                                            <td id="extTotalDominioTransversal">0</td>
+                                                                            <td id="extTotalNonAedificandiTransversal">0</td>
+                                                                        </tr>
+                                                                        <!-- <tr>
+                                                        <td>Área Total de Ocupação Pontual</td>
+                                                        <td id="extTotalDominioPontual">0</td>
+                                                        <td id="extTotalNonAedificandiPontual">0</td>
+                                                    </tr> -->
+                                                                        <tr>
+                                                                            <td>Extensão Total</td>
+                                                                            <td id="extTotalDominio">0</td>
+                                                                            <td id="extTotalNonAedificandi">0</td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="card-body table-responsive p-0">
+                                                                <table class="table table-hover text-nowrap">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th></th>
+                                                                            <th>Faixa de Domínio</th>
+                                                                            <th>Non Aedificandi</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td>Área Total de Ocupação Pontual</td>
+                                                                            <td id="extTotalDominioPontual">0</td>
+                                                                            <td id="extTotalNonAedificandiPontual">0</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>Área Total de Interferência</td>
+                                                                            <td id="extTotalDominioInterferencia">0</td>
+                                                                            <td id="extTotalNonAedificandiInterferencia">0</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>Área Total</td>
+                                                                            <td id="extTotalDominioPontualInterferencia">0</td>
+                                                                            <td id="extTotalNonAedificandiPontualInterferencia">0</td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- </div> -->
+
+                                                    <div class="modal fade" id="modalTrecho" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                                        <div class="modal-dialog modal-lg" role="document">
+                                                            <div class="modal-content" style="margin-left:100px; width:870px;">
+                                                                <fieldset>
+                                                                    <legend>Adicionar Trecho</legend>
+
+                                                                    <div class="card-header p-0 pt-1" style="margin-left:20px">
+                                                                        <ul class="nav nav-tabs" id="gestao-ocupacao-tab-modal-trecho" role="tablist">
+                                                                            <li class="nav-item active">
+                                                                                <a class="nav-link active" id="gestao-ocupacao-tab-modal-trecho-adicionar" data-toggle="pill" href="#gestao-ocupacao-trecho-adicionar" role="tab" aria-controls="gestao-ocupacao-trecho-adicionar" aria-selected="true">Trecho *</a>
+                                                                            </li>
+                                                                            <li class="nav-item">
+                                                                                <a class="nav-link" id="gestao-ocupacao-tab-modal-interferencia-adicionar" data-toggle="pill" href="#gestao-ocupacao-interferencia-adicionar" role="tab" aria-controls="gestao-ocupacao-interferencia-adicionar" aria-selected="false">Ocupações Pontuais</a>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+
+                                                                    <div class="card-body">
+                                                                        <div class="tab-content" id="gestao-ocupacao-modal-trechotabContent">
+                                                                            <br />
+
+                                                                            <div class="tab-pane fade active in" id="gestao-ocupacao-trecho-adicionar" role="tabpanel" aria-labelledby="gestao-ocupacao-tab-modal-trecho-adicionar">
+
+                                                                                <div class="modal-body form-group form-body">
+                                                                                    <div class="form-group row">
+                                                                                        <div class="col-md-12" style="margin-top:20px">
+                                                                                            <div class="row">
+                                                                                                <p class="col-md-6">
+                                                                                                    @Html.RadioButton("resumotrechorbt", "faixadominio", true)
+                                                                                                    <label>Faixa de Domínio</label>
+                                                                                                </p>
+                                                                                                <p class="col-md-6">
+                                                                                                    @Html.RadioButton("resumotrechorbt", "nonaedificandi")
+                                                                                                    <label>Non Aedificandi</label>
+                                                                                                </p>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="form-group row">
+                                                                                        <div class="col-md-6">
+                                                                                            <label class="col-form-label">Tipo de Ocupação *</label>
+                                                                                            @** @@Html.DropDownListFor(model => model.TipoOcupacaoId, Model.TipoOcupacoesSelectList, "Selecione", new { @class = "form-control", @data_input = "" }) **@
+                                                                                            @Html.DropDownListFor(model => model.TipoOcupacaoId, Enumerable.Empty<SelectListItem>(), "Selecione", new { @class = "form-control", @data_input = "" })
+                                                                                            @Html.ValidationMessageFor(m => m.TipoOcupacaoId, "", new { @class = "text-danger" })
+                                                                                        </div>
+                                                                                    </div>
+
+                                                                                    <div class="form-group row">
+                                                                                        <div class="col-md-3">
+                                                                                            <label class="col-form-label">Rodovia *</label>
+                                                                                            @Html.DropDownListFor(model => model.RodoviaId, Model.Rodovias, "Selecione", new { @class = "form-control", @data_input = "" })
+                                                                                            @Html.ValidationMessageFor(m => m.RodoviaId, "", new { @class = "text-danger" })
+                                                                                        </div>
+                                                                                        <div class="col-md-6">
+                                                                                            <label class="col-form-label">Tipo Implantação *</label>
+                                                                                            @Html.DropDownListFor(model => model.TipoImplantacaoId, Model.TipoImplantacoes, "Selecione", new { @class = "form-control", @data_input = "" })
+                                                                                            @Html.ValidationMessageFor(m => m.TipoImplantacaoId, "", new { @class = "text-danger" })
+                                                                                        </div>
+                                                                                        <div class="col-md-3">
+                                                                                            <label class="col-form-label">Tipo Passagem *</label>
+                                                                                            @Html.DropDownListFor(model => model.TipoPassagemId, Model.TipoPassagens, "Selecione", new { @class = "form-control", @data_input = "" })
+                                                                                            @Html.ValidationMessageFor(m => m.TipoPassagemId, "", new { @class = "text-danger" })
+                                                                                        </div>
+                                                                                    </div>
+
+                                                                                    <div class="form-group row">
+                                                                                        <div class="col-md-4">
+                                                                                            <label class="col-form-label">Km Inicial *</label>
+                                                                                            @Html.EditorFor(Model => Model.KmInicial, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = "7", @min = 0, @placeholder = "000,000" } })
+                                                                                            @Html.ValidationMessageFor(m => m.KmInicial, "", new { @class = "text-danger" })
+                                                                                        </div>
+                                                                                        <div class="col-md-4">
+                                                                                            <label class="col-form-label">Km Final *</label>
+                                                                                            @Html.EditorFor(Model => Model.KmFinal, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = "7", @min = 0, @disabled = true, @placeholder = "000,000" } })
+                                                                                            @Html.ValidationMessageFor(m => m.KmFinal, "", new { @class = "text-danger" })
+                                                                                        </div>
+                                                                                        <div class="col-md-4">
+                                                                                            <label class="col-form-label" id="ExtensaoLabel">Extensão *</label>
+                                                                                            @Html.EditorFor(Model => Model.Extensao, new { htmlAttributes = new { @class = "form-control", @data_input = "", @min = 0, @maxlength = "11", @placeholder = "000,000" } })
+                                                                                            @Html.ValidationMessageFor(m => m.Extensao, "", new { @class = "text-danger" })
+                                                                                        </div>
+
+                                                                                    </div>
+
+                                                                                    <div class="form-group row">
+                                                                                        <div class="col-md-4">
+                                                                                            <label class="col-form-label">Lado *</label>
+                                                                                            @*@Html.EditorFor(Model => Model.Lado, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 50 } })*@
+                                                                                            @Html.DropDownListFor(model => model.LadoId, Model.Lados, "Selecione", new { @class = "form-control", @data_input = "" })
+                                                                                            @Html.ValidationMessageFor(m => m.LadoId, "", new { @class = "text-danger" })
+                                                                                        </div>
+                                                                                        <div class="col-md-4">
+                                                                                            <label class="col-form-label">Altura *</label>
+                                                                                            @Html.EditorFor(Model => Model.Altura, new { htmlAttributes = new { @class = "form-control", @data_input = "", @value = 0 } })
+                                                                                            @Html.ValidationMessageFor(m => m.Altura, "", new { @class = "text-danger" })
+                                                                                        </div>
+
+                                                                                        <div class="col-md-4">
+                                                                                            <label class="col-form-label">Profundidade *</label>
+                                                                                            @Html.EditorFor(Model => Model.Profundidade, new { htmlAttributes = new { @class = "form-control", @data_input = "", @value = 0 } })
+                                                                                            @Html.ValidationMessageFor(m => m.Profundidade, "", new { @class = "text-danger" })
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="modal-footer">
+                                                                                    <button class="btn btn-primary" id="btnAdicionarTrechoInterferencia" onclick="controller.trechosComponent.AdicionarTrechoInterferencia();" type="button"><i class="fa fa-plus"> </i>Adicionar Ocupações Pontuais</button>
+                                                                                    <a href="#" data-toggle="tooltip" title="Se tratam das instalações pontuais, como postes, caixas de inspeção, poços de visitas, estação de controles de pressão, válvulas, ou seja, qualquer objeto que ocupe a faixa de domínio em m²">(?)</a>
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="tab-pane fade" id="gestao-ocupacao-interferencia-adicionar" role="tabpanel" aria-labelledby="gestao-ocupacao-tab-modal-interferencia-adicionar">
+                                                                                <div class="form-group row col-md-12">
+                                                                                    <div class="col-md-3">
+                                                                                        <label class="col-form-label">Tipo de Interferência</label>
+                                                                                        @Html.DropDownListFor(model => model.TipoInterferenciaId, Model.TipoInterferencias, "Selecione", new { @class = "form-control", @data_input = "", @id = "TrechoInterferencia_TipoInterferencia" })
+                                                                                        @Html.ValidationMessageFor(m => m.TipoInterferenciaId, "", new { @class = "text-danger" })
+                                                                                    </div>
+
+                                                                                    <div class="col-md-3">
+                                                                                        <label class="col-form-label">Volume Unitário(m²)</label>
+                                                                                        @Html.EditorFor(Model => Model.TrechoInterferencia.volume_unitario, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = "7" } })
+                                                                                        @Html.ValidationMessageFor(m => m.TrechoInterferencia.volume_unitario, "", new { @class = "text-danger" })
+                                                                                    </div>
+
+                                                                                    <div class="col-md-3">
+                                                                                        <label class="col-form-label">Quantidade</label>
+                                                                                        @Html.EditorFor(Model => Model.TrechoInterferencia.quantidade, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = "7" } })
+                                                                                        @Html.ValidationMessageFor(m => m.TrechoInterferencia.quantidade, "", new { @class = "text-danger" })
+                                                                                    </div>
+
+                                                                                    <div class="col-md-3">
+                                                                                        <label class="col-form-label">Volume Total(m²)</label>
+                                                                                        @Html.EditorFor(Model => Model.TrechoInterferencia.volume_total, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 11, @limit = 11 } })
+                                                                                        @Html.ValidationMessageFor(m => m.TrechoInterferencia.volume_total, "", new { @class = "text-danger" })
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <br />
+                                                                                <div>
+                                                                                    <button class="btn btn-primary" id="btn_cad_trecho_interferencia" style="margin-left:15px" onclick="controller.trechosComponent.cad_trecho_interferencias();" type="button"><i class="fa fa-plus"> </i>Adicionar Interferência</button>
+                                                                                </div>
+                                                                                <br />
+
+                                                                                <div style="height: 150px;overflow-x: hidden;overflow-y: scroll;">
+                                                                                    <table class="table table-striped" id="dtTrechosInterferencia" style="margin-left:10px">
+                                                                                        <thead>
+                                                                                            <tr>
+                                                                                                <th scope="col">Tipo de Interferência</th>
+                                                                                                <th scope="col">Volume Unitário(m²)</th>
+                                                                                                <th scope="col">Quantidade</th>
+                                                                                                <th scope="col">Volume Total(m²)</th>
+                                                                                                <th scope="col">Opções</th>
+                                                                                            </tr>
+                                                                                        </thead>
+                                                                                        <tbody id="bodyTrechoInterferencia">
+                                                                                            @if (Model.ListaTrechoInterferencia != null && Model.ListaTrechoInterferencia.Count > 0)
+                                                                                            {
+                                                                                                int linha = 0;
+
+                                                                                                foreach (var item in Model.ListaTrechoInterferencia)
+                                                                                                {
+
+                                                                                                    string interferenciaId = "interferenciaId" + @linha;
+                                                                                                    string volume = "volume" + @linha;
+                                                                                                    string quantidade = "quantidade" + @linha;
+                                                                                                    string volumetotal = "volumetotal" + @linha;
+                                                                                                    <tr>
+                                                                                                        <td class="leftText"><span id='TipoInterferencia@item.Id'>@item.interferencia_tipo</span></td>
+                                                                                                        <td class="leftText"><span id='Volume@item.Id'>@item.volume_unitario</span></td>
+                                                                                                        <td class="leftText"><span id='Quantidade@item.Id'>@item.quantidade</span></td>
+                                                                                                        <td class="leftText"><span id='VolumeTotal@item.Id'>@item.volume_total</span></td>
+                                                                                                        <td>
+                                                                                                            <button type='button' onclick='controller.trechosComponent.exc_trecho_interferencia(@linha);' class='btn btn-link excluirTrechoInterferencia hide'><i class='fa fa-trash' title='Excluir'></i></button>
+                                                                                                        </td>
+                                                                                                    </tr>
+                                                                                                    linha++;
+                                                                                                }
+                                                                                            }
+                                                                                        </tbody>
+                                                                                    </table>
+                                                                                </div>
+                                                                                <br />
+                                                                                <div class="interferenciaTrecho" style="margin-left: 10px; width: 85%;">
+                                                                                    <fieldset>
+                                                                                        <legend>Resumo das Interferências</legend>
+                                                                                        <div class="card-body table-responsive p-0">
+                                                                                            <table class="table table-hover text-nowrap">
+                                                                                                <thead>
+                                                                                                    <tr>
+                                                                                                        <th>Tipo de Interferência</th>
+                                                                                                        <th>Quantidade de Interferência</th>
+                                                                                                        <th>Volume Total(m²)</th>
+                                                                                                    </tr>
+                                                                                                </thead>
+                                                                                                <tbody id="bodyInterferenciaTrechoTotais">
+                                                                                                    <tr>
+                                                                                                        <td id="resumoIdTipodeInterferencia">Postes</td>
+                                                                                                        <td id="resumoIdQtdInterferencia">8</td>
+                                                                                                        <td id="resumoIdVolumeTotal">11</td>
+                                                                                                    </tr>
+                                                                                                </tbody>
+                                                                                            </table>
+                                                                                        </div>
+                                                                                    </fieldset>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <button class="btn btn-primary" id="btnAdicionarTrecho" onclick="controller.trechosComponent.AdicionarTrecho();" type="button"><i class="fa fa-plus"> </i>Adicionar Trecho</button>
+                                                                            <button class="btn btn-primary" id="btnAlterarTrecho" onclick="controller.trechosComponent.EditarTrechoSalvar();" type="button"><i class="fa fa-plus"> </i>Alterar</button>
+                                                                            <button class="btn btn-primary" data-dismiss="modal" id="btnFecharTrecho" name="btnFecharTrecho" type="button">Fechar</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </fieldset>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="tab-pane fade" id="gestao-ocupacao-tep" role="tabpanel" aria-labelledby="gestao-ocupacao-tep-tab">
+                                                <!--AQUI-->
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="card-body table-responsive p-0">
+                                                            <table id="tablePep" class="table table-hover text-nowrap">
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td><button class="btn btn-primary" id="btnCalcularPep" onclick="CalcularPep()" type="button"><i class="fa fa-money"> </i>Calcular PEP</button></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Data de Emissão da PEP:</td>
+                                                                        <td>@Html.TextBoxFor(model => model.PEP.DataEmissãoPEP, "{0:yyyy-MM-dd}", new { type = "date", @class = "form-control", @data_input = "", @disabled = "disabled" })</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Data do Pagamento:</td>
+                                                                        <td>@Html.TextBoxFor(model => model.PEP.DataPagamento, "{0:yyyy-MM-dd}", new { type = "date", @class = "form-control", @data_input = "", @disabled = "disabled" })</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Data de vencimento:</td>
+                                                                        <td>@Html.TextBoxFor(model => model.PEP.Datavencimento, "{0:yyyy-MM-dd}", new { type = "date", @class = "form-control", @data_input = "", @disabled = "disabled" })</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Valor:</td>
+                                                                        <td>@Html.TextBoxFor(model => model.PEP.Valor, new { type = "decimal", @class = "form-control", @data_input = "", @disabled = "disabled" })</td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="row" style="margin-left:5px;">
+                                                                <div class="col-md-11" style="margin-top:5px;">
+                                                                    <fieldset>
+                                                                        <legend>Anexar comprovante</legend>
+                                                                        <div class="row" style="margin-left:5px;">
+                                                                            <div class="col-sm-4" style="margin-top:5px;">
+                                                                                <button class="btn btn-primary" id="btnAdicionarComprovante" onclick="" type="button"><i class="fa fa-archive"> </i>Selecionar Arquivo</button>
+                                                                            </div>
+                                                                            <div class="col-sm-8" style="margin-top:5px;">
+                                                                                <p id="comprovantePep"></p>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row" style="margin-left:5px;">
+                                                                            <div class="col-sm-4" style="margin-top:5px;">
+                                                                                <button class="btn btn-primary">
+                                                                                    <i class="fa fa-download"></i>
+                                                                                    @if (Model.PEP != null)
+                                                                                    {
+                                                                                        @Html.ActionLink("Baixar boleto", "BaixarBoletoPEP", new { idocupacao = Model.Id }, new { @class = "customButton" })
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <a href="javascript:alert('Dados não preenchidos!');" class="customButton">Você precisa realizar o Upload do Regulamento Vigente</a>
+                                                                                    }
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </fieldset>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="card-body table-responsive p-0">
+                                                            <table id="tablePepFatores" class="table table-hover text-nowrap" style="border: 1px solid black">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th style="background-color:gray">Fatores de calculos da PEP</th>
+                                                                        <th style="background-color:gray"></th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td>Data base calculo:</td>
+                                                                        <td id="dataBaseCalculoPepColumn">
+                                                                            @Html.TextBoxFor(model => model.PEP.dataBaseCalculo, new { type = "text", @class = "form-control", @data_input = "", @disabled = "disabled" })
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>UFESP:</td>
+                                                                        <td id="ufespPepColumn">
+                                                                            @Html.TextBoxFor(model => model.PEP.UFESP, new { type = "decimal", @class = "form-control", @data_input = "", @disabled = "disabled" })
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Extensão da Ocupação Longitudinal - (D):</td>
+                                                                        <td id="extensaoOcupacaoLongitudinalPepColumn">
+                                                                            @Html.TextBoxFor(model => model.PEP.extensaoOcupacaoLongitudinal, new { type = "decimal", @class = "form-control", @data_input = "", @disabled = "disabled" })
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Extensão da Ocupação Transversal - (Y):</td>
+                                                                        <td id="extensaoOcupacaoTransversalPepColumn">
+                                                                            @Html.TextBoxFor(model => model.PEP.extensaoOcupacaoTransversal, new { type = "decimal", @class = "form-control", @data_input = "", @disabled = "disabled" })
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Extensão da Ocupação Pontual - (K):</td>
+                                                                        <td id="extensaoOcupacaoPontualPepColumn">
+                                                                            @Html.TextBoxFor(model => model.PEP.extensaoOcupacaoPontual, new { type = "decimal", @class = "form-control", @data_input = "", @disabled = "disabled" })
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Fator de remuneração - (P):</td>
+                                                                        <td id="fatorRemuneracaoPepColumn">
+                                                                            @Html.TextBoxFor(model => model.PEP.fatorRemuneracao, new { type = "decimal", @class = "form-control", @data_input = "", @disabled = "disabled" })
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+
+                                                        @if (ViewBag.IsUsuarioAdm)
+                                                        {
+                                                            <div class="card-body table-responsive p-0">
+                                                                <table id="tablePepCalculo" class="table table-hover text-nowrap" style="border: 1px solid black">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th style="background-color:gray">Calculo</th>
+                                                                            <th style="background-color:gray"></th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td>Ocupação Longitudinal:</td>
+                                                                            <td id="OcupacaoLongitudinalPepColumn">
+                                                                                @Html.TextBoxFor(model => model.PEP.OcupacaoLongitudinal, new { type = "decimal", @class = "form-control", @data_input = "", @disabled = "disabled" })
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>Ocupação Transversal:</td>
+                                                                            <td id="OcupacaoTransversalPepColumn">
+                                                                                @Html.TextBoxFor(model => model.PEP.OcupacaoTransversal, new { type = "decimal", @class = "form-control", @data_input = "", @disabled = "disabled" })
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>Ocupação Pontual:</td>
+                                                                            <td id="OcupacaoPontualPepColumn">
+                                                                                @Html.TextBoxFor(model => model.PEP.OcupacaoPontual, new { type = "decimal", @class = "form-control", @data_input = "", @disabled = "disabled" })
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>Total Calculado:</td>
+                                                                            <td id="totalCalculadoPepColumn">
+                                                                                @Html.TextBoxFor(model => model.PEP.totalCalculado, new { type = "decimal", @class = "form-control", @data_input = "", @disabled = "disabled" })
+                                                                            </td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="tab-pane fade" id="gestao-ocupacao-ocorrencias" role="tabpanel" aria-labelledby="gestao-ocupacao-ocorrencias-tab">
+                                                <div class="list">
+                                                    <button class="btn btn-primary right" onclick="controller.ocorrenciasComponent.ModalOcorrenciaAdd();" type="button" id="adicionarOcorrencia">
+                                                        <i class="fa fa-comment"></i>
+                                                        <span>Adicionar Ocorrência</span>
+                                                    </button>
+                                                    <br /><br />
+
+                                                    <table class="table table-striped" id="dtOcorrencias">
+                                                        <thead>
+                                                            <tr>
+                                                                <th scope="col">Data da Ocorrência</th>
+                                                                <th scope="col">Autor</th>
+                                                                <th scope="col">Ocorrência</th>
+                                                                <th scope="col">Área</th>
+                                                                <th scope="col" id="opcoesId">Opções</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="bodyOcorrencia">
+                                                            @if (Model.ListaOcorrencias != null && Model.ListaOcorrencias.Count > 0)
+                                                            {
+                                                                int linha = 1;
+
+                                                                foreach (var item in Model.ListaOcorrencias)
+                                                                {
+                                                                    string dataOcorrencia = "dataOcorrencia" + @linha;
+                                                                    string autor = "autor" + @linha;
+                                                                    string area = "area" + @linha;
+                                                                    string ocorrencia = "ocorrencia" + @linha;
+                                                                    <tr>
+                                                                        <td class="leftText"><span id='@dataOcorrencia'>@item.DataOcorrencia</span></td>
+                                                                        <td class="leftText"><span id='@autor'>@item.Autor</span></td>
+                                                                        <td class="leftText"><span id='@ocorrencia'>@item.Ocorrencia</span></td>
+                                                                        <td class="leftText"><span id='@area'>@item.Area</span></td>
+                                                                        <td id="tdOpcoesId">
+                                                                            <button type='button' onclick="controller.ocorrenciasComponent.VisualizarOcorrencia(@linha)" class="btn btn-link visualizarOcorrencia hide" title="Visualizar"><i class="fa fa-search"></i></button>
+                                                                            <button type='button' onclick="controller.ocorrenciasComponent.EditarOcorrencia(@linha)" class="btn btn-link editarOcorrencia hide" title="Editar"><i class="fa fa-pencil"></i></button>
+                                                                            <button type='button' onclick='controller.ocorrenciasComponent.ExcluirOcorrencia(@linha);' class='btn btn-link excluirOcorrencia hide'><i class='fa fa-trash' title='Excluir'></i></button>
+                                                                        </td>
+                                                                    </tr>
+                                                                    linha++;
+                                                                }
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                    <div class="modal fade" id="modalOcorrencia" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                                        <div class="modal-dialog modal-lg" role="document">
+                                                            <div class="modal-content" style="margin-left:200px; width:550px;">
+                                                                <div class="modal-header">
+                                                                </div>
+                                                                <form>
+                                                                    <br />
+                                                                    <fieldset>
+                                                                        <legend>Adicionar Ocorrência</legend>
+                                                                        <div class="modal-body form-group form-body">
+                                                                            <div class="form-group row">
+                                                                                <div class="col-md-12">
+                                                                                    <label class="col-form-label">Área *</label>
+                                                                                    @Html.DropDownListFor(model => model.AreaId, Model.Areas, new { @class = "form-control", @data_input = "" })
+                                                                                    @Html.ValidationMessageFor(m => m.AreaId, "", new { @class = "text-danger" })
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="form-group row">
+                                                                                <div class="col-md-12">
+                                                                                    <label class="col-form-label">Ocorrência *</label>
+                                                                                    @Html.EditorFor(Model => Model.Ocorrencia, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 250 } })
+                                                                                    @*@Html.TextAreaFor(Model => Model.Ocorrencia, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 250 } })*@
+                                                                                    @Html.ValidationMessageFor(m => m.Ocorrencia, "", new { @class = "text-danger" })
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <button class="btn btn-primary" id="btnAdicionarOcorrencia" onclick="controller.ocorrenciasComponent.AdicionarOcorrencia();" type="button"><i class="fa fa-plus"> </i>Adicionar</button>
+                                                                            <button class="btn btn-primary" id="btnAlterarOcorrencia" onclick="controller.ocorrenciasComponent.EditarOcorrenciaSalvar();" type="button"><i class="fa fa-plus"> </i>Alterar</button>
+                                                                            <button class="btn btn-primary" data-dismiss="modal" id="btnFecharOcorrencia" name="btnFecharOcorrencia" type="button">Fechar</button>
+                                                                        </div>
+                                                                    </fieldset>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal fade" id="modalVisualizarOcorrencia" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                                        <div class="modal-dialog modal-lg" role="document">
+                                                            <div class="modal-content" style="margin-left:150px; width:750px;">
+                                                                <div class="modal-header">
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                                    <h3 class="modal-title text-center"><b data-title="">Visualizar Ocorrência</b></h3>
+                                                                </div>
+                                                                <form>
+                                                                    <div class="modal-body form-group form-body">
+                                                                        <div class="form-group row">
+                                                                            <div class="col-md-4">
+                                                                                <label class="col-form-label">Área</label>
+                                                                                @Html.DropDownListFor(model => model.AreaId, Model.Areas, new { @class = "form-control", @data_input = "" })
+                                                                                @Html.ValidationMessageFor(m => m.AreaId, "", new { @class = "text-danger" })
+                                                                            </div>
+
+                                                                            <div class="col-md-4">
+                                                                                <label class="col-form-label">Ocorrência</label>
+                                                                                @Html.EditorFor(Model => Model.Ocorrencia, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 250 } })
+                                                                                @Html.ValidationMessageFor(m => m.Ocorrencia, "", new { @class = "text-danger" })
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" id="btnFecharVisualizarOcorrencia" name="btnFecharVisualizarOcorrencia" data-dismiss="modal" class="btn btn-primary">Fechar</button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="tab-pane fade" id="gestao-ocupacao-documentos" role="tabpanel" aria-labelledby="gestao-ocupacao-documentos-tab">
+                                                <!-- Documentos -->
+                                                @if (!ViewBag.SomenteVisualizar)
+                                                {
+                                                    <button class="btn btn-primary right" onclick="controller.documentosComponent.ModalDocumento();" type="button">
+                                                        <i class="fa fa-book"></i>
+                                                        <span>Adicionar Documento</span>
+                                                    </button>
+                                                    <br /><br />
+                                                }
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="list">
+
+                                                            <table class="table table-striped" id="dtDocumentos">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th scope="col">Documentos</th>
+                                                                        <th scope="col">Arquivo</th>
+                                                                        <th scope="col">Adicionado Por</th>
+                                                                        @*<th scope="col">Adicionado Em</th>*@
+                                                                        @*<th scope="col">Status</th>*@
+                                                                        <th scope="col">Opções</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody id="bodyDocumentos">
+                                                                    @if (Model.ListaDocumentos != null && Model.ListaDocumentos.Count > 0)
+                                                                    {
+                                                                        int linha = 0;
+
+                                                                        foreach (var item in Model.ListaDocumentos)
+                                                                        {
+                                                                            string idId = "id" + @linha;
+                                                                            string documentoId = "documento" + @linha;
+                                                                            string arquivoId = "arquivo" + @linha;
+                                                                            string adicionadoPorId = "adicionadoPor" + @linha;
+                                                                            //string dataAdicionadoId = "dataAdicionado" + @linha;
+                                                                            //string status = "status" + @linha;
+                                                                            string tipoDocumentoId = "tipoDocumentoId" + @linha;
+
+                                                                            <tr>
+                                                                                <td class="leftText hide"><span id='@idId'>@item.Id</span></td>
+                                                                                <td class="leftText"><span id='@documentoId'>@item.Documento</span></td>
+                                                                                <td class="leftText"><span id='@arquivoId'>@item.Arquivo</span></td>
+                                                                                <td class="leftText"><span id='@adicionadoPorId'>@item.AdicionadoPor</span></td>
+                                                                                @*<td class="leftText"><span id='@dataAdicionadoId'>@item.Data</span></td>*@
+                                                                                @*<td class="leftText"><span id='@status'>@item.StatusId</span></td>*@
+                                                                                <td class="leftText hide"><span id='@tipoDocumentoId'>@item.TipoDocumentoId</span></td>
+                                                                                <td>
+                                                                                    <button type='button' onclick='controller.documentosComponent.ExcluirDocumento(@linha);' class='btn btn-link excluirDocumento hide'><i class='fa fa-trash' title='Excluir'></i></button>
+                                                                                    @if (!String.IsNullOrEmpty(item.Arquivo))
+                                                                                    {
+                                                                                        <button type='button' onclick='controller.DownloadArquivo("@item.Arquivo");' class='btn btn-link DownloadArquivoId'><i class='fa fa-download' title='Baixar Arquivo'></i></button>
+                                                                                    }
+                                                                                </td>
+                                                                            </tr>
+                                                                            linha++;
+                                                                        }
+                                                                    }
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal fade" id="modalDocumento" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                                    <div class="modal-dialog modal-lg" role="document">
+                                                        <div class="modal-content" style="margin-left:150px; width:550px;">
+                                                            <div class="modal-header">
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                                <h3 class="modal-title text-center"><b data-title="">Adicionar Documento</b></h3>
+                                                            </div>
+                                                            <form>
+                                                                <br />
+                                                                <div class="modal-body form-group form-body">
+                                                                    <div class="form-group row">
+                                                                        <div class="col-md-12">
+                                                                            <label class="col-form-label">Tipo de Documento</label>
+
+                                                                            @Html.DropDownListFor(model => model.TipoDeDocumentoOcupacaoId, Model.TipoDocumentosOcupacoes, new { @class = "form-control", @data_input = "" })
+                                                                            @Html.ValidationMessageFor(m => m.TipoDeDocumentoOcupacaoId, "", new { @class = "text-danger" })
+                                                                            @*<select id="Documentos" name="Documentos" class="form-control" data-input="" data-val="true" data-val-number="O campo Documentos deve ser um número." data-val-required="Campo Obrigatório"></select>*@
+                                                                            <span class="field-validation-valid text-danger" data-valmsg-for="Documentos" data-valmsg-replace="true"></span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group row">
+                                                                        <div class="col-md-12">
+                                                                            <input type="file" name="DocumentoUpload" id="DocumentoUpload" data-input="" class="form-control" data-val="true" data-val-required="Campo Obrigatório" />
+                                                                            <span class="field-validation-valid text-danger" data-valmsg-for="DocumentoUpload" data-valmsg-replace="true"></span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" onclick="controller.documentosComponent.AdicionarDocumento()" class="btn btn-primary"><i class="fa fa-cloud-upload" title="Enviar"></i> Enviar</button>
+                                                                    <button type="button" id="btnFecharDocumento" name="btnFecharDocumento" data-dismiss="modal" class="btn btn-primary">Fechar</button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="modal fade" id="modalVisualizarDocumento" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                                    <div class="modal-dialog modal-lg" role="document">
+                                                        <div class="modal-content" style="margin-left:150px; width:550px;">
+                                                            <div class="modal-header">
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                                <h3 class="modal-title text-center"><b data-title="">Visualizar Documento</b></h3>
+                                                            </div>
+                                                            <form>
+                                                                <br />
+                                                                <div class="modal-body form-group form-body">
+                                                                    <div class="form-group row">
+                                                                        <div class="col-md-12">
+                                                                            <label class="col-form-label">Tipo de Documento</label>
+
+                                                                            @Html.DropDownListFor(model => model.TipoDeDocumentoOcupacaoId, Model.TipoDocumentosOcupacoes, new { @class = "form-control", @data_input = "" })
+                                                                            @Html.ValidationMessageFor(m => m.TipoDeDocumentoOcupacaoId, "", new { @class = "text-danger" })
+                                                                            @*<select id="Documentos" name="Documentos" class="form-control" data-input="" data-val="true" data-val-number="O campo Documentos deve ser um número." data-val-required="Campo Obrigatório"></select>*@
+                                                                            <span class="field-validation-valid text-danger" data-valmsg-for="Documentos" data-valmsg-replace="true"></span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group row">
+                                                                        <div class="col-md-12">
+                                                                            <input type="file" name="DocumentoUpload" id="DocumentoUpload" data-input="" class="form-control" data-val="true" data-val-required="Campo Obrigatório" />
+                                                                            <span class="field-validation-valid text-danger" data-valmsg-for="DocumentoUpload" data-valmsg-replace="true"></span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" onclick="controller.documentosComponent.AdicionarDocumento()" class="btn btn-primary" type="button"><i class="fa fa-cloud-upload" title="Enviar"></i> Enviar</button>
+                                                                    <button type="button" id="btnFecharDocumento" name="btnFecharDocumento" data-dismiss="modal" class="btn btn-primary">Fechar</button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Fim Documentos -->
+                                            </div>
+
+
+                                            <!-- Parecer -->
+                                            <div class="tab-pane fade" id="gestao-ocupacao-parecer" role="tabpanel" aria-labelledby="gestao-ocupacao-parecer-tab">
+
+                                                <div class="form-group row">
+                                                    <fieldset>
+                                                        <legend>Parecer da Regional</legend>
+                                                        <div class="row">
+                                                            <div class="row">
+                                                                <div class="col-md-11" style="float:left;margin-left:15px;">
+                                                                    @Html.EditorFor(Model => Model.ParecerRegionalObservacao, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 250, @placeholder = "Observação" } })
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-md-3" style="margin-top:5px;">
+                                                                <label class="col-form-label">Data</label>
+                                                                @Html.EditorFor(Model => Model.ParecerRegionalData, new { htmlAttributes = new { @type = "date", @class = "form-control", @data_input = "", @data_toggle = "tooltip", title = "DD/MM/AAAA", @value = "111111-08-09", @min = "1900-01-01", @max = "9999-12-31" } })
+                                                            </div>
+                                                            <div class="col-md-8" style="margin-top:5px;margin-left:27px;">
+                                                                <label class="col-form-label">Documento Regional</label>
+                                                                <input type="file" name="ParecerRegionalDocumentoUpload" id="ParecerRegionalDocumentoUpload" data-input="" class="form-control" data-val="true" />
+                                                                <span class="field-validation-valid text-danger" data-valmsg-for="ParecerRegionalDocumentoUpload" data-valmsg-replace="true"></span>
+                                                                @if (!String.IsNullOrEmpty(@Model.CaminhoArquivoRegional))
+                                                                {
+                                                                    <button type='button' onclick='controller.DownloadArquivo("@Model.CaminhoArquivoRegional");' class='btn btn-link DownloadArquivoId'><i class='fa fa-download' title='Baixar Arquivo'></i></button>
+                                                                }
+                                                            </div>
+
+                                                            <div class="col-md-9">
+                                                                <div class="row">
+                                                                    <div style="float:left;margin-right:15px;margin-left:15px;margin-top:15px;">
+                                                                        <input type="radio" name="ParecerRegionalId" value="1" id="ParecerRegionalFavoravel" />
+                                                                        <label for="ParecerRegionalFavoravel">Favorável</label>
+                                                                    </div>
+                                                                    <div style="float:left;margin-right:15px;margin-top:15px;">
+                                                                        <input type="radio" name="ParecerRegionalId" value="2" id="ParecerRegionalExcepcionalidade" />
+                                                                        <label for="ParecerRegionalExcepcionalidade">Favorável com Excepcionalidade</label>
+                                                                    </div>
+                                                                    <div style="float:left;margin-top:15px;">
+                                                                        <input type="radio" name="ParecerRegionalId" value="3" id="ParecerRegionalDesfavoravel" />
+                                                                        <label for="ParecerRegionalDesfavoravel">Desfavorável</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </fieldset>
+                                                </div>
+
+                                                <br />
+                                                <div class="form-group row">
+                                                    <fieldset>
+                                                        <legend>Parecer da Diretoria de Engenharia</legend>
+                                                        <div class="row">
+                                                            <div class="row">
+                                                                <div class="col-md-11" style="float:left;margin-left:15px;">
+                                                                    @Html.EditorFor(Model => Model.ParecerDiretoriaEngenhariaObservacao, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 250, @placeholder = "Observação" } })
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-md-3">
+                                                                <label class="col-form-label">Data</label>
+                                                                @Html.EditorFor(Model => Model.ParecerDiretoriaEngenhariaData, new { htmlAttributes = new { @type = "date", @class = "form-control", @data_input = "", @data_toggle = "tooltip", title = "DD/MM/AAAA", @value = "111111-08-09", @min = "1900-01-01", @max = "9999-12-31" } })
+                                                            </div>
+                                                            <div class="col-md-8" style="margin-top:5px;margin-left:27px;">
+                                                                <label class="col-form-label">Documento Engenharia</label>
+                                                                <input type="file" name="ParecerDiretoriaEngenhariaDocumentoUpload" id="ParecerDiretoriaEngenhariaDocumentoUpload" data-input="" class="form-control" data-val="true" />
+                                                                <span class="field-validation-valid text-danger" data-valmsg-for="ParecerDiretoriaEngenhariaDocumentoUpload" data-valmsg-replace="true"></span>
+                                                                @if (!String.IsNullOrEmpty(@Model.CaminhoArquivoDiretoria))
+                                                                {
+                                                                    <button type='button' onclick='controller.DownloadArquivo("@Model.CaminhoArquivoDiretoria");' class='btn btn-link DownloadArquivoId'><i class='fa fa-download' title='Baixar Arquivo'></i></button>
+                                                                }
+                                                            </div>
+
+                                                            <div class="col-md-9">
+                                                                <div class="row">
+                                                                    <div style="float:left;margin-right:15px;margin-left:15px;margin-top:15px;">
+                                                                        <input type="radio" name="ParecerDiretoriaEngenhariaId" value="1" id="ParecerDiretoriaFavoravel" />
+                                                                        <label for="ParecerDiretoriaFavoravel">Favorável</label>
+                                                                    </div>
+                                                                    <div style="float:left;margin-right:15px;margin-top:15px;">
+                                                                        <input type="radio" name="ParecerDiretoriaEngenhariaId" value="2" id="ParecerDiretoriaExcepcionalidade" />
+                                                                        <label for="ParecerDiretoriaExcepcionalidade">Favorável com Excepcionalidade</label>
+                                                                    </div>
+                                                                    <div style="float:left;margin-top:15px;">
+                                                                        <input type="radio" name="ParecerDiretoriaEngenhariaId" value="3" id="ParecerDiretoriaDesfavoravel" />
+                                                                        <label for="ParecerDiretoriaDesfavoravel">Desfavorável</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </fieldset>
+                                                </div>
+                                                <br />
+
+                                                <div class="form-group row">
+                                                    <fieldset>
+                                                        <legend>Parecer da Coordenadoria de Operações</legend>
+                                                        <div class="row">
+                                                            <div class="row">
+                                                                <div class="col-md-11" style="float:left;margin-left:15px;">
+                                                                    @Html.EditorFor(Model => Model.ParecerCoordenadoriaOperacoesObservacao, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 250, @placeholder = "Observação" } })
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-md-3">
+                                                                <label class="col-form-label">Data</label>
+                                                                @Html.EditorFor(Model => Model.ParecerCoordenadoriaOperacoesData, new { htmlAttributes = new { @type = "date", @class = "form-control", @data_input = "", @data_toggle = "tooltip", title = "DD/MM/AAAA", @value = "111111-08-09", @min = "1900-01-01", @max = "9999-12-31" } })
+                                                            </div>
+                                                            <div class="col-md-8" style="margin-top:5px;margin-left:27px;">
+                                                                <label class="col-form-label">Documento Coordenadoria</label>
+                                                                <input type="file" name="ParecerCoordenadoriaDocumentoUpload" id="ParecerCoordenadoriaDocumentoUpload" data-input="" class="form-control" data-val="true" />
+                                                                <span class="field-validation-valid text-danger" data-valmsg-for="ParecerCoordenadoriaDocumentoUpload" data-valmsg-replace="true"></span>
+                                                                @if (!String.IsNullOrEmpty(@Model.CaminhoArquivoCoordenadoria))
+                                                                {
+                                                                    <button type='button' onclick='controller.DownloadArquivo("@Model.CaminhoArquivoCoordenadoria");' class='btn btn-link DownloadArquivoId'><i class='fa fa-download' title='Baixar Arquivo'></i></button>
+                                                                }
+                                                            </div>
+
+                                                            <div class="col-md-9">
+                                                                <div class="row">
+                                                                    <div style="float:left;margin-right:15px;margin-left:15px;margin-top:15px;">
+                                                                        <input type="radio" name="ParecerCoordenadoriaOperacoesId" value="1" id="ParecerCoordenadoriaFavoravel" />
+                                                                        <label for="ParecerCoordenadoriaFavoravel">Favorável</label>
+                                                                    </div>
+                                                                    <div style="float:left;margin-right:15px;margin-top:15px;">
+                                                                        <input type="radio" name="ParecerCoordenadoriaOperacoesId" value="2" id="ParecerCoordenadoriaExcepcionalidade" />
+                                                                        <label for="ParecerCoordenadoriaExcepcionalidade">Favorável com Excepcionalidade</label>
+                                                                    </div>
+                                                                    <div style="float:left;margin-top:15px;">
+                                                                        <input type="radio" name="ParecerCoordenadoriaOperacoesId" value="3" id="ParecerCoordenadoriaDesfavoravel" />
+                                                                        <label for="ParecerCoordenadoriaDesfavoravel">Desfavorável</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </fieldset>
+                                                </div>
+                                                <br />
+
+                                                <div class="form-group row">
+                                                    <fieldset>
+                                                        <legend>Parecer da Faixa de Domínio</legend>
+                                                        <div class="row">
+                                                            <div class="row">
+                                                                <div class="col-md-11" style="float:left;margin-left:15px;">
+                                                                    @Html.EditorFor(Model => Model.ParecerFaixaDominioObservacao, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 250, @placeholder = "Observação" } })
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-md-3">
+                                                                <label class="col-form-label">Data</label>
+                                                                @Html.EditorFor(Model => Model.ParecerFaixaDominioData, new { htmlAttributes = new { @type = "date", @class = "form-control", @data_input = "", @data_toggle = "tooltip", title = "DD/MM/AAAA", @value = "111111-08-09", @min = "1900-01-01", @max = "9999-12-31" } })
+                                                            </div>
+                                                            <div class="col-md-8" style="margin-top:5px;margin-left:27px;">
+                                                                <label class="col-form-label">Documento Faixa de Domínio</label>
+                                                                <input type="file" name="ParecerFaixaDominioDocumentoUpload" id="ParecerFaixaDominioDocumentoUpload" data-input="" class="form-control" data-val="true" />
+                                                                <span class="field-validation-valid text-danger" data-valmsg-for="ParecerFaixaDominioDocumentoUpload" data-valmsg-replace="true"></span>
+                                                                @if (!String.IsNullOrEmpty(@Model.CaminhoArquivoFaixaDominio))
+                                                                {
+                                                                    <button type='button' onclick='controller.DownloadArquivo("@Model.CaminhoArquivoFaixaDominio");' class='btn btn-link DownloadArquivoId'><i class='fa fa-download' title='Baixar Arquivo'></i></button>
+                                                                }
+                                                            </div>
+
+                                                            <div class="col-md-9">
+                                                                <div class="row">
+                                                                    <div style="float:left;margin-right:15px;margin-left:15px;margin-top:15px;">
+                                                                        <input type="radio" name="ParecerFaixaDominioId" value="1" id="ParecerFaixaDominioFavoravel" />
+                                                                        <label for="ParecerFaixaDominioFavoravel">Favorável</label>
+                                                                    </div>
+                                                                    <div style="float:left;margin-right:15px;margin-top:15px;">
+                                                                        <input type="radio" name="ParecerFaixaDominioId" value="2" id="ParecerFaixaDominioExcepcionalidade" />
+                                                                        <label for="ParecerFaixaDominioExcepcionalidade">Favorável com Excepcionalidade</label>
+                                                                    </div>
+                                                                    <div style="float:left;margin-top:15px;">
+                                                                        <input type="radio" name="ParecerFaixaDominioId" value="3" id="ParecerFaixaDominioDesfavoravel" />
+                                                                        <label for="ParecerFaixaDominioDesfavoravel">Desfavorável</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </fieldset>
+                                                </div>
+
+                                            </div>
+                                            <!-- Fim Parecer -->
+
+                                            <div class="tab-pane fade" id="gestao-ocupacao-deferimento" role="tabpanel" aria-labelledby="gestao-ocupacao-deferimento-tab">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <label class="col-form-label">Data da Assinatura</label>
+                                                        @Html.EditorFor(Model => Model.Deferimento.DataAssinatura, new { htmlAttributes = new { @type = "date", @class = "form-control", @data_input = "", @data_toggle = "tooltip", title = "DD/MM/AAAA", @value = "111111-08-09", @min = "1900-01-01", @max = "9999-12-31" } })
+                                                    </div>
+                                                </div>
+                                                <br />
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <label class="col-form-label">Número do Termo</label>
+                                                        @Html.EditorFor(Model => Model.Deferimento.NumeroProcesso, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 250 } })
+                                                        @Html.ValidationMessageFor(m => m.Deferimento.NumeroProcesso, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                                <br />
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <label class="col-form-label">Data do Despacho Autorizativo/Termo</label>
+                                                        @Html.EditorFor(Model => Model.Deferimento.DataDespachoAutorizativo, new { htmlAttributes = new { @type = "date", @class = "form-control", @data_input = "", @data_toggle = "tooltip", title = "DD/MM/AAAA", @value = "111111-08-09", @min = "1900-01-01", @max = "9999-12-31", onblur = "controller.validarDatasParecer();" } })
+                                                    </div>
+                                                </div>
+                                                <br />
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <label class="col-form-label">Data da Publicação</label>
+                                                        @Html.EditorFor(Model => Model.Deferimento.DataPublicacao, new { htmlAttributes = new { @type = "date", @class = "form-control", @data_input = "", @data_toggle = "tooltip", title = "DD/MM/AAAA", @value = "111111-08-09", @min = "1900-01-01", @max = "9999-12-31" } })
+                                                    </div>
+                                                </div>
+                                                <br />
+                                                <div class="modal-body form-group form-body col-md-6">
+                                                    <fieldset>
+                                                        <legend>Termo Anexado</legend>
+                                                        <div class="form-group row">
+                                                            <div class="col-md-10">
+                                                                <input type="file" name="TermoAnexadoDocumentoUpload" id="TermoAnexadoDocumentoUpload" data-input="" class="form-control" />
+                                                                @if (@Model.Deferimento != null && !String.IsNullOrEmpty(@Model.Deferimento.CaminhoArquivo))
+                                                                {
+                                                                    <button type='button' onclick='controller.DownloadArquivo("@Model.Deferimento.CaminhoArquivo");' class='btn btn-link DownloadArquivoId'><i class='fa fa-download' title='Baixar Arquivo'></i></button>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                        @*<button type="button" data-dismiss="modal" onclick="BaixarTermo()" id="btnBaixarTermo" class="btn btn-primary" type="button"><i class="fa fa-download" title="Enviar"></i> Baixar Termo</button>*@
+
+                                                    </fieldset>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="tab-pane fade" id="gestao-ocupacao-notificacao" role="tabpanel" aria-labelledby="gestao-ocupacao-notificacao-tab">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <label class="col-form-label">Tipo notificação</label><br />
+                                                        <select name="notificacao" id="notificacaoSelect" class="form-control" onchange="setEmailContent()">
+                                                            <option value="branco">Em branco</option>
+                                                            <option value="at">Análise Técnica</option>
+                                                            <option value="arq">Arquivamento</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <br />
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <label class="col-form-label">Assunto</label>
+                                                        <input type="text" class="form-control" id="emailAssunto" />
+                                                    </div>
+                                                </div>
+                                                <br />
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <label class="col-form-label">Conteúdo</label>
+                                                        <textarea class="form-control" id="emailConteudo" rows="15" cols="120"></textarea>
+                                                    </div>
+                                                </div>
+                                                <br />
+                                                <button type='button' onclick='enviarEmail()' class='btn btn-primary'><i class='fa fa-paper-plane' title='Enviar'></i>Enviar</button>
+
+                                            </div>
+
+
+                                            <div class="tab-pane fade" id="gestao-ocupacao-remuneracao" role="tabpanel" aria-labelledby="gestao-ocupacao-remuneracao-tab">
+                                                <!--AQUI-->
+                                                <div class="card-body table-responsive p-0">
+                                                    <table id="tableRemuneracao" class="table table-hover text-nowrap" style="border: 1px solid black">
+                                                        <thead>
+                                                            <tr>
+                                                                <th style="background-color:gray">Data</th>
+                                                                <th style="background-color:gray">Valor</th>
+                                                                <th style="background-color:gray">Descrição</th>
+                                                                <th style="background-color:gray">Status</th>
+                                                                <th style="background-color:gray">Print</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @if (Model.Remuneracao != null)
+                                                            {
+                                                                foreach (var item in Model.Remuneracao)
+                                                                {
+                                                                    <tr>
+                                                                        <td id="dtRemuneracao">
+                                                                            @Html.TextBoxFor(x => item.DataRemuneracao, "{0:yyyy-MM-dd}", new { type = "date", @class = "form-control", @data_input = "", @disabled = "disabled" })
+                                                                        </td>
+                                                                        <td id="valRemuneracao">
+                                                                            @Html.TextBoxFor(x => item.ValorRemuneracao, new { @class = "form-control", @data_input = "", @maxlength = 250, @disabled = "disabled" })
+                                                                        </td>
+                                                                        <td id="valDescricao">
+                                                                            @Html.TextBoxFor(x => item.Descricao, new { @class = "form-control", @data_input = "", @maxlength = 250, @disabled = "disabled" })
+                                                                        </td>
+                                                                        <td id="valStatus">
+                                                                            @Html.TextBoxFor(x => item.Status, new { @class = "form-control", @data_input = "", @maxlength = 250, @disabled = "disabled" })
+                                                                        </td>
+                                                                        <td>
+                                                                            @if (item.Liberado)
+                                                                            {
+                                                                                <button class="btn btn-primary">
+                                                                                    <i class="fa fa-download"></i>
+                                                                                    @Html.ActionLink("Imprimir", "BaixarBoletoRemuneracao", new { idocupacao = @Model.Id, idremuneracao = item.IdGestaoOcupacoesRemuneracao, Liberado = item.Liberado }, new { @class = "customButton" })
+                                                                                </button>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                if (ViewBag.IsUsuarioAdm)
+                                                                                {
+                                                                                    <button class="btn btn-primary">
+                                                                                        <i class="fa fa-download"></i>
+                                                                                        @Html.ActionLink("Liberar", "LiberarBoletoRemuneracao", new { idocupacao = @Model.Id, idremuneracao = item.IdGestaoOcupacoesRemuneracao }, new { @class = "customButton" })
+                                                                                    </button>
+                                                                                }
+                                                                            }
+                                                                        </td>
+                                                                    </tr>
+                                                                }
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <div class="row center-block">
+                            <hr />
+                            <fieldset>
+                                <legend>Retificações</legend>
+                                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="false">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading" role="tab" id="headingOne">
+                                            <h2 class="panel-title">
+                                                <a role="button" data-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                                    Ret-Rati 01 teste
+                                                </a>
+                                                <button class="btn btn-success float-right" id="btnRetificar" onclick="" type="button">
+                                                    <i class="fa fa-plus"> </i>Retificar
+                                                </button>
+                                            </h2>
+                                           
+                                        </div>
+                                        <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                                            <div class="panel-body">
+                                                @{
+                                                    @Html.Partial(
+                                                      "_RetiRati",
+                                                      new ViewDataDictionary(this.Vi‌​ewData) {
+                                                        {
+                                                          "hi", "hello"
+                                                        },
+                                                        {
+                                                          "modelDesejada", Model.Assunto
+                                                        }
+                                                      }
+                                                    );;
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading" role="tab" id="headingTwo">
+                                            <h4 class="panel-title">
+                                                <a class="collapsed" role="button" data-toggle="collapse" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                                    Ret-Rati 02 teste
+                                                </a>
+                                            </h4>
+                                        </div>
+                                        <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                                            <div class="panel-body">
+                                                @{
+                                                    @Html.Partial(
+                                                      "_RetiRati",
+                                                      new ViewDataDictionary(this.Vi‌​ewData) {
+                                                        {
+                                                          "hi", "hello"
+                                                        }
+                                                      }
+                                                    );
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading" role="tab" id="headingThree">
+                                            <h4 class="panel-title">
+                                                <a class="collapsed" role="button" data-toggle="collapse" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                                    Ret-Rati 03 teste
+                                                </a>
+                                            </h4>
+                                        </div>
+                                        <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                                            <div class="panel-body">
+                                                @{
+                                                    @Html.Partial(
+                                                      "_RetiRati",
+                                                      new ViewDataDictionary(this.Vi‌​ewData) {
+                                                        {
+                                                          "hi", "hello"
+                                                        }
+                                                      }
+                                                    );
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </fieldset>
+                        </div>
+
+</fieldset>
+            <br />
+
+
+                                    }
+    </section>
+</section>
+
+@section importJS {
+    <script>
+
+        //INICIO VALIDACAO CPF/CNPJ
+
+        function mascaraMutuario(o, f) {
+            v_obj = o
+            v_fun = f
+            setTimeout("execmascara();", 1)
+        }
+
+        function execmascara() {
+            v_obj.value = v_fun(v_obj.value);
+        }
+
+        function cpfCnpj(v) {
+
+            //Remove tudo o que não é dígito
+            v = v.replace(/\D/g, "")
+
+            if (v.length <= 14) { //CPF
+
+                //Coloca um ponto entre o terceiro e o quarto dígitos
+                v = v.replace(/(\d{3})(\d)/, "$1.$2")
+
+                //Coloca um ponto entre o terceiro e o quarto dígitos
+                //de novo (para o segundo bloco de números)
+                v = v.replace(/(\d{3})(\d)/, "$1.$2")
+
+                //Coloca um hífen entre o terceiro e o quarto dígitos
+                v = v.replace(/(\d{3})(\d{1,2})$/, "$1-$2")
+
+            } else { //CNPJ
+
+                //Coloca ponto entre o segundo e o terceiro dígitos
+                v = v.replace(/^(\d{2})(\d)/, "$1.$2")
+
+                //Coloca ponto entre o quinto e o sexto dígitos
+                v = v.replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3")
+
+                //Coloca uma barra entre o oitavo e o nono dígitos
+                v = v.replace(/\.(\d{3})(\d)/, ".$1/$2")
+
+                //Coloca um hífen depois do bloco de quatro dígitos
+                v = v.replace(/(\d{4})(\d)/, "$1-$2")
+
+            }
+
+            return v
+        }
+
+     //FINAL VALIDACAO CPF/CNPJ
+
+
+        var AdicionadoPor = "@ViewBag.Usuario";
+        var DataAdicionado = "@ViewBag.DataAtual";
+        var Model = @Html.Raw(Json.Encode(@Model));
+        var TipoOcupacoes = @Html.Raw(Json.Encode(@Model.TipoOcupacoes));
+        var ListaTrecho = @Html.Raw(Json.Encode(@Model.ListaTrecho));
+        var Ocorrencias = @Html.Raw(Json.Encode(@Model.ListaOcorrencias));
+        var ListaDocumentos = @Html.Raw(Json.Encode(@Model.ListaDocumentos));
+        var ParecerRegionalId = '@Model.ParecerRegionalId';
+        var ParecerDiretoriaEngenhariaId = '@Model.ParecerDiretoriaEngenhariaId';
+        var ParecerCoordenadoriaOperacoesId = '@Model.ParecerCoordenadoriaOperacoesId';
+        var ParecerFaixaDominioId = '@Model.ParecerFaixaDominioId';
+        var InteressadoId = @Model.InteressadoId;
+        var OcupacaoId = @Model.Id;
+        var DeferimentoTermoAnexadoNome = '@Model.Deferimento.CaminhoArquivo';
+        var ParecerRegionalDocumentoNome = '@Model.CaminhoArquivoRegional';
+        var ParecerDiretoriaDocumentoNome = '@Model.CaminhoArquivoDiretoria';
+        var ParecerCoordenadoriaDocumentoNome = '@Model.CaminhoArquivoCoordenadoria';
+        var ParecerFaixaDominioDocumentoNome = '@Model.CaminhoArquivoFaixaDominio';
+        ListaTrecho = !ListaTrecho ? [] : ListaTrecho;
+        Ocorrencias = !Ocorrencias ? [] : Ocorrencias;
+        ListaDocumentos = !ListaDocumentos ? [] : ListaDocumentos;
+
+        /// Me desculpem por ter sido feito no front.
+        function setEmailContent() {
+          var selectValue = document.getElementById("notificacaoSelect");
+          var assuntoElmt = document.getElementById("emailAssunto");
+          var conteudoElmt = document.getElementById("emailConteudo");
+          var rodovia = ListaTrecho[0].NomeRodovia;
+          var kmInicial = ListaTrecho[0].KmInicial.toString() +"+" +ListaTrecho[0].KmInicialMetragem;
+          var kmFinal = ListaTrecho[0].KmFinal+"+" +ListaTrecho[0].KmFinalMetragem;
+          var tipoOcupacao;
+
+          TipoOcupacoes.forEach(t => {
+           if (t.TipoOcupacaoId == Model.TipoOcupacaoId)
+               tipoOcupacao = t.Nome
+          })
+
+          if (selectValue.value === "branco"){
+              assuntoElmt.value = "";
+              conteudoElmt.value = "";
+          } else if (selectValue.value === "at"){
+              assuntoElmt.value = "Análise Técnica";
+              conteudoElmt.value = "Prezado(a) Senhor(a),\nInformamos que após análise técnica referente a uma ocupação na faixa de domínio do DER/SP na rodovia " + rodovia + " travessia no " +
+               "Km " + kmInicial + " Km" + kmFinal + ", tipo de ocupação " + tipoOcupacao + ", verificamos que: \n\n" +
+                "\n\n*Salientamos que o não atendimento no prazo de 60 (sessenta) dias corridos ensejará o arquivamento do protocolo de acordo com o estabelecido no item 12.12 do Regulamento.\n* Este é um e-mail automático, por favor, não responda.\nAtenciosamente,";
+          } else if (selectValue.value === "arq"){
+              assuntoElmt.value = "Arquivamento";
+              conteudoElmt.value = "Prezado(a) Senhor(a),\nInformamos que devido à falta de manifestação dessa Empresa referente a uma ocupação na faixa de domínio do DER/SP na rodovia "+ rodovia +", travessia no Km " + kmInicial + " Km" + kmFinal + ", tipo de ocupação " + tipoOcupacao + ", o pedido foi arquivado.\n\n"+
+              "Lembramos que, de acordo com o item 12.12.1 do Regulamento da Faixa de Domínio, caso volte a ter interesse na referida ocupação, novo pedido deverá ser encaminhado ao DER e consequentemente, iniciar todo o processo de análise.\n\n"+
+              "Informamos, também, que as rodovias sofrem diversas melhorias e outras interferências, podendo alterar a configuração no decorrer do tempo.\n\n"+
+             "Atenciosamente,"
+
+          }
+
+        }
+
+        function enviarEmail(){
+            var assuntoElmt = document.getElementById("emailAssunto").value;
+            var conteudoElmt = document.getElementById("emailConteudo").value;
+           var response = POST("/Email/Enviar", JSON.stringify({ Assunto: assuntoElmt, CorpoEmail: conteudoElmt, Destinatario: Model["InteressadoEmail"] }));
+                          swal({
+                              type: 'success',
+                              title: 'Sucesso',
+                              text: response.message
+                          }).then((result) => {
+                              console.log(result);
+                          })
+        }
+
+        //AQUI
+        function CalcularPep()
+        {
+            POST("/GestaoOcupacoes/CalcularPEP", JSON.stringify({ IdOcupacao: OcupacaoId }));
+            location.reload();
+        }
+
+        function ValidarCNPJ()
+        {
+            if ($("#CpfCNPJ").val().length > 18) {
+                $("#CpfCNPJ").val('')
+                swal({
+                    type: 'error',
+                    title: 'Atenção',
+                    text: 'Por favor, digite no máximo 18 números.'
+                })
+            }
+        }
+
+    </script>
+    <script src="~/Scripts/libs/moment/2.18.1/moment.min.js"></script>
+    <script src="~/Scripts/libs/big.js/6.0.0/big.min.js"></script>
+    <script src="~/ScriptsDist/GestaoOcupacaoModule.js?data=@ViewBag.DateTimeNow"></script>
+}

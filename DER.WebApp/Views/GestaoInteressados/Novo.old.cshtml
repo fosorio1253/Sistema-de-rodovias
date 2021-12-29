@@ -1,0 +1,1160 @@
+﻿@model DER.WebApp.ViewModels.GestaoInteressados.GestaoInteressadosViewModel
+@{
+    ViewBag.Title = "Novo";
+}
+
+<section class="content">
+    <section class="content-header">
+        <div>
+            <h1>Visualizando Cadastro de Interessado</h1>
+
+            <button type="submit" onclick="Salvar()" class="btn btn-primary" id="salvar">
+                <i class="fa fa-save"></i>
+                <span>Salvar</span>
+            </button>
+
+            <button type="button" class="btn btn-primary" id="baixar">
+                <i class="fa fa-book"></i>
+                <span>Baixar Certificado</span>
+            </button>
+
+            <a href="/GestaoInteressados/List" class="btn btn-primary">
+                <i class="fa fa-pencil"></i>
+                <span>Editar</span>
+            </a>
+        </div>
+
+        <ol class="breadcrumb">
+            <li><i class="fa fa-home"></i><a href="/Home/Index"> Home </a></li>
+            <li><a href="/GestaoInteressados/List">Listar Gestão de Interessados </a></li>
+            <li class="active"><a> Cadastro </a></li>
+        </ol>
+    </section>
+    <section class="jumbotron">
+        @using (Html.BeginForm("Salvar", "GestaoInteressados", FormMethod.Post, new { id = "gestaoInteressado" }))
+        {
+            <fieldset>
+                <legend>Informações do Cadastro</legend>
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <label class="col-form-label">Número SPDOC</label>
+                                @Html.EditorFor(Model => Model.NumeroSPDOC, new { htmlAttributes = new { @class = "form-control", @data_input = "" } })
+                            </div>
+
+                            <div class="col-md-8">
+                                <label class="col-form-label">Status SPDOC</label>
+                                @Html.EditorFor(Model => Model.StatusSPDOC, new { htmlAttributes = new { @class = "form-control", @data_input = "" } })
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-md-8">
+                                <label class="col-form-label">Nome</label>
+                                @Html.EditorFor(Model => Model.Nome, new { htmlAttributes = new { @class = "form-control", @data_input = "" } })
+                                @Html.ValidationMessageFor(m => m.Nome, "", new { @class = "text-danger  " })
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="col-form-label">Natureza Jurídica</label>
+                                @Html.DropDownListFor(model => model.NaturezaJuridicaId, Model.NaturezasJuridicas, "Selecione", new { @class = "form-control", @data_input = "" })
+                                @Html.ValidationMessageFor(m => m.NaturezaJuridicaId, "", new { @class = "text-danger  " })
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                            <label class="col-form-label">CPF / CNPJ</label>
+                                @Html.EditorFor(Model => Model.Documento, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 18, disabled = "disabled" } })
+                                @Html.ValidationMessageFor(m => m.Documento, "", new { @class = "text-danger  " })
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="col-form-label">Matriz ou Filial</label>
+                                @Html.DropDownListFor(model => model.TipoEmpresaId, Model.TiposEmpresas, "Selecione", new { @class = "form-control", @data_input = "" })
+                                @Html.ValidationMessageFor(m => m.TipoEmpresaId, "", new { @class = "text-danger  " })
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="col-form-label">Validade de Credenciamento</label>
+                                @Html.EditorFor(Model => Model.Validade, new { htmlAttributes = new { @class = "form-control", @data_input = "", @readonly="readonly" } })
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="col-form-label">Status</label>
+                                @Html.DropDownListFor(model => model.StatusId, Model.Status, "Selecione", new { @class = "form-control", @data_input = "" })
+                                @Html.ValidationMessageFor(m => m.StatusId, "", new { @class = "text-danger  " })
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <label class="col-form-label">Nome Fantasia</label>
+                                @Html.EditorFor(Model => Model.NomeFantasia, new { htmlAttributes = new { @class = "form-control", @data_input = "" } })
+                                @Html.ValidationMessageFor(m => m.NomeFantasia, "", new { @class = "text-danger  " })
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="col-form-label">Tipo de Interessado</label>
+                                @Html.DropDownListFor(model => model.TipoInteressadoId, Model.TiposInteressados, "Selecione", new { @class = "form-control", @data_input = "" })
+                                @Html.ValidationMessageFor(m => m.TipoInteressadoId, "", new { @class = "text-danger  " })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <fieldset>
+                            <legend>Tipo de Concessão</legend>
+                            <div class="checkbox-list">
+                                @foreach (var tipoDeConcessao in Model.TiposDeConcessoes)
+                                {
+                                    @Html.CheckBoxFor(check => tipoDeConcessao.Marcado)
+                                    //@Html.HiddenFor(check => tipoDeConcessao.Id)
+                                    @Html.DisplayFor(check => tipoDeConcessao.Nome)
+                                    <br />
+                                }
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="list">
+                            <label class="col-form-label">Contatos</label>
+                            <table class="table table-striped" id="dtContatos">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Nome</th>
+                                        <th scope="col">Cargo</th>
+                                        <th scope="col">Opções</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="bodyContatos">
+                                    @if (Model.Contatos != null && Model.Contatos.Count > 0)
+                                    {
+                                        int linha = 1;
+                                        foreach (var item in Model.Contatos)
+                                        {
+                                            <tr>
+                                                <td>@item.Nome</td>
+                                                <td>@item.Cargo</td>
+                                                <td class="hide">linha</td>
+                                                <td><button type='button' onclick='ExcluirContato(linha);' class='btn btn-link hide' id="excluirContato"><i class='fa fa-trash' title='Excluir'></i></button></td>
+                                            </tr>
+                                            linha++;
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <button class="btn btn-primary right" onclick="ModalAdicionarContato();" type="button">
+                            <i class="fa fa-user"></i>
+                            <span>Adicionar Contato</span>
+                        </button>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="list">
+                            <label class="col-form-label">Endereços</label>
+                            <table class="table table-striped" id="dtEnderecos">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Unidade</th>
+                                        <th scope="col">Endereço</th>
+                                        <th scope="col">Opções</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="bodyEnderecos">
+                                    @if (Model.Enderecos != null && Model.Enderecos.Count > 0)
+                                    {
+                                        foreach (var item in Model.Enderecos)
+                                        {
+                                            int linha = 1;
+                                            <tr>
+                                                <td>@item.EstadoId</td>
+                                                <td>@item.Logradouro</td>
+                                                <td class="hide">linha</td>
+                                                <td><button type='button' onclick='ExcluirEndereco(linha);' class='btn btn-link hide' id="excluirEndereco"><i class='fa fa-trash' title='Excluir'></i></button></td>
+                                            </tr>
+
+                                            linha++;
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <button class="btn btn-primary right" onclick="ModalEndereco();" type="button">
+                            <i class="fa fa-map-marker"></i>
+                            <span>Adicionar Endereço</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="modalAdicionarContato" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content" style="margin-left:150px; width:800px;">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h3 class="modal-title text-center"><b data-title="">Adicionar Contato</b></h3>
+                            </div>
+                            <form>
+                                <div class="modal-body form-group form-body">
+                                    <fieldset>
+                                        <div class="form-group row">
+                                            <div class="col-md-6">
+                                                <label class="col-form-label">Empresa de Atuação</label>
+                                                @Html.DropDownListFor(model => model.Contato.EmpresaId, Model.Contato.Empresas, "Selecione", new { @class = "form-control", @data_input = "" })
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="col-form-label">Login</label>
+                                                @Html.EditorFor(Model => Model.Contato.Login, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 10 } })
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-md-6">
+                                                <label class="col-form-label">Cargo</label>
+                                                @Html.EditorFor(Model => Model.Contato.Cargo, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 100 } })
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="col-form-label">E-mail</label>
+                                                @Html.EditorFor(Model => Model.Contato.Email, new { htmlAttributes = new { @class = "form-control", @type = "email", @data_input = "", @maxlength = 100 } })
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-md-6">
+                                                <label class="col-form-label">DDD</label>
+                                                @Html.EditorFor(Model => Model.Contato.DDD, new { htmlAttributes = new { @class = "form-control", @data_input = "", @data_mask = "99", @maxlength = 2 } })
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="col-form-label">Telefone</label>
+                                                @Html.EditorFor(Model => Model.Contato.Telefone, new { htmlAttributes = new { @class = "form-control", @data_input = "", @data_mask = "0000-00009", @maxlength = 10 } })
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-md-6">
+                                                <label class="col-form-label">Nome</label>
+                                                @Html.EditorFor(Model => Model.Contato.Nome, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 100 } })
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="col-form-label">Estado</label>
+                                                @Html.DropDownListFor(model => model.Contato.EstadoId, Model.Contato.Estados, "Selecione", new { @class = "form-control", @data_input = "" })
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-primary" data-dismiss="modal" onclick="AdicionarContato();" type="button"><i class="fa fa-user">Adicionar Contato</i></button>
+                                    <button type="button" id="bntFechar" name="bntFechar" data-dismiss="modal" class="btn btn-primary" type="button">Fechar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="modalEndereco" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content" style="margin-left:150px; width:550px;">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h3 class="modal-title text-center"><b data-title="">Endereço de Cobrança</b></h3>
+                            </div>
+                            <form>
+                                <br />
+                                <div class="modal-body form-group form-body">
+                                    <div class="form-group row">
+                                        <div class="col-md-12">
+                                            <label class="col-form-label">Unidade</label>
+                                            @Html.EditorFor(Model => Model.Endereco.Unidade, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 100 } })
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-8">
+                                            <label class="col-form-label">Endereço</label>
+                                            @Html.EditorFor(Model => Model.Endereco.Logradouro, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 100 } })
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label class="col-form-label">CEP</label>
+                                            @Html.EditorFor(Model => Model.Endereco.CEP, new { htmlAttributes = new { @class = "form-control", @data_input = "", @data_mask = "00000-000", @maxlength = 9 } })
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-6">
+                                            <label class="col-form-label">Número</label>
+                                            @Html.EditorFor(Model => Model.Endereco.Numero, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 20 } })
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label class="col-form-label">Complemento</label>
+                                            @Html.EditorFor(Model => Model.Endereco.Complemento, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 50 } })
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <label class="col-form-label">Bairro</label>
+                                            @Html.EditorFor(Model => Model.Endereco.Bairro, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 100 } })
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label class="col-form-label">Município</label>
+                                            @Html.DropDownListFor(model => model.Endereco.MunicipioId, Model.Endereco.Municipios, "Selecione", new { @class = "form-control", @data_input = "" })
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="col-form-label">Estado</label>
+                                            @Html.DropDownListFor(model => model.Endereco.EstadoId, Model.Endereco.Estados, "Selecione", new { @class = "form-control", @data_input = "" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-12">
+                                            <label class="col-form-label">Nome do Contato</label>
+                                            @Html.EditorFor(Model => Model.Endereco.NomeContato, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 100 } })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-primary" data-dismiss="modal" onclick="AdicionarEndereco();" type="button"><i class="fa fa-map-marker">Adicionar Endereço</i></button>
+                                    <button type="button" id="bntFechar" name="bntFechar" data-dismiss="modal" class="btn btn-primary">Fechar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="list">
+                            <label class="col-form-label">Documentos</label>
+                            <table class="table table-striped" id="dtDocumentos">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Documento</th>
+                                        <th scope="col">Arquivo</th>
+                                        <th scope="col">Opções</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="bodyDocumentos">
+                                    @if (Model.Documentos != null && Model.Documentos.Count > 0)
+                                    {
+                                        foreach (var item in Model.Documentos)
+                                        {
+                                            int linha = 1;
+                                            <tr>
+                                                <td>@item.Documento</td>
+                                                <td>@item.Arquivo</td>
+                                                <td class="hide">linha</td>
+                                                <td><button type='button' onclick='ExcluirDocumento(linha);' class='btn btn-link hide' id="excluirDocumento"><i class='fa fa-trash' title='Excluir'></i></button></td>
+                                            </tr>
+                                            linha++;
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <button class="btn btn-primary right" onclick="ModalDocumento();" type="button">
+                            <i class="fa fa-book"></i>
+                            <span>Adicionar Documento</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="modal fade" id="modalDocumento" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content" style="margin-left:150px; width:550px;">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h3 class="modal-title text-center"><b data-title="">Adicionar Documento</b></h3>
+                            </div>
+                            <form>
+                                <br />
+                                <div class="modal-body form-group form-body">
+                                    <div class="form-group row">
+                                        <div class="col-md-12">
+                                            <label class="col-form-label">Tipo de Documento</label>
+                                            <select id="Documentos" class="form-control"> </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-12">
+                                            <input type="file" name="DocumentoUpload" id="DocumentoUpload" data-input="" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" data-dismiss="modal" onclick="AdicionarDocumento()" class="btn btn-primary" type="button"><i class="fa fa-cloud-upload" title="Enviar"></i> Enviar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="list">
+                            <label class="col-form-label">Observações</label>
+                            <table class="table table-striped" id="dtObservacoes">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Observação</th>
+                                        <th scope="col">Adicionado Por</th>
+                                        <th scope="col">Data</th>
+                                        <th scope="col">Opções</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="bodyObservacoes">
+                                    @if (Model.Observacoes != null && Model.Observacoes.Count > 0)
+                                    {
+                                        foreach (var item in Model.Observacoes)
+                                        {
+                                            int linha = 1;
+                                            <tr>
+                                                <td>@item.Observacao</td>
+                                                <td>@item.AdicionadoPor</td>
+                                                <td>@item.Data</td>
+                                                <td><button type='button' onclick='ExcluirObs(linha);' class='btn btn-link hide' id="excluirObservacao"><i class='fa fa-trash' title='Excluir'></i></button></td>
+                                            </tr>
+                                            linha++;
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <button class="btn btn-primary right" onclick="ModalObservacao();" type="button">
+                            <i class="fa fa-comment"></i>
+                            <span>Adicionar Observação</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="modalObservacao" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content" style="margin-left:150px; width:550px;">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h3 class="modal-title text-center"><b data-title="">Adicionar Observação</b></h3>
+                            </div>
+                            <form>
+                                <br />
+                                <div class="modal-body form-group form-body">
+                                    <div class="form-group row">
+                                        <div class="col-md-12">
+                                            <label class="col-form-label">Observação</label>
+                                            @Html.EditorFor(Model => Model.Obs.Observacao, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 500 } })
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-primary" data-dismiss="modal" onclick="AdicionarObservacao();" type="button"><i class="fa fa-comment">Adicionar Observação</i></button>
+                                    <button type="button" id="bntFechar" name="bntFechar" data-dismiss="modal" class="btn btn-primary">Fechar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        }
+    </section>
+</section>
+
+<script>
+@section Ready {
+    $("#NaturezaJuridicaId").change(function () {
+        $("#Documento").unmask();
+        let idNatureza = $("#NaturezaJuridicaId").val();
+
+        if (idNatureza == 32) {
+            $("#Documento").prop( "disabled", false)
+            $("#Documento").mask("99.999.999/9999-99");
+        } else if (idNatureza == 33) {
+            $("#Documento").prop( "disabled", false)
+            $("#Documento").mask("999.999.999-99");
+        } else {
+            $("#Documento").prop( "disabled", true )
+            $("#Documento").unmask();
+        }
+    });
+
+    if ($(location).attr("href").toLocaleLowerCase().indexOf('visualizar') > 0) {
+        $('[data-input]').attr('disabled', 'disabled');
+        $('[data-check]').attr('disabled', 'disabled');
+        $('.isSelect').multiselect('disable');
+        $('#salvar').addClass("hide")
+    }
+    else {
+        if (isEditing) {
+            $('#excluirEndereco').removeClass("hide");
+            $('#excluirContato').removeClass("hide");
+            $('#excluirDocumento').removeClass("hide");
+            $('#editarContato').removeClass("hide");
+            $('#excluirObservacao').removeClass("hide");
+            $('#observacoesColunaOpcoes').removeClass("hide");
+        }
+    }
+}
+
+    function ModalEndereco() {
+        $("#modalEndereco").modal('show');
+    }
+
+    function ModalVisualizarContato() {
+        $("#modalVisualizarContato").modal('show');
+    }
+
+    function ModalAdicionarContato() {
+        $("#modalAdicionarContato").modal('show');
+    }
+
+    function ModalDocumento() {
+        let id = $("#NaturezaJuridicaId").val();
+
+        $.ajax({
+            url: '/GestaoInteressados/RetornaNaturezaJuridica',
+            processData: true,
+            data: { id: id },
+            type: 'POST',
+            dataType: 'json',
+            success: function (response) {
+
+                $("#Documentos").html("");
+
+                response.lista.forEach(function (item, i) {
+                    $("#Documentos").append(new Option(item.Nome, item.TipoDeDocumentoId));
+                });
+
+                $("#modalDocumento").modal('show');
+            },
+            error: function (response) {
+                console.log(response);
+            }
+        })
+    }
+
+    function ModalObservacao() {
+        $("#modalObservacao").modal('show');
+    }
+
+    function AdicionarObservacao() {
+        let linha = 1;
+        let observacoes = [];
+
+        $('#dtObservacoes > tbody > tr').each(function () {
+            let observacao = $("#observacao" + linha).html();
+            let adicionadoPor = $("#adicionadoPor" + linha).html();
+            let dataAdicionado = $("#dataAdicionado" + linha).html();
+
+            observacoes.push({
+                observacao: observacao,
+                adicionadoPor: adicionadoPor,
+                dataAdicionado: dataAdicionado,
+                linha: linha
+            });
+
+            linha++;
+        });
+
+        let obs = $("#Obs_Observacao").val();
+
+        if (obs.trim() == '') {
+             swal({
+                type: 'error',
+                title: 'Formulário Inválido',
+                text: 'Campos obrigatórios não foram preenchidos.'
+            })
+        }
+
+        let addPor = "@ViewBag.Usuario";
+        let dataAdd = "@ViewBag.DataAtual";
+
+        observacoes.push({
+            observacao: obs,
+            adicionadoPor: addPor,
+            dataAdicionado: dataAdd,
+            linha: linha
+        });
+
+        $("#Obs_Observacao").val('');
+
+        this.ConstruirListaObservacao(observacoes);
+    }
+
+    function ExcluirObs(linhaExclusao) {
+        let linha = 1;
+        let observacoes = [];
+
+        $('#dtObservacoes > tbody > tr').each(function () {
+            let observacao = $("#observacao" + linha).html();
+            let adicionadoPor = $("#adicionadoPor" + linha).html();
+            let dataAdicionado = $("#dataAdicionado" + linha).html();
+
+            observacoes.push({
+                observacao: observacao,
+                adicionadoPor: adicionadoPor,
+                dataAdicionado: dataAdicionado,
+                linha: linha
+            });
+
+            linha++;
+        });
+
+        observacoes.splice(linhaExclusao - 1, 1);
+
+        this.ConstruirListaObservacao(observacoes);
+    }
+
+    function ConstruirListaObservacao(observacoes) {
+        $("#bodyObservacoes").empty();
+
+        let newContent = "";
+        linha = 1;
+
+        $(observacoes).each(function () {
+            newContent = newContent + "<tr>";
+            newContent = newContent + "<td class='leftText'><span id='observacao" + linha + "' value='" + this.observacao + "'>" + this.observacao + "</span></td>";
+            newContent = newContent + "<td class='leftText'><span id='adicionadoPor" + linha + "' value='" + this.adicionadoPor + "'>" + this.adicionadoPor + "</span></td>";
+            newContent = newContent + "<td class='leftText'><span id='dataAdicionado" + linha + "' value='" + this.dataAdicionado + "'>" + this.dataAdicionado + "</span></td>";
+            newContent = newContent + "<td><button type='button' onclick='ExcluirObs(" + linha + ");' class='btn btn-link' id='excluirObservacao'><i class='fa fa-trash' title='Excluir'></i></button></td>"
+            newContent = newContent + "</tr>";
+            linha++;
+        });
+
+        $("#bodyObservacoes").append(newContent);
+    }
+
+    function AdicionarEndereco() {
+        let linha = 1;
+        let enderecos = [];
+
+        $('#dtEnderecos > tbody > tr').each(function () {
+            let unidade = $("#unidade" + linha).html();
+            let logradouro = $("#logradouro" + linha).html();
+            let cep  = $("#cep" + linha).html();
+            let numero = $("#numero" + linha).html();
+            let complemento = $("#complemento" + linha).html();
+            let bairro = $("#bairro" + linha).html();
+            let municipioId = $("#municipioId" + linha).html();
+            let estadoId = $("#estadoId" + linha).html();
+            let nomeContato = $("#nomeContato" + linha).html();
+
+            enderecos.push({
+                unidade: unidade,
+                logradouro: logradouro,
+                cep : cep ,
+                numero: numero,
+                complemento: complemento,
+                bairro: bairro,
+                municipioId: municipioId,
+                estadoId: estadoId,
+                nomeContato: nomeContato,
+                linha: linha
+            });
+
+            linha++;
+        });
+
+        let unidade = $("#Endereco_Unidade").val();
+        let logradouro = $("#Endereco_Logradouro").val();
+        let cep = $("#Endereco_CEP").val();
+        let numero = $("#Endereco_Numero").val();
+        let complemento = $("#Endereco_Complemento").val();
+        let bairro = $("#Endereco_Bairro").val();
+        let municipioId = $("#Endereco_MunicipioId").val();
+        let estadoId = $("#Endereco_EstadoId").val();
+        let nomeContato = $("#Endereco_NomeContato").val();
+
+        enderecos.push({
+            unidade: unidade,
+            logradouro: logradouro,
+            cep : cep ,
+            numero: numero,
+            complemento: complemento,
+            bairro: bairro,
+            municipioId: municipioId,
+            estadoId: estadoId,
+            nomeContato: nomeContato,
+            linha: linha
+        });
+
+        console.log(enderecos);
+
+        $("#Endereco_Unidade").val('');
+        $("#Endereco_Logradouro").val('');
+        $("#Endereco_CEP").val('');
+        $("#Endereco_Numero").val('');
+        $("#Endereco_Complemento").val('');
+        $("#Endereco_Bairro").val('');
+        $("#Endereco_MunicipioId").val('');
+        $("#Endereco_EstadoId").val('');
+        $("#Endereco_NomeContato").val('');
+
+        this.ConstruirListaEndereco(enderecos);
+    }
+
+    function ExcluirEndereco(linhaExclusao) {
+         let linha = 1;
+        let enderecos = [];
+
+        $('#dtEnderecos > tbody > tr').each(function () {
+            let unidade = $("#unidade" + linha).html();
+            let logradouro = $("#logradouro" + linha).html();
+            let cep  = $("#cep" + linha).html();
+            let numero = $("#numero" + linha).html();
+            let complemento = $("#complemento" + linha).html();
+            let bairro = $("#bairro" + linha).html();
+            let municipioId = $("#municipioId" + linha).html();
+            let estadoId = $("#estadoId" + linha).html();
+            let nomeContato = $("#nomeContato" + linha).html();
+
+            enderecos.push({
+               unidade: unidade,
+                logradouro: logradouro,
+                cep : cep ,
+                numero: numero,
+                complemento: complemento,
+                bairro: bairro,
+                municipioId: municipioId,
+                estadoId: estadoId,
+                nomeContato: nomeContato,
+                adicionadoPor: addPor,
+                dataAdicionado: dataAdd,
+                linha: linha
+            });
+
+            linha++;
+        });
+
+        enderecos.splice(linhaExclusao - 1, 1);
+
+        this.ConstruirListaObservacao(enderecos);
+    }
+
+    function ConstruirListaEndereco(enderecos) {
+        $("#bodyEnderecos").empty();
+
+        let newContent = "";
+        linha = 1;
+
+        $(enderecos).each(function () {
+            newContent = newContent + "<tr>";
+            newContent = newContent + "<td class='leftText'><span id='unidade" + linha + "' value='" + this.unidade + "'>" + this.unidade + "</span></td>";
+            newContent = newContent + "<td class='leftText'><span id='logradouro" + linha + "' value='" + this.logradouro + "'>" + this.logradouro + "</span></td>";
+            newContent = newContent + "<td class='leftText hide'><span id='cep" + linha + "' value='" + this.cep + "'>" + this.cep + "</span></td>";
+            newContent = newContent + "<td class='leftText hide'><span id='numero" + linha + "' value='" + this.numero + "'>" + this.numero + "</span></td>";
+            newContent = newContent + "<td class='leftText hide'><span id='complemento" + linha + "' value='" + this.complemento + "'>" + this.complemento + "</span></td>";
+            newContent = newContent + "<td class='leftText hide'><span id='bairro" + linha + "' value='" + this.bairro + "'>" + this.bairro + "</span></td>";
+            newContent = newContent + "<td class='leftText hide'><span id='municipioId" + linha + "' value='" + this.municipioId + "'>" + this.municipioId + "</span></td>";
+            newContent = newContent + "<td class='leftText hide'><span id='estadoId" + linha + "' value='" + this.estadoId + "'>" + this.estadoId + "</span></td>";
+            newContent = newContent + "<td class='leftText hide'><span id='nomeContato" + linha + "' value='" + this.nomeContato + "'>" + this.nomeContato + "</span></td>";
+            newContent = newContent + "<td><button type='button' onclick='ExcluirEndereco(" + linha + ");' class='btn btn-link' id='excluirEndereco'><i class='fa fa-trash' title='Excluir'></i></button></td>";
+            newContent = newContent + "</tr>";
+            linha++;
+        });
+
+        $("#bodyEnderecos").append(newContent);
+    }
+
+    function AdicionarDocumento() {
+        debugger;
+        let linha = 1;
+        let documentos = [];
+
+        $('#dtDocumentos > tbody > tr').each(function () {
+            let documento = $("#documento" + linha).html();
+            let tipoDocumentoId = $("#tipoDocumentoId" + linha).html();
+            let arquivo = $("#documentoArquivo" + linha).html();
+            let adicionadoPor = $("#adicionadoPor" + linha).html();
+            let dataAdicionado = $("#dataAdicionado" + linha).html();
+            //let baixarDoc = $("#Documento_baixarDoc" + linha).html();
+
+            documentos.push({
+                documento: documento,
+                arquivo: arquivo,
+                adicionadoPor: adicionadoPor,
+                dataAdicionado: dataAdicionado,
+                tipoDocumentoId: tipoDocumentoId,
+                //baixarDoc: baixarDoc,
+                linha: linha
+            });
+
+            linha++;
+        });
+        debugger;
+        let documento = $("#Documentos option:selected").text();
+        let arquivo = $("#DocumentoUpload")[0].files[0].name;
+        let adicionadoPor = "@ViewBag.Usuario";
+        let dataAdicionado = "@ViewBag.DataAtual";
+        @*let baixar = "@#Documento_baixarDoc";*@
+
+        linha++;
+
+        documentos.push({
+            documento: documento,
+            arquivo: arquivo,
+            adicionadoPor: adicionadoPor,
+            dataAdicionado: dataAdicionado,
+            //baixarDoc: baixarDoc,
+            linha: linha
+        });
+
+        $("#Documentos").val('');
+        $("#DocumentoUpload").val('');
+        //$("#Documento_baixarDoc").val('');
+        console.log(documentos);
+        this.ConstruirListaDocumentos(documentos);
+    }
+
+    function ExcluirDocumento(linhaExclusao) {
+
+        let linha = 1;
+        let documentos = [];
+
+        $('#dtDocumentos > tbody > tr').each(function () {
+            let documento = $("#documento" + linha).html();
+            let tipoDocumentoId = $("#tipoDocumentoId" + linha).html();
+            let arquivo = $("#documentoArquivo" + linha).html();
+            let adicionadoPor = $("#adicionadoPor" + linha).html();
+            let dataAdicionado = $("#dataAdicionado" + linha).html();
+
+            documentos.push({
+                documento: documento,
+                tipoDocumentoId: tipoDocumentoId,
+                arquivo: arquivo,
+                adicionadoPor: adicionadoPor,
+                dataAdicionado: dataAdicionado,
+                linha: linha
+            });
+
+            linha++;
+        });
+
+        documentos.splice(linhaExclusao - 1, 1);
+
+        this.ConstruirListaDocumentos(documentos);
+    }
+
+    function ConstruirListaDocumentos(documentos) {
+        $("#bodyDocumentos").empty();
+
+        let newContent = "";
+        linha = 1;
+
+        $(documentos).each(function () {
+            newContent = newContent + "<tr>";
+            newContent = newContent + "<td class='leftText'><span id='documento" + linha + "' value='" + this.documento + "'>" + this.documento + "</span></td>";
+            newContent = newContent + "<td class='leftText hide'><span id='tipoDocumentoId" + linha + "' value='" + this.tipoDocumentoId + "'>" + this.tipoDocumentoId + "</span></td>";
+            newContent = newContent + "<td class='leftText'><span id='documentoArquivo" + linha + "' value='" + this.arquivo + "'>" + this.arquivo + "</span></td>";
+            newContent = newContent + "<td class='leftText'><span id='adicionadoPor" + linha + "' value='" + this.adicionadoPor + "'>" + this.adicionadoPor + "</span></td>";
+            newContent = newContent + "<td class='leftText'><span id='dataAdicionado" + linha + "' value='" + this.dataAdicionado + "'>" + this.dataAdicionado + "</span></td>";
+            newContent = newContent + "<td><button type='button' onclick='ExcluirDocumento(" + linha + ");' class='btn btn-link' id='excluirDocumento'><i class='fa fa-trash' title='Excluir'></i></button></td>"
+            linha++;
+        });
+
+        $("#bodyDocumentos").append(newContent);
+    }
+
+    function AdicionarContato() {
+        let linha = 1;
+        let contatos = [];
+
+        $('#dtContatos > tbody > tr').each(function () {
+            let empresaId = $("#empresaId" + linha).html();
+            let cargo = $("#cargo" + linha).html();
+            let nome = $("#nome" + linha).html();
+            let login = $("#login" + linha).html();
+            let email = $("#email" + linha).html();
+            let ddd = $("#ddd" + linha).html();
+            let telefone = $("#telefone" + linha).html();
+            let estadoId = $("#estadoId" + linha).html();
+            let adicionadoPor = $("#adicionadoPor" + linha).html();
+            let dataAdicionado = $("#dataAdicionado" + linha).html();
+
+            contatos.push({
+                empresaId: empresaId,
+                cargo: cargo,
+                nome: nome,
+                login: login,
+                email: email,
+                ddd: ddd,
+                telefone: telefone,
+                estadoId: estadoId,
+                adicionadoPor: adicionadoPor,
+                dataAdicionado: dataAdicionado,
+                linha: linha
+            });
+
+            linha++;
+        });
+
+        let empresaId = $("#Contato_EmpresaId").val();
+        let cargo = $("#Contato_Cargo").val();
+        let nome = $("#Contato_Nome").val();
+        let login = $("#Contato_Login").val();
+        let email = $("#Contato_Email").val();
+        let ddd = $("#Contato_DDD").val();
+        let telefone = $("#Contato_Telefone").val();
+        let estadoId = $("#Contato_EstadoId").val();
+        let addPor = "@ViewBag.Usuario";
+        let dataAdd = "@ViewBag.DataAtual";
+
+        linha++;
+
+        contatos.push({
+            empresaId: empresaId,
+            cargo: cargo,
+            nome: nome,
+            login: login,
+            email: email,
+            ddd: ddd,
+            telefone: telefone,
+            estadoId: estadoId,
+            adicionadoPor: addPor,
+            dataAdicionado: dataAdd,
+            linha: linha
+        });
+
+        $("#Contato_EmpresaId").val('');
+        $("#Contato_Cargo").val('');
+        $("#Contato_Nome").val('');
+        $("#Contato_Login").val('');
+        $("#Contato_Email").val('');
+        $("#Contato_DDD").val('');
+        $("#Contato_Telefone").val('');
+        $("#Contato_EstadoId").val('');
+
+        this.ConstruirListaContatos(contatos);
+    }
+
+    function ExcluirContato(linhaExclusao) {
+        let linha = 1;
+        let contatos = [];
+
+        $('#dtContatos > tbody > tr').each(function () {
+            let empresaId = $("#empresaId" + linha).html();
+            let cargo = $("#cargo" + linha).html();
+            let nome = $("#nome" + linha).html();
+            let login = $("#login" + linha).html();
+            let email = $("#email" + linha).html();
+            let ddd = $("#ddd" + linha).html();
+            let telefone = $("#telefone" + linha).html();
+            let estadoId = $("#estadoId" + linha).html();
+            let adicionadoPor = $("#adicionadoPor" + linha).html();
+            let dataAdicionado = $("#dataAdicionado" + linha).html();
+
+            contatos.push({
+                empresaId: empresaId,
+                cargo: cargo,
+                nome: nome,
+                login: login,
+                email: email,
+                ddd: ddd,
+                telefone: telefone,
+                estadoId: estadoId,
+                adicionadoPor: adicionadoPor,
+                dataAdicionado: dataAdicionado,
+                linha: linha
+            });
+
+            linha++;
+        });
+
+        contatos.splice(linhaExclusao - 1, 1);
+
+        this.ConstruirListaContatos(contatos);
+    }
+
+    function ConstruirListaContatos(contatos) {
+        $("#bodyContatos").empty();
+        let newContent = "";
+        linha = 1;
+
+        $(contatos).each(function () {
+            newContent = newContent + "<tr>";
+            newContent = newContent + "<td class='leftText hide'><span id='empresaId" + linha + "' value='" + this.empresaId + "'>" + this.empresaId + "</span></td>";
+            newContent = newContent + "<td class='leftText'><span id='nome" + linha + "' value='" + this.nome + "'>" + this.nome + "</span></td>";
+            newContent = newContent + "<td class='leftText'><span id='cargo" + linha + "' value='" + this.cargo + "'>" + this.cargo + "</span></td>";
+            newContent = newContent + "<td class='leftText hide'><span id='login" + linha + "' value='" + this.login + "'>" + this.login + "</span></td>";
+            newContent = newContent + "<td class='leftText hide'><span id='email" + linha + "' value='" + this.email + "'>" + this.email + "</span></td>";
+            newContent = newContent + "<td class='leftText hide'><span id='ddd" + linha + "' value='" + this.ddd + "'>" + this.ddd + "</span></td>";
+            newContent = newContent + "<td class='leftText hide'><span id='telefone" + linha + "' value='" + this.telefone + "'>" + this.telefone + "</span></td>";
+            newContent = newContent + "<td class='leftText hide'><span id='estadoId" + linha + "' value='" + this.estadoId + "'>" + this.estadoId + "</span></td>";
+            newContent = newContent + "<td><button type='button' onclick='ExcluirContato(" + linha + ");' class='btn btn-link' id='excluirContato'><i class='fa fa-trash' title='Excluir'></i></button></td>"
+            linha++;
+        });
+
+        $("#bodyContatos").append(newContent);
+    }
+
+    async function Salvar(e) {
+        var formValido = $('#gestaoInteressado').valid()
+        if (formValido) {
+            var data = {
+                NumeroSPDOC: $("#NumeroSPDOC").val(),
+                StatusSPDOC: $("#StatusSPDOC").val(),
+                Nome: $("#Nome").val(),
+                NaturezaJuridicaId: $("#NaturezaJuridicaId").val(),
+                Documento: $("#Documento").val(),
+                TipoEmpresaId: $("#TipoEmpresaId").val(),
+                Validade: $("#Validade").val(),
+                StatusId: $("#StatusId").val(),
+                NomeFantasia: $("#NomeFantasia").val(),
+                TipoInteressadoId: $("#TipoInteressadoId").val(),
+                Enderecos: [],
+                Contatos: [],
+                Documentos: [],
+                Observacoes: []
+            };
+
+            let linha = 1;
+
+            $('#dtObservacoes > tbody > tr').each(function () {
+                let observacao = $("#observacao" + linha).html();
+                let adicionadoPor = $("#adicionadoPor" + linha).html();
+                let dataAdicionado = $("#dataAdicionado" + linha).html();
+
+                data.Observacoes.push({
+                    Observacao: observacao,
+                    AdicionadoPor: adicionadoPor,
+                    Data: dataAdicionado,
+                });
+
+                linha++;
+            });
+
+            linha = 1;
+
+            $('#dtEnderecos > tbody > tr').each(function () {
+                let unidade = $("#unidade" + linha).html();
+                let logradouro = $("#logradouro" + linha).html();
+                let cep = $("#cep" + linha).html();
+                let numero = $("#numero" + linha).html();
+                let complemento = $("#complemento" + linha).html();
+                let bairro = $("#bairro" + linha).html();
+                let municipioId = $("#municipioId" + linha).html();
+                let estadoId = $("#estadoId" + linha).html();
+                let nomeContato = $("#nomeContato" + linha).html();
+
+                data.Enderecos.push({
+                    Unidade: unidade,
+                    Logradouro: logradouro,
+                    CEP: cep,
+                    Numero: numero,
+                    Complemento: complemento,
+                    Bairro: bairro,
+                    MunicipioId: municipioId,
+                    EstadoId: estadoId,
+                    NomeContato: nomeContato
+                });
+
+                linha++;
+            });
+
+            linha = 1;
+
+            $('#dtContatos > tbody > tr').each(function () {
+                let empresaId = $("#empresaId" + linha).html();
+                let cargo = $("#cargo" + linha).html();
+                let nome = $("#nome" + linha).html();
+                let login = $("#login" + linha).html();
+                let email = $("#email" + linha).html();
+                let ddd = $("#ddd" + linha).html();
+                let telefone = $("#telefone" + linha).html();
+                let estadoId = $("#estadoId" + linha).html();
+                let adicionadoPor = $("#adicionadoPor" + linha).html();
+                let dataAdicionado = $("#dataAdicionado" + linha).html();
+
+                data.Contatos.push({
+                    EmpresaId: empresaId,
+                    Cargo: cargo,
+                    Nome: nome,
+                    Login: login,
+                    Email: email,
+                    DDD: ddd,
+                    Telefone: telefone,
+                    EstadoId: estadoId
+                });
+
+                linha++;
+            });
+
+            linha = 1;
+
+            $('#dtDocumentos > tbody > tr').each(function () {
+                let tipoDocumentoId = $("#tipoDocumentoId" + linha).html();
+                let documento = $("#documento" + linha).html();
+                let arquivo = $("#documentoArquivo" + linha).html();
+
+                data.Documentos.push({
+                    TipoDocumentoId: tipoDocumentoId,
+                    Documento: documento,
+                    Arquivo: arquivo
+                });
+
+                linha++;
+            });
+
+
+            var response = POST('/GestaoInteressados/Salvar', JSON.stringify(data))
+
+            if (!response.valid) {
+                if (!response.validCNPJ) {
+                    swal({
+                        type: 'error',
+                        title: 'Formulário inválido',
+                        text: 'Por favor, insira um CNPJ válido.'
+                    }).then((result) => {
+                        console.log(response.html);
+                    })
+                } else if (!response.validCPF) {
+                    swal({
+                        type: 'error',
+                        title: 'Formulário invalido',
+                        text: 'Por favor, insira um CPF válido.'
+                    }).then((result) => {
+                        console.log(response.html);
+                    })
+                } else {
+                    messagem = 'Ocorreu um erro, entrar em contato com o suporte.'
+
+                    var validador = "";
+
+                    if (validador != "")
+                        messagem = "Ocorreu um erro interno";
+
+                    swal({
+                        type: (validador != "" ? 'warning' : 'error'),
+                        title: (validador != "" ? 'Atenção' : 'Formulário Inválido'),
+                        text: messagem
+                    })
+                }
+            }
+            else {
+                swal.close();
+                swal({
+                    type: 'success',
+                    title: 'Sucesso',
+                    text: 'Interessado salvo com sucesso!'
+                }).then((result) => {
+                    if (result.value) {
+                        window.location.href = "/GestaoInteressados/List";
+                    }
+                })
+            }
+
+            async function salvar(data) {
+                return $.ajax({
+                    url: '/GestaoInteressados/Salvar',
+                    processData: true,
+                    data: data,
+                    type: 'POST',
+                    dataType: 'json'
+                }).then(response => response);
+            }
+        }
+        else {
+              swal({
+                type: 'error',
+                title: 'Atenção',
+                text: 'Por favor, preencha os campos obrigatórios!'
+            })
+        }
+    }
+</script>

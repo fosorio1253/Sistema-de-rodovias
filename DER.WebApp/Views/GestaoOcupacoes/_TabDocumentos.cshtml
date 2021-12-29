@@ -1,0 +1,156 @@
+﻿@model DER.WebApp.ViewModels.GestaoOcupacoes.GestaoOcupacoesViewModel
+@{
+    ViewBag.Title = "SGFD - Cadastro de Ocupações";
+
+}
+@{
+    string fadeIn = "";
+    if (!string.IsNullOrEmpty(ViewBag.origem))
+    {
+        if (ViewBag.origem == "manutencao")
+        {
+            fadeIn = "active in";
+        }
+    }
+}
+
+<div class="tab-pane fade @fadeIn" id="gestao-ocupacao-documentos@{@ViewBag.idInterno}" role="tabpanel" aria-labelledby="gestao-ocupacao-documentos-tab@{@ViewBag.idInterno}">
+    <!-- Documentos -->
+    @if (!ViewBag.SomenteVisualizar && ViewBag.situacao != "Deferida")
+    {
+        <button class="btn btn-primary right" onclick="controller.documentosComponent.ModalDocumento();" type="button">
+            <i class="fa fa-book"></i>
+            <span>Adicionar Documento</span>
+        </button>
+        <br /><br />
+    }
+    <div class="row">
+        <div class="col-md-12">
+            <div class="list">
+
+                <table class="table table-striped" id="dtDocumentos">
+                    <thead>
+                        <tr>
+                            <th scope="col">Documentos</th>
+                            <th scope="col">Arquivo</th>
+                            <th scope="col">Adicionado Por</th>
+                            @*<th scope="col">Adicionado Em</th>*@
+                            @*<th scope="col">Status</th>*@
+                            <th scope="col">Opções</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bodyDocumentos">
+                        @if (Model.ListaDocumentos != null && Model.ListaDocumentos.Count > 0)
+                        {
+                            int linha = 0;
+
+                            foreach (var item in Model.ListaDocumentos)
+                            {
+                                string idId = "id" + @linha;
+                                string documentoId = "documento" + @linha;
+                                string arquivoId = "arquivo" + @linha;
+                                string adicionadoPorId = "adicionadoPor" + @linha;
+                                //string dataAdicionadoId = "dataAdicionado" + @linha;
+                                //string status = "status" + @linha;
+                                string tipoDocumentoId = "tipoDocumentoId" + @linha;
+
+                                <tr>
+                                    <td class="leftText hide"><span id='@idId'>@item.Id</span></td>
+                                    <td class="leftText"><span id='@documentoId'>@item.Documento</span></td>
+                                    <td class="leftText"><span id='@arquivoId'>@item.Arquivo</span></td>
+                                    <td class="leftText"><span id='@adicionadoPorId'>@item.AdicionadoPor</span></td>
+                                    @*<td class="leftText"><span id='@dataAdicionadoId'>@item.Data</span></td>*@
+                                    @*<td class="leftText"><span id='@status'>@item.StatusId</span></td>*@
+                                    <td class="leftText hide"><span id='@tipoDocumentoId'>@item.TipoDocumentoId</span></td>
+                                    <td>
+                                        @if (!ViewBag.SomenteVisualizar && ViewBag.situacao != "Deferida")
+                                        {
+                                            <button type='button' onclick='controller.documentosComponent.ExcluirDocumento(@linha);' class='btn btn-link excluirDocumento hide'><i class='fa fa-trash' title='Excluir'></i></button>
+                                        }
+                                        @if (!String.IsNullOrEmpty(item.Arquivo))
+                                        {
+                                            <button type='button' onclick='controller.DownloadArquivo("@item.Arquivo");' class='btn btn-link DownloadArquivoId'><i class='fa fa-download' title='Baixar Arquivo'></i></button>
+                                        }
+                                    </td>
+                                </tr>
+                                linha++;
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modalDocumento" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content" style="margin-left:150px; width:550px;">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h3 class="modal-title text-center"><b data-title="">Adicionar Documento</b></h3>
+                </div>
+                <form>
+                    <br />
+                    <div class="modal-body form-group form-body">
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                                <label class="col-form-label">Tipo de Documento</label>
+
+                                @Html.DropDownListFor(model => model.TipoDeDocumentoOcupacaoId, Model.TipoDocumentosOcupacoes, new { @class = "form-control", @data_input = "" })
+                                @Html.ValidationMessageFor(m => m.TipoDeDocumentoOcupacaoId, "", new { @class = "text-danger" })
+                                @*<select id="Documentos" name="Documentos" class="form-control" data-input="" data-val="true" data-val-number="O campo Documentos deve ser um número." data-val-required="Campo Obrigatório"></select>*@
+                                <span class="field-validation-valid text-danger" data-valmsg-for="Documentos" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                                <input type="file" name="DocumentoUpload" id="DocumentoUpload" data-input="" class="form-control" data-val="true" data-val-required="Campo Obrigatório" />
+                                <span class="field-validation-valid text-danger" data-valmsg-for="DocumentoUpload" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" onclick="controller.documentosComponent.AdicionarDocumento()" class="btn btn-primary"><i class="fa fa-cloud-upload" title="Enviar"></i> Enviar</button>
+                        <button type="button" id="btnFecharDocumento" name="btnFecharDocumento" data-dismiss="modal" class="btn btn-primary">Fechar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalVisualizarDocumento" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content" style="margin-left:150px; width:550px;">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h3 class="modal-title text-center"><b data-title="">Visualizar Documento</b></h3>
+                </div>
+                <form>
+                    <br />
+                    <div class="modal-body form-group form-body">
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                                <label class="col-form-label">Tipo de Documento</label>
+
+                                @Html.DropDownListFor(model => model.TipoDeDocumentoOcupacaoId, Model.TipoDocumentosOcupacoes, new { @class = "form-control", @data_input = "" })
+                                @Html.ValidationMessageFor(m => m.TipoDeDocumentoOcupacaoId, "", new { @class = "text-danger" })
+                                @*<select id="Documentos" name="Documentos" class="form-control" data-input="" data-val="true" data-val-number="O campo Documentos deve ser um número." data-val-required="Campo Obrigatório"></select>*@
+                                <span class="field-validation-valid text-danger" data-valmsg-for="Documentos" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                                <input type="file" name="DocumentoUpload" id="DocumentoUpload" data-input="" class="form-control" data-val="true" data-val-required="Campo Obrigatório" />
+                                <span class="field-validation-valid text-danger" data-valmsg-for="DocumentoUpload" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" onclick="controller.documentosComponent.AdicionarDocumento()" class="btn btn-primary" type="button"><i class="fa fa-cloud-upload" title="Enviar"></i> Enviar</button>
+                        <button type="button" id="btnFecharDocumento" name="btnFecharDocumento" data-dismiss="modal" class="btn btn-primary">Fechar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Fim Documentos -->
+</div>

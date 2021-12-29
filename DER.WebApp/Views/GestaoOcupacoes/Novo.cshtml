@@ -1,0 +1,730 @@
+﻿@model DER.WebApp.ViewModels.GestaoOcupacoes.GestaoOcupacoesViewModel
+@{
+    ViewBag.Title = "SGFD - Cadastro de Ocupações";
+}
+
+<section class="content">
+    <section class="content-header">
+        <div>
+            <h1>Visualizando Cadastro de Ocupação</h1>
+
+            <button onclick="controller.save()" class="btn btn-primary" id="btnSalvar">
+                <i class="fa fa-save"></i>
+                <span>Salvar</span>
+            </button>
+
+            <a href="/GestaoOcupacoes/List" class="btn btn-primary">
+                <i class="fa fa-arrow-left"></i>
+                <span>Voltar</span>
+            </a>
+
+            <button class="btn btn-primary">
+                
+
+                <i class="fa fa-download"></i>
+                @if (Model.Regulamento != null)
+                {
+                    @Html.ActionLink("Baixar Regulamento Vigente", "DownloadRegulamentoNorma", new { fileName = Model.Regulamento }, new { @class = "customButton" })
+                }
+                else
+                {
+                    <a href="javascript:alert('Entre em contato com o administrador para fazer o Upload do Regulamento!');" class="customButton">Você precisa realizar o Upload do Regulamento Vigente</a>
+                }
+            </button>
+
+            <button class="btn btn-primary">
+                <i class="fa fa-download"></i>
+                @if (Model.Norma != null)
+                {
+                    @Html.ActionLink("Baixar Normas Vigentes", "DownloadRegulamentoNorma", new { fileName = Model.Norma }, new { @class = "customButton" }) }
+                else
+                {
+                    <a href="javascript:alert('Entre em contato com o administrador para fazer o Upload das Normas!');" class="customButton">Você precisa realizar o Upload das Normas Vigentes</a>
+                }
+            </button>
+        </div>
+
+        <ol class="breadcrumb">
+            <li><i class="fa fa-home"></i><a href="/Home/Index"> Home </a></li>
+            <li><a href="/GestaoOcupacoes/List">Listar Gestão de Ocupações </a></li>
+            <li class="active"><a> Cadastro </a></li>
+        </ol>
+    </section>
+    <section class="jumbotron">
+
+        @using (Html.BeginForm("Salvar", "GestaoOcupacoes", FormMethod.Post, new { id = "gestaoOcupacoes" }))
+        {
+            <li class="active"><a> Última alteração por: @ViewBag.Usuario em  @ViewBag.DataAtualizacao.</a></li><div class="row center-block">
+                <hr />
+                <fieldset>                                      
+                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="false">
+                        @{
+                            if (ViewBag.novaOrigem == null)
+                            {
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" role="tab" id="panel @Model.Id" style="height:50px;">
+                                        @{
+                                            string idOrigem = Model.OrigemSolicitacaoId.ToString();
+                                            var origemSolicitacoes = Model.OrigemSolicitacoes.Where(o => o.Value == idOrigem);
+                                            string origem = origemSolicitacoes.Count() > 0 ? origemSolicitacoes.FirstOrDefault().Text : "";
+                                            string origemTabs = "";
+                                            string rotaTab = "";
+                                            string nomeTab = "collapse" + Model.Id.ToString();
+                                            string situacao = Model.SituacaoSolicitacaoId > 0 ? Model.SituacaoSolitacoes.Where(n => n.Value == Model.SituacaoSolicitacaoId.ToString()).FirstOrDefault().Text : "";
+
+
+                                            //verificar se esta ativo exibe e tras aberto
+
+                                            <h2 class="panel-title">
+
+                                                <a role="button" data-toggle="collapse" href="#@nomeTab" aria-expanded="true" aria-controls="@nomeTab">
+                                                    @origem
+                                                </a>
+                                                <span class="ml-3 float-right">Sequência  @Model.Sequencia - @situacao</span>
+                                                @{
+                                                    if ((situacao == "Deferida" || situacao == "Autorizado") && origem!="Solicitação de Cancelamento")
+                                                    {
+                                                        <button class="btn btn-danger float-right" id="btnCancelar" onclick="window.location.href='?novaOrigem=cancelamento';" type="button">
+                                                            <i class="fa fa-times-circle"> </i>Cancelamento
+                                                        </button>
+                                                        if (ViewBag.IsUsuarioAdm)
+                                                        {
+                                                        <button class="btn btn-info float-right" id="btnAjuizamento" onclick="window.location.href='?novaOrigem=ajuizamento';" type="button">
+                                                            <i class="fa fa-gavel"> </i>Ação Ajuizada
+                                                        </button>
+                                                        }
+                                                        <button class="btn btn-warning float-right" id="btnManutencao" onclick="window.location.href='?novaOrigem=manutencao';" type="button">
+                                                            <i class="fa fa-exclamation-triangle"> </i>Manutenção
+                                                        </button>
+                                                        <button class="btn btn-primary float-right" id="btnTransferir" onclick="window.location.href='?novaOrigem=transferencia';" type="button">
+                                                            <i class="fa fa-address-book"> </i>Transferir Titularidae
+                                                        </button>
+                                                        <button class="btn btn-success float-right" id="btnRetificar" onclick="window.location.href='?novaOrigem=retificacao';" type="button">
+                                                            <i class="fa fa-edit"> </i>Retificação
+                                                        </button>
+                                                    }
+                                                }
+
+                                            </h2>
+                                        }
+                                    </div>
+
+                                    <div id="@nomeTab" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="@nomeTab" aria-expanded="true">
+                                        <div class="panel-body">
+                                            @{
+                                                switch (origem)
+                                                {
+                                                    case "Solicitação de Implantação":
+                                                        origemTabs = "implantacao";
+                                                        rotaTab = "_TabsSolicitacao";
+                                                        break;
+                                                    case "Solicitação de Cancelamento":
+                                                        origemTabs = "cancelamento";
+                                                        rotaTab = "_TabsCancelamento";
+                                                        break;
+                                                    case "Transferência de Titularidade":
+                                                        origemTabs = "transferencia";
+                                                        rotaTab = "_TabsTransferencia";
+                                                        break;
+                                                    case "Retificação":
+                                                        origemTabs = "retificacao";
+                                                        rotaTab = "_TabsRetificacao";
+                                                        break;
+                                                    case "Regularização":
+                                                        origemTabs = "regularizacao";
+                                                        rotaTab = "_TabsRegularizacao";
+                                                        break;
+                                                    case "Ajuizamento de Ação":
+                                                        origemTabs = "ajuizamento";
+                                                        rotaTab = "_TabsAcoesJudiciais";
+                                                        break;
+                                                    case "Manutenção de Rotina":
+                                                        origemTabs = "manutencao";
+                                                        rotaTab = "_TabsManutencao";
+                                                        break;
+                                                    default:
+                                                        origemTabs = "implantacao";
+                                                        rotaTab = "_TabsSolicitacao";
+                                                        break;
+                                                }
+                                                if(origemTabs == "transferencia")
+                                                {
+                                                    @Html.Partial(rotaTab,
+                                                        new ViewDataDictionary(this.Vi‌​ewData) {
+                                                        {
+                                                            "id", Model.Id
+                                                        },
+                                                        {
+                                                            "origem", origemTabs
+                                                        },
+                                                        {
+                                                                "model", Model
+                                                        },
+                                                        {
+                                                            "situacao", situacao
+                                                        }
+                                                        }
+                                                    );
+
+                                                    @Html.Partial("_InformacaoCadastro", Model,
+                                                        new ViewDataDictionary(this.Vi‌​ewData) {
+                                                        {
+                                                            "id", Model.Id
+                                                        },
+                                                        {
+                                                            "origem", origemTabs
+                                                        },
+                                                        {
+                                                            "origemLabel", origem
+                                                        },
+                                                        {
+                                                            "modelOcupacao", Model
+                                                        },
+                                                        {
+                                                            "situacao", situacao
+                                                        }
+                                                        }
+                                                    );
+                                                }
+                                                else 
+                                                {
+                                                    @Html.Partial("_InformacaoCadastro", Model,
+                                                        new ViewDataDictionary(this.Vi‌​ewData) {
+                                                        {
+                                                            "id", Model.Id
+                                                        },
+                                                        {
+                                                            "origem", origemTabs
+                                                        },
+                                                        {
+                                                            "origemLabel", origem
+                                                        },
+                                                        {
+                                                            "modelOcupacao", Model
+                                                        },
+                                                        {
+                                                            "situacao", situacao
+                                                        }
+                                                        }
+                                                    );
+
+                                                    @Html.Partial(rotaTab,
+                                                        new ViewDataDictionary(this.Vi‌​ewData) {
+                                                        {
+                                                            "id", Model.Id
+                                                        },
+                                                        {
+                                                            "origem", origemTabs
+                                                        },
+                                                        {
+                                                                "model", Model
+                                                        },
+                                                        {
+                                                            "situacao", situacao
+                                                        }
+                                                        }
+                                                    );
+
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        @{
+                            if (Model.ListaGestaoOcupacoesViewModel != null && ViewBag.novaOrigem == null)
+                            {
+                                foreach (var item in Model.ListaGestaoOcupacoesViewModel)
+                                {
+                                    <div class="panel panel-default">
+
+                                        <div class="panel-heading" role="tab" id="panel @item.Id" style="height:50px;">
+                                            @{
+                                                string idOrigem = item.OrigemSolicitacaoId.ToString();
+                                                string origem = item.OrigemSolicitacoes.Where(o => o.Value == idOrigem).FirstOrDefault().Text;
+                                                string origemTabs = "";
+                                                string rotaTab = "";
+                                                string nomeTab = "collapse" + item.Id.ToString();
+                                                string situacao = item.SituacaoSolicitacaoId > 0 ? Model.SituacaoSolitacoes.Where(n => n.Value == item.SituacaoSolicitacaoId.ToString()).FirstOrDefault().Text : "";
+
+                                                //verificar se esta ativo exibe e tras aberto
+                                                <h2 class="panel-title">
+                                                    <a role="button" data-toggle="collapse" href="#@nomeTab" aria-expanded="true" aria-controls="@nomeTab">
+                                                        @origem
+                                                    </a>
+                                                    <span class="ml-3 float-right">Sequência  @item.Sequencia - @situacao</span>
+                                                    @{
+                                                        if (item.Ativo && (situacao == "Deferida" || situacao == "Autorizado") && origem!="Solicitação de Cancelamento")
+                                                        {
+                                                            <span class="ml-3 float-right">Sequencia @item.Sequencia</span>
+                                                            <button class="btn btn-danger float-right" id="btnCancelar" onclick="window.location.href='?novaOrigem=cancelamento';" type="button">
+                                                                <i class="fa fa-times-circle"> </i>Cancelamento
+                                                            </button>
+                                                            if (ViewBag.IsUsuarioAdm)
+                                                            {
+                                                            <button class="btn btn-info float-right" id="btnAjuizamento" onclick="window.location.href='?novaOrigem=ajuizamento';" type="button">
+                                                                <i class="fa fa-gavel"> </i>Ação Ajuizada
+                                                            </button>
+                                                            }
+                                                            <button class="btn btn-warning float-right" id="btnManutencao" onclick="window.location.href='?novaOrigem=manutencao';" type="button">
+                                                                <i class="fa fa-exclamation-triangle"> </i>Manutenção
+                                                            </button>
+                                                            <button class="btn btn-primary float-right" id="btnTransferir" onclick="window.location.href='?novaOrigem=transferencia';" type="button">
+                                                                <i class="fa fa-address-book"> </i>Transferir Titularidae
+                                                            </button>
+                                                            <button class="btn btn-success float-right" id="btnRetificar" onclick="window.location.href='?novaOrigem=retificacao';" type="button">
+                                                                <i class="fa fa-edit"> </i>Retificação
+                                                            </button>
+                                                        }
+                                                    }
+                                                </h2>
+                                            }
+                                        </div>
+                                        <div id="@nomeTab" class="panel-collapse collapse" role="tabpanel" aria-labelledby="@nomeTab">
+                                            <div class="panel-body">
+                                                @{
+                                                    switch (origem)
+                                                    {
+                                                        case "Solicitação de Implantação":
+                                                            origemTabs = "implantacao";
+                                                            rotaTab = "_TabsSolicitacao";
+                                                            break;
+                                                        case "Solicitação de Cancelamento":
+                                                            origemTabs = "cancelamento";
+                                                            rotaTab = "_TabsCancelamento";
+                                                            break;
+                                                        case "Transferência de Titularidade":
+                                                            origemTabs = "transferencia";
+                                                            rotaTab = "_TabsTransferencia";
+                                                            break;
+                                                        case "Retificação":
+                                                            origemTabs = "retificacao";
+                                                            rotaTab = "_TabsRetificacao";
+                                                            break;
+                                                        case "Regularização":
+                                                            origemTabs = "regularizacao";
+                                                            rotaTab = "_TabsRegularizacao";
+                                                            break;
+                                                        case "Ajuizamento de Ação":
+                                                            origemTabs = "ajuizamento";
+                                                            rotaTab = "_TabsAcoesJudiciais";
+                                                            break;
+                                                        case "Manutenção de Rotina":
+                                                            origemTabs = "manutencao";
+                                                            rotaTab = "_TabsManutencao";
+                                                            break;
+                                                        default:
+                                                            origemTabs = "implantacao";
+                                                            rotaTab = "_TabsSolicitacao";
+                                                            break;
+                                                    }
+                                                    if(origemTabs == "transferencia")
+                                                    {                                                            
+                                                        @Html.Partial(rotaTab, item,
+                                                            new ViewDataDictionary(this.Vi‌​ewData) {
+                                                            {
+                                                                "id", item.Id
+                                                            },
+                                                            {
+                                                                "origem", origemTabs
+                                                            },
+                                                                {
+                                                                    "model", item
+                                                                },
+                                                                {
+                                                                    "situacao", situacao
+                                                                }
+                                                            }
+                                                        );
+                                                        @Html.Partial("_InformacaoCadastro", item,
+                                                            new ViewDataDictionary(this.Vi‌​ewData) {
+                                                            {
+                                                                "id", item.Id
+                                                            },
+                                                            {
+                                                                "origem", origemTabs
+                                                            },
+                                                            {
+                                                            "origemLabel", origem
+                                                            },
+                                                            {
+                                                                "modelOcupacao", item
+                                                            },
+                                                            {
+                                                                "situacao", situacao
+                                                            }
+                                                            }
+                                                        );
+                                                    }else{
+                                                        @Html.Partial("_InformacaoCadastro", item,
+                                                            new ViewDataDictionary(this.Vi‌​ewData) {
+                                                            {
+                                                                "id", item.Id
+                                                            },
+                                                            {
+                                                                "origem", origemTabs
+                                                            },
+                                                            {
+                                                            "origemLabel", origem
+                                                            },
+                                                            {
+                                                                "modelOcupacao", item
+                                                            },
+                                                            {
+                                                                "situacao", situacao
+                                                            }
+                                                            }
+                                                        );
+                                                        @Html.Partial(rotaTab, item,
+                                                            new ViewDataDictionary(this.Vi‌​ewData) {
+                                                            {
+                                                                "id", item.Id
+                                                            },
+                                                            {
+                                                                "origem", origemTabs
+                                                            },
+                                                                {
+                                                                    "model", item
+                                                                },
+                                                                {
+                                                                    "situacao", situacao
+                                                                }
+                                                            }
+                                                        );
+                                                    }
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        }
+                        @{
+                            if (ViewBag.novaOrigem != null)
+                            {
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" role="tab" id="panel00" style="height:50px;">
+                                        @{
+                                            string novaOrigem = ViewBag.novaOrigem;
+                                            string novaOrigemTabs = novaOrigem;
+                                            string novaOrigemTitle = "";
+                                            string novaRotaTab = "";
+                                            string novaNomeTab = "collapse" + "00";
+                                            string situacao = "";
+
+                                            switch (novaOrigem)
+                                            {
+                                                case "cancelamento":
+                                                    novaOrigemTitle = "Solicitação de Cancelamento";
+                                                    novaRotaTab = "_TabsCancelamento";
+                                                    break;
+                                                case "transferencia":
+                                                    novaOrigemTitle = "Transferência de Titularidade";
+                                                    novaRotaTab = "_TabsTransferencia";
+                                                    break;
+                                                case "retificacao":
+                                                    novaOrigemTitle = "Retificação";
+                                                    novaRotaTab = "_TabsRetificacao";
+                                                    break;
+                                                case "regularizacao":
+                                                    novaOrigemTitle = "Regularização";
+                                                    novaRotaTab = "_TabsRegularizacao";
+                                                    break;
+                                                case "ajuizamento":
+                                                    novaOrigemTitle = "Ajuizamento de Ação";
+                                                    novaRotaTab = "_TabsAcoesJudiciais";
+                                                    break;
+                                                case "manutencao":
+                                                    novaOrigemTitle = "Manutenção de Rotina";
+                                                    novaRotaTab = "_TabsManutencao";
+                                                    break;
+                                            }
+
+                                            //verificar se esta ativo exibe e tras aberto
+
+                                            <h2 class="panel-title">
+
+                                                <a role="button" data-toggle="collapse" href="#@novaNomeTab" aria-expanded="true" aria-controls="@novaNomeTab">
+                                                    @novaOrigemTitle
+                                                </a>
+                                                <span class="ml-3 float-right">Sequência Nova</span>
+                                            </h2>
+                                        }
+                                    </div>
+
+                                    <div id="@novaNomeTab" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="@novaNomeTab">
+                                        <div class="panel-body">
+                                            @{
+                                                if(novaOrigem=="transferencia")
+                                                {
+                                                    @Html.Partial(novaRotaTab,
+                                                        new ViewDataDictionary(this.Vi‌​ewData) {
+                                                        {
+                                                            "id", "00"+Model.Id
+                                                        },
+                                                        {
+                                                            "origem", novaOrigemTabs
+                                                        },
+                                                        {
+                                                            "model", Model
+                                                        },
+                                                        {
+                                                            "situacao", situacao
+                                                        }
+                                                        }
+                                                    );
+
+                                                    @Html.Partial("_InformacaoCadastro", Model,
+                                                        new ViewDataDictionary(this.Vi‌​ewData) {
+                                                        {
+                                                            "id", Model.Id
+                                                        },
+                                                        {
+                                                            "origem", novaOrigemTabs
+                                                        },
+                                                        {
+                                                            "origemLabel", novaOrigemTitle
+                                                        },
+                                                        {
+                                                            "modelOcupacao", Model
+                                                        },
+                                                        {
+                                                            "situacao", situacao
+                                                        }
+                                                        
+                                                        }
+                                                    );
+                                                }
+                                                else 
+                                                {
+                                                    @Html.Partial("_InformacaoCadastro", Model,
+                                                        new ViewDataDictionary(this.Vi‌​ewData) {
+                                                        {
+                                                            "id", Model.Id
+                                                        },
+                                                        {
+                                                            "origem", novaOrigemTabs
+                                                        },
+                                                        {
+                                                            "origemLabel", novaOrigemTitle
+                                                        },
+                                                        {
+                                                            "modelOcupacao", Model
+                                                        },
+                                                        {
+                                                            "situacao", situacao
+                                                        }
+                                                        
+                                                        }
+                                                    );
+
+                                                    @Html.Partial(novaRotaTab,
+                                                        new ViewDataDictionary(this.Vi‌​ewData) {
+                                                        {
+                                                            "id", "00"+Model.Id
+                                                        },
+                                                        {
+                                                            "origem", novaOrigemTabs
+                                                        },
+                                                        {
+                                                            "model", Model
+                                                        },
+                                                        {
+                                                            "situacao", situacao
+                                                        }
+                                                        }
+                                                    );
+                                                }
+                                            }
+
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                </fieldset>
+            </div>
+
+        }
+    </section>
+</section>
+
+@section importJS {
+    <script>
+
+
+        //INICIO VALIDACAO CPF/CNPJ
+
+        function mascaraMutuario(o, f) {
+            v_obj = o
+            v_fun = f
+            setTimeout("execmascara();", 1)
+        }
+
+        function execmascara() {
+            v_obj.value = v_fun(v_obj.value);
+        }
+
+        function cpfCnpj(v) {
+
+            //Remove tudo o que não é dígito
+            v = v.replace(/\D/g, "")
+
+            if (v.length <= 14) { //CPF
+
+                //Coloca um ponto entre o terceiro e o quarto dígitos
+                v = v.replace(/(\d{3})(\d)/, "$1.$2")
+
+                //Coloca um ponto entre o terceiro e o quarto dígitos
+                //de novo (para o segundo bloco de números)
+                v = v.replace(/(\d{3})(\d)/, "$1.$2")
+
+                //Coloca um hífen entre o terceiro e o quarto dígitos
+                v = v.replace(/(\d{3})(\d{1,2})$/, "$1-$2")
+
+            } else { //CNPJ
+
+                //Coloca ponto entre o segundo e o terceiro dígitos
+                v = v.replace(/^(\d{2})(\d)/, "$1.$2")
+
+                //Coloca ponto entre o quinto e o sexto dígitos
+                v = v.replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3")
+
+                //Coloca uma barra entre o oitavo e o nono dígitos
+                v = v.replace(/\.(\d{3})(\d)/, ".$1/$2")
+
+                //Coloca um hífen depois do bloco de quatro dígitos
+                v = v.replace(/(\d{4})(\d)/, "$1-$2")
+
+            }
+
+            return v
+        }
+
+        //FINAL VALIDACAO CPF/CNPJ
+        var AdicionadoPor = "@ViewBag.Usuario";
+        var DataAdicionado = "@ViewBag.DataAtual";
+        var Model = @Html.Raw(Json.Encode(@Model));
+        var OrigemSolicitacoes = @Html.Raw(Json.Encode(@Model.OrigemSolicitacoes));
+        var TipoDocumentosOcupacoes = @Html.Raw(Json.Encode(@Model.TipoDocumentosOcupacoes));
+        var TipoOcupacoes = @Html.Raw(Json.Encode(@Model.TipoOcupacoes));
+        var ListaTrecho = @Html.Raw(Json.Encode(@Model.ListaTrecho));
+        var Ocorrencias = @Html.Raw(Json.Encode(@Model.ListaOcorrencias));
+        var ListaDocumentos = @Html.Raw(Json.Encode(@Model.ListaDocumentos));
+        var ParecerRegionalId = '@Model.ParecerRegionalId';
+        var ParecerDiretoriaEngenhariaId = '@Model.ParecerDiretoriaEngenhariaId';
+        var ParecerCoordenadoriaOperacoesId = '@Model.ParecerCoordenadoriaOperacoesId';
+        var ParecerFaixaDominioId = '@Model.ParecerFaixaDominioId';
+        var InteressadoId = @Model.InteressadoId;
+        var OcupacaoId = @Model.Id;
+        var DeferimentoTermoAnexadoNome = '@Model.Deferimento.CaminhoArquivo';
+        var ParecerRegionalDocumentoNome = '@Model.CaminhoArquivoRegional';
+        var ParecerDiretoriaDocumentoNome = '@Model.CaminhoArquivoDiretoria';
+        var ParecerCoordenadoriaDocumentoNome = '@Model.CaminhoArquivoCoordenadoria';
+        var ParecerFaixaDominioDocumentoNome = '@Model.CaminhoArquivoFaixaDominio';
+        var CriarNovaOcupacao = '@Model.CriarNovaOcupacao';
+        var novaOrigem = '@ViewBag.novaOrigem';
+        OrigemSolicitacoes = !OrigemSolicitacoes ? [] : OrigemSolicitacoes;
+        TipoDocumentosOcupacoes = !TipoDocumentosOcupacoes ? [] : TipoDocumentosOcupacoes;
+        ListaTrecho = !ListaTrecho ? [] : ListaTrecho;
+        ListaTrecho = !ListaTrecho ? [] : ListaTrecho;
+        Ocorrencias = !Ocorrencias ? [] : Ocorrencias;
+        ListaDocumentos = !ListaDocumentos ? [] : ListaDocumentos;
+        CriarNovaOcupacao = CriarNovaOcupacao=='True';
+
+        function setEmailContent()
+        {
+            // Adicionar Anexos
+          var selectValue = document.getElementById("notificacaoSelect");
+          var assuntoElmt = document.getElementById("emailAssunto");
+          var conteudoElmt = document.getElementById("emailConteudo");
+
+          var rodovia = ListaTrecho[0].NomeRodovia;
+            var kmInicial = ListaTrecho[0].KmInicial.toString() +"+" +ListaTrecho[0].KmInicialMetragem;
+            var kmFinal = ListaTrecho[0].KmFinal+"+" +ListaTrecho[0].KmFinalMetragem;
+          var tipoOcupacao;
+
+          TipoOcupacoes.forEach(t => {
+           if (t.TipoOcupacaoId == Model.TipoOcupacaoId)
+               tipoOcupacao = t.Nome
+          })
+
+            var response = GET("/Template/Templates");
+
+            response.forEach(value => {
+                console.log(selectValue.value);
+                if (selectValue.value == value.Id) {
+                    assuntoElmt.value = value.Assunto;
+                    conteudoElmt.value = value.Conteudo;
+                    conteudoElmt.value = conteudoElmt.value.replace("#rodovia", rodovia);
+                    conteudoElmt.value = conteudoElmt.value.replace("#kminicial", kmInicial);
+                    conteudoElmt.value = conteudoElmt.value.replace("#kmfinal", kmFinal);
+                    conteudoElmt.value = conteudoElmt.value.replace("#tipoocupacao", tipoOcupacao);
+                }
+            })
+
+        }
+
+        function loadTemplates() {
+            var response = GET("/Template/Templates");
+            response.forEach(value => { $("#notificacaoSelect").append(new Option(value.Assunto, value.Id)); })
+        }
+        loadTemplates();
+
+
+        function enviarEmail(){
+            var assuntoElmt = document.getElementById("emailAssunto").value;
+            var conteudoElmt = document.getElementById("emailConteudo").value;
+            var anexoElmt = document.getElementById("anexo").files[0];
+
+            var data = new FormData();
+
+            data.append("Anexo", anexoElmt, anexoElmt.name);
+            data.append("Assunto", assuntoElmt);
+            data.append("CorpoEmail", conteudoElmt);
+            data.append("Destinatario", Model["InteressadoEmail"]);
+
+            var response = $.ajax({
+                url: '/Email/Enviar',
+                processData: false,
+                data: data,
+                type: 'POST',
+                contentType: false,
+                dataType: 'json'
+            });
+
+                          swal({
+                              type: 'success',
+                              title: 'Sucesso',
+                              text: response.message
+                          }).then((result) => {
+                              console.log(result);
+                          })
+        }
+
+        //AQUI
+        function CalcularPep()
+        {
+            POST("/GestaoOcupacoes/CalcularPEP", JSON.stringify({ IdOcupacao: OcupacaoId }));
+            location.reload();
+        }
+
+        function ValidarCNPJ()
+        {
+            if ($("#CpfCNPJ").val().length > 18) {
+                $("#CpfCNPJ").val('')
+                swal({
+                    type: 'error',
+                    title: 'Atenção',
+                    text: 'Por favor, digite no máximo 18 números.'
+                })
+            }
+        }
+
+    </script>
+    <script src="~/Scripts/libs/moment/2.18.1/moment.min.js"></script>
+    <script src="~/Scripts/libs/big.js/6.0.0/big.min.js"></script>
+    <script src="~/ScriptsDist/GestaoOcupacaoModule.js?data=@ViewBag.DateTimeNow"></script>
+}

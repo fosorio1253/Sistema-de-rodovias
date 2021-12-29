@@ -1,0 +1,121 @@
+﻿@model List<DER.WebApp.Domain.Models.DTO.ListaProjetosMelhoriasDTO>
+@{
+    ViewBag.Title = "SGFD - Projetos Melhorias";
+    var permissoes = (DER.WebApp.ViewModels.PermissoesViewModel)ViewBag.Permissoes;
+}
+
+<section class="content">
+    <section class="content-header">
+        <h1>Consultar Projetos Cadastrados</h1>
+        <button onclick="window.location.href = '/ProjetosMelhorias/Novo'" class="btn btn-primary">
+            <i class="fa fa-save"></i>
+            <span>Novo</span>
+        </button>
+        <ol class="breadcrumb">
+            <li><i class="fa fa-home"></i><a href="/Home/Index"> Home </a></li>
+            <li class="active"><a> Consultar Projetos Cadastrados </a></li>
+        </ol>
+    </section>
+    <section class="jumbotron">
+        <div class="list">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Regional</th>
+                        <th scope="col">Município</th>
+                        <th scope="col">Rodovia </th>
+                        <th scope="col">KmInicial</th>
+                        <th scope="col">KmFinal </th>
+                        <th scope="col">Extensão</th>
+                        <th scope="col">Sentido </th>
+                        <th scope="col">Lado </th>
+                        <th scope="col">Lote </th>
+                        <th scope="col">Descrição</th>
+                        <th scope="col">Status </th>
+                        <th scope="col">Opções</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Count > 0)
+                    {
+                        foreach (var item in Model)
+                        {
+                            if (item.Status == "emandamento")
+                            {
+                                item.Status = "Em Andamento";
+                            }
+                            else
+                            {
+                                item.Status = "Futuro";
+
+                            }
+                            <tr data-id="@item.Id">
+                                <th scope="row">@item.Regional</th>
+                                <th>@item.Municipio</th>
+                                <th>@item.Rodovia</th>
+                                <th>@item.KmInicial</th>
+                                <th>@item.KmFinal</th>
+                                <th>@item.Extensao</th>
+                                <th>@item.Sentido</th>
+                                <th>@item.LadoId</th>
+                                <th>@item.Lote</th>
+                                <th>@item.Descricao</th>
+                                <th>@item.Status</th>
+                                <td>
+                                    <button type="submit" onclick="location.href='/ProjetosMelhorias/Visualizar/@item.Id'" @(permissoes.Visualizar ? "" : "disabled") class="btn btn-link"><i class="fa fa-search"></i></button>
+                                    <button type="submit" onclick="location.href='/ProjetosMelhorias/Editar/@item.Id'" @(permissoes.Editar ? "" : "disabled") class="btn btn-link" title="Editar"><i class="fa fa-pencil"></i></button>
+                                    <button onclick="Excluir(@item.Id)" @(permissoes.Excluir ? "" : "disabled") class="btn btn-link excluir" ><i class="fa fa-trash"></i></button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7">
+                                Nenhum dado encontrado.
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </section>
+</section>
+<script>
+@section Ready{
+    $('.table').DataTable({
+        language: {
+            url: '/Content/DataTables/Pt-Br.json'
+        }
+    });
+}
+    function Excluir(id) {        
+        swal({
+            title: 'Exclusão',
+            text: "Deseja realmente excluir o projeto?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'Não',
+            confirmButtonText: 'Sim'
+        }).then((result) => {
+            if (result.value) {
+                var response = POST("/ProjetosMelhorias/Excluir", JSON.stringify({ id: id }));               
+                if (response.status == true) {
+                    swal({
+                        type: 'success',
+                        title: 'Sucesso',
+                        text: 'Projeto Excluído com sucesso!'
+                    }).then((result) => {
+                        if (result.value) {                           
+                            $('[data-id=' + id + ']').remove()                            
+                        }
+                    })                    
+                }
+            }
+        });
+    }
+</script>

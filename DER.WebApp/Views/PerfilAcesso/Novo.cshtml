@@ -1,0 +1,177 @@
+﻿@model DER.WebApp.ViewModels.PerfilAcessoViewModel
+@{
+    ViewBag.Title = "SGFD - Cadastro de perfil de acesso";
+    ViewBag.Visualizar = ViewBag.Visualizar ?? false;
+    ViewBag.Editar = ViewBag.Editar ?? false;
+}
+
+<style>
+    
+</style>
+<section class="content">
+    <section class="content-header">
+        <div>
+            <h1>Perfil de Acesso</h1>
+            <button type="submit" class="btn btn-primary" id="btnSalvar" onclick="Salvar(event)">
+                <i class="fa fa-save"></i> <span>Salvar</span>
+            </button>
+            <a href="/PerfilAcesso/List" class="btn btn-primary">
+                <i class="fa fa-arrow-left"></i>
+                <span>Voltar</span>
+            </a>
+        </div>
+
+        <ol class="breadcrumb">
+            <li><i class="fa fa-home"></i><a href="/Home/Index"> Home </a></li>
+            <li><a  href="/PerfilAcesso/List"> Listar Perfil </a></li>
+            <li class="active"><a> Cadastro </a></li>
+        </ol>
+    </section>
+    <section class="jumbotron">
+        @using (Html.BeginForm("Salvar", "PerfilAcesso", FormMethod.Post, new { id = "perfilForm" }))
+        {
+            @Html.HiddenFor(model => model.Id, new { @data_input = "" } )
+            @Html.Hidden("Permissoes", String.Join(",", Model.PermissoesIds), new { @id = "hdnPermissao" })
+            <div class="container">
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Nome *</label>
+                    <div class="col-sm-10">
+                        @Html.EditorFor(model => model.Nome, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 50 } })
+                        @Html.ValidationMessageFor(m => m.Nome, "", new { @class = "text-danger  " })
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Descrição</label>
+                    <div class="col-sm-10">
+                        @Html.TextAreaFor(model => model.Descricao, new { @class = "form-control", @data_input = "", @row = 5, @maxlength = 150 })
+                        @Html.ValidationMessageFor(m => m.Descricao, "", new { @class = "text-danger  " })
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Permissões de perfil</label>
+                </div>
+
+                <ul class="tree-list permissoes">
+                    @foreach (var item in (List<DER.WebApp.ViewModels.ListaPermissaoViewModel>)ViewBag.Permissoes)
+                    {
+                        <li>
+                            @Html.Partial("_itemPermissao", item)
+                        </li>
+                    }
+                </ul>
+            </div>
+        }
+    </section>
+</section>
+
+<script>
+    @section Ready{
+
+    if ($(location).attr("href").toLocaleLowerCase().indexOf('visualizar') > 0) {
+        $('[data-input]').attr('disabled', 'disabled');
+        $('input').attr('disabled', 'disabled');
+        $('#btnSalvar').addClass("hide")
+    }
+
+    $('#hdnPermissao').val().split(',').forEach((e) => {
+        $('#Custom' + e ).prop('checked', true);
+    });
+
+    $('#perfilForm .permissoes input').on('click', (e) => {
+        var checkbox = $(e.target);
+        if (checkbox.is(':checked')) {
+            if (checkbox.hasClass('parent')) {
+                checkbox.parent().find('input').each((i, e) => {
+                    $(e).prop('checked', true)
+                });
+            }
+        }
+        else {
+            if (checkbox.hasClass('parent')) {
+                checkbox.parent().find('input').each((i, e) => {
+                    $(e).prop('checked', false)
+                });
+            }
+        }
+        checkbox.parents('.combo').each((index, div) => {
+            var anyChecked = true;
+            $(div).find('.child').each((i, input) => {
+                anyChecked = anyChecked && !$(input).is(':checked')
+            })
+
+            var fullChecked = true;
+            $(div).find('.child').each((i, input) => {
+                fullChecked = fullChecked && $(input).is(':checked')
+            })
+            
+            if (!fullChecked) {
+                $(div).find('.parent:first').prop('checked', true);
+            }
+            if (anyChecked) {
+                $(div).find('.parent').prop('checked', false);
+            }
+        })
+    });
+    }
+
+    function Salvar(e) {
+        var data = {};
+
+        if ($('#perfilForm').valid()) {
+            $('#perfilForm [data-input]').each((i, e) => {
+                data[$(e).attr("name")] = $(e).val()
+            });
+
+            var permissoes = [];
+
+            $('#perfilForm .permissoes input:checked').each((i, e) => {
+                permissoes.push($(e).val());
+            })
+
+            data['PermissoesIds'] = permissoes;
+
+            var response = POST('/PerfilAcesso/Salvar', JSON.stringify(data))
+            if (response.status == true) {
+                swal({
+                    type: 'success',
+                    title: 'Sucesso',
+                    text: 'Perfil salvo com sucesso!'
+                }).then((result) => {
+                    if (result.value) {
+                        window.location.href = "/PerfilAcesso/List";
+                    }
+                })
+            }
+            else if (response.exists == true) {
+                 swal({
+                    type: 'error',
+                    title: 'Formulário invalido',
+                    text: 'Este nome perfil já esta sendo usado'
+                }).then((result) => {
+                    console.log(response.html);
+                })
+            }
+            else {
+                swal({
+                    type: 'error',
+                    title: 'Formulário invalido',
+                    text: 'Favor verifique os campos!'
+                }).then((result) => {
+                    console.log(response.html);
+                })
+            }
+        }
+    }
+
+    var toggler = document.getElementsByClassName("caret");
+    var i;
+
+    for (i = 0; i < toggler.length; i++) {
+        toggler[i].addEventListener("click", function () {
+            this.parentElement.querySelector(".nested").classList.toggle("active");
+            this.classList.toggle("caret-down");
+        });
+    }
+
+    
+</script>

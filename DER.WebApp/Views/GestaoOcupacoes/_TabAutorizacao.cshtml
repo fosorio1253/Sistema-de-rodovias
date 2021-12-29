@@ -1,0 +1,71 @@
+﻿@model DER.WebApp.ViewModels.GestaoOcupacoes.GestaoOcupacoesViewModel
+@{
+    ViewBag.Title = "SGFD - Cadastro de Ocupações";
+
+    var htmlAttributesText = new Dictionary<string, object> 
+    {
+        { "class" , "form-control"},
+        { "data_input", "" },     
+        { "maxlength", 250},            
+    };
+    var htmlAttributesData = new Dictionary<string, object>
+    {
+        { "type" , "date"},
+        { "class" , "form-control"},
+        { "data_input", "" },     
+        { "data_toggle", "tooltip"},     
+        { "title", "DD/MM/AAAA" },     
+        { "min", "1900-01-01" },     
+        { "max", "9999-12-31" },         
+    };
+    var disabledReadOnly = "";
+    if (ViewBag.IsUsuarioAdm==false || ViewBag.situacao == "Deferida")
+    {   
+        disabledReadOnly = "disabled=\"disabled\"";
+        htmlAttributesText.Add("disabled", "disabled");
+        htmlAttributesData.Add("disabled", "disabled");
+    }
+    var htmlAttributesReadOnlyText = new { htmlAttributes=htmlAttributesText};
+    var htmlAttributesReadOnlyData = new { htmlAttributes=htmlAttributesData};
+}
+<div class="tab-pane fade" id="gestao-ocupacao-autorizacao@{@ViewBag.idInterno}" role="tabpanel" aria-labelledby="gestao-ocupacao-autorizacao-tab@{@ViewBag.idInterno}">
+    <div class="row">
+        <div class="col-md-6">
+            <label class="col-form-label">Data da Assinatura</label>
+            @Html.EditorFor(Model => Model.Manutencao.DataAssinatura, @htmlAttributesReadOnlyData)
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-6">
+            <label class="col-form-label">Data da Aprovação Divisão Regional</label>
+            @Html.EditorFor(Model => Model.Manutencao.DataAprovacaoRegional, @htmlAttributesReadOnlyData)
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-6">
+            <label class="col-form-label">Observação</label>
+            @Html.EditorFor(Model => Model.Manutencao.Observacao, @htmlAttributesReadOnlyText)
+            @Html.ValidationMessageFor(m => m.Manutencao.Observacao, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <br />
+    <div class="modal-body form-group form-body col-md-6">
+        <fieldset>
+            <legend>Documento Anexado</legend>
+            <div class="form-group row">
+                <div class="col-md-10">
+                    <input type="file" name="Manutencao_ArquivoUpload" id="Manutencao_ArquivoUpload" data-input="" class="form-control" @disabledReadOnly/>
+                    @if (@Model.Manutencao != null && !String.IsNullOrEmpty(@Model.Manutencao.CaminhoArquivo))
+                    {
+                        <button type='button' onclick='controller.DownloadArquivo("@Model.Manutencao.CaminhoArquivo");' class='btn btn-link DownloadArquivoId'><i class='fa fa-download' title='Baixar Arquivo'></i></button>
+                    }
+                </div>
+            </div>
+            @*<button type="button" data-dismiss="modal" onclick="BaixarTermo()" id="btnBaixarTermo" class="btn btn-primary" type="button"><i class="fa fa-download" title="Enviar"></i> Baixar Documento Anexado</button>*@
+
+        </fieldset>
+    </div>
+
+</div>

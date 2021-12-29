@@ -1,0 +1,59 @@
+﻿@model DER.WebApp.Domain.Models.Template
+@{
+
+    ViewBag.Title = "SGFD - Edição de template";
+}
+
+<section class="content">
+    <section class="content-header">
+        <div>
+            <h1>Template</h1>
+            <button type="submit" class="btn btn-primary" onclick="Salvar()" id="btnSalvar">
+                <i class="fa fa-save"></i>
+                <span>Salvar</span>
+            </button>
+            <a href="/Template/List" class="btn btn-primary">
+                <i class="fa fa-arrow-left"></i>
+                <span>Voltar</span>
+            </a>
+        </div>
+
+        <ol class="breadcrumb">
+            <li><i class="fa fa-home"></i><a href="/Home/Index"> Home </a></li>
+            <li><a href="/Template/List">Listar templates</a></li>
+        </ol>
+    </section>
+    <section class="jumbotron">
+        @using (Html.BeginForm("Salvar", "Template", FormMethod.Post, new { id = "template" }))
+        {
+            @Html.HiddenFor(model => model.Id, new { data_input = "" })
+        <div class="container">
+            <div class="form-group row">
+                <label class="col-sm-12">Assunto</label>
+                <div class="col-sm-12">
+                    @Html.TextBoxFor(model => model.Assunto, new { @class = "form-control", @data_input = "", @maxlength = 50 })
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-12">Conteúdo do template (aceita tags HTML) *</label>
+                <div class="col-sm-12">
+                    @Html.TextAreaFor(model => model.Conteudo, new { @class = "form-control", @maxlength = 50000, @cols = 80, @rows = 10 })
+                </div>
+            </div>
+        </div>
+        }
+    </section>
+</section>
+
+<script>
+    function Salvar() {
+        var response = POST("/Template/Update", JSON.stringify({ Id: $('#Id').val(), Assunto: $('#Assunto').val(), Conteudo: $('#Conteudo').val() }));
+        swal({
+            type: 'success',
+            title: 'Sucesso',
+            text: response.message
+        }).then((result) => {
+            window.location.href = "/Template/List";
+        });
+    }
+</script>

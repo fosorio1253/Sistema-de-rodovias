@@ -1,0 +1,164 @@
+﻿@model DER.WebApp.ViewModels.GestaoOcupacoes.GestaoOcupacoesViewModel
+@{
+    ViewBag.Title = "SGFD - Cadastro de Ocupações";
+}
+<div class="tab-pane fade" id="gestao-ocupacao-tep@{@ViewBag.idInterno}" role="tabpanel" aria-labelledby="gestao-ocupacao-tep-tab@{@ViewBag.idInterno}">
+        <!--AQUI-->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card-body table-responsive p-0">
+                    <table id="tablePep" class="table table-hover text-nowrap">
+                        <tbody>
+                            @if (!ViewBag.SomenteVisualizar && ViewBag.situacao != "Deferida")
+                            {
+                            <tr>
+                                <td><button class="btn btn-primary" id="btnCalcularPep" onclick="CalcularPep()" type="button"><i class="fa fa-money"> </i>Calcular PEP</button></td>
+                            </tr>
+                            }
+                            <tr>
+                                <td>Data de Emissão da PEP:</td>
+                                <td>@Html.TextBoxFor(model => model.PEP.DataEmissãoPEP, "{0:yyyy-MM-dd}", new { type = "date", @class = "form-control", @data_input = "", @disabled = "disabled" })</td>
+                            </tr>
+                            <tr>
+                                <td>Data do Pagamento:</td>
+                                <td>@Html.TextBoxFor(model => model.PEP.DataPagamento, "{0:yyyy-MM-dd}", new { type = "date", @class = "form-control", @data_input = "", @disabled = "disabled" })</td>
+                            </tr>
+                            <tr>
+                                <td>Data de vencimento:</td>
+                                <td>@Html.TextBoxFor(model => model.PEP.Datavencimento, "{0:yyyy-MM-dd}", new { type = "date", @class = "form-control", @data_input = "", @disabled = "disabled" })</td>
+                            </tr>
+                            <tr>
+                                <td>Valor:</td>
+                                <td>@Html.TextBoxFor(model => model.PEP.Valor, new { type = "decimal", @class = "form-control", @data_input = "", @disabled = "disabled" })</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row">
+                    <div class="row" style="margin-left:5px;">
+                        <div class="col-md-11" style="margin-top:5px;">
+                            <fieldset>
+                                <legend>Anexar comprovante</legend>
+                                @if (!ViewBag.SomenteVisualizar && ViewBag.situacao != "Deferida")
+                                {
+                                <div class="row" style="margin-left:5px;">
+                                    <div class="col-sm-4" style="margin-top:5px;">
+                                        <button class="btn btn-primary" id="btnAdicionarComprovante" onclick="" type="button"><i class="fa fa-archive"> </i>Selecionar Arquivo</button>
+                                    </div>
+                                    <div class="col-sm-8" style="margin-top:5px;">
+                                        <p id="comprovantePep"></p>
+                                    </div>
+                                </div>
+                                }
+                                <div class="row" style="margin-left:5px;">
+                                    <div class="col-sm-4" style="margin-top:5px;">
+                                        <button class="btn btn-primary">
+                                            <i class="fa fa-download"></i>
+                                            @if (Model.PEP != null)
+                                            {
+                                                @Html.ActionLink("Baixar boleto", "BaixarBoletoPEP", new { idocupacao = Model.Id }, new { @class = "customButton" })
+                                            }
+                                            else
+                                            {
+                                                <a href="javascript:alert('Dados não preenchidos!');" class="customButton">Você precisa realizar o Upload do Regulamento Vigente</a>
+                                            }
+                                        </button>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card-body table-responsive p-0">
+                    <table id="tablePepFatores" class="table table-hover text-nowrap" style="border: 1px solid black">
+                        <thead>
+                            <tr>
+                                <th style="background-color:gray">Fatores de calculos da PEP</th>
+                                <th style="background-color:gray"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Data base calculo:</td>
+                                <td id="dataBaseCalculoPepColumn">
+                                    @Html.TextBoxFor(model => model.PEP.dataBaseCalculo, new { type = "text", @class = "form-control", @data_input = "", @disabled = "disabled" })
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>UFESP:</td>
+                                <td id="ufespPepColumn">
+                                    @Html.TextBoxFor(model => model.PEP.UFESP, new { type = "decimal", @class = "form-control", @data_input = "", @disabled = "disabled" })
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Extensão da Ocupação Longitudinal - (D):</td>
+                                <td id="extensaoOcupacaoLongitudinalPepColumn">
+                                    @Html.TextBoxFor(model => model.PEP.extensaoOcupacaoLongitudinal, new { type = "decimal", @class = "form-control", @data_input = "", @disabled = "disabled" })
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Extensão da Ocupação Transversal - (Y):</td>
+                                <td id="extensaoOcupacaoTransversalPepColumn">
+                                    @Html.TextBoxFor(model => model.PEP.extensaoOcupacaoTransversal, new { type = "decimal", @class = "form-control", @data_input = "", @disabled = "disabled" })
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Extensão da Ocupação Pontual - (K):</td>
+                                <td id="extensaoOcupacaoPontualPepColumn">
+                                    @Html.TextBoxFor(model => model.PEP.extensaoOcupacaoPontual, new { type = "decimal", @class = "form-control", @data_input = "", @disabled = "disabled" })
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Fator de remuneração - (P):</td>
+                                <td id="fatorRemuneracaoPepColumn">
+                                    @Html.TextBoxFor(model => model.PEP.fatorRemuneracao, new { type = "decimal", @class = "form-control", @data_input = "", @disabled = "disabled" })
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                @if (ViewBag.IsUsuarioAdm)
+                {
+                    <div class="card-body table-responsive p-0">
+                        <table id="tablePepCalculo" class="table table-hover text-nowrap" style="border: 1px solid black">
+                            <thead>
+                                <tr>
+                                    <th style="background-color:gray">Calculo</th>
+                                    <th style="background-color:gray"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Ocupação Longitudinal:</td>
+                                    <td id="OcupacaoLongitudinalPepColumn">
+                                        @Html.TextBoxFor(model => model.PEP.OcupacaoLongitudinal, new { type = "decimal", @class = "form-control", @data_input = "", @disabled = "disabled" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Ocupação Transversal:</td>
+                                    <td id="OcupacaoTransversalPepColumn">
+                                        @Html.TextBoxFor(model => model.PEP.OcupacaoTransversal, new { type = "decimal", @class = "form-control", @data_input = "", @disabled = "disabled" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Ocupação Pontual:</td>
+                                    <td id="OcupacaoPontualPepColumn">
+                                        @Html.TextBoxFor(model => model.PEP.OcupacaoPontual, new { type = "decimal", @class = "form-control", @data_input = "", @disabled = "disabled" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Total Calculado:</td>
+                                    <td id="totalCalculadoPepColumn">
+                                        @Html.TextBoxFor(model => model.PEP.totalCalculado, new { type = "decimal", @class = "form-control", @data_input = "", @disabled = "disabled" })
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>

@@ -1,0 +1,94 @@
+﻿@model DER.WebApp.ViewModels.GestaoOcupacoes.GestaoOcupacoesViewModel
+@{
+    ViewBag.Title = "SGFD - Cadastro de Ocupações";
+
+}
+
+<div class="tab-pane fade active in" id="gestao-transferencia-titularidade@{@ViewBag.idInterno}" role="tabpanel"
+     aria-labelledby="gestao-transferencia-titularidade-tab@{@ViewBag.idInterno}">
+    <div class="col-8">
+        <div class="form-group row">
+            <div class="col-md-3">
+                <label class="col-form-label">Número do Protocolo / SPDOC</label>
+                @Html.EditorFor(Model => Model.Transferencia.NumerospdocAntecessor, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 50 } })
+                @Html.ValidationMessageFor(m => m.Transferencia.NumerospdocAntecessor, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="col-md-3">
+                <label class="col-form-label">Número do Processo</label>
+                @Html.EditorFor(Model => Model.Transferencia.NumeroProcessoAntecessor, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 50 } })
+                @Html.ValidationMessageFor(m => m.Transferencia.NumeroProcessoAntecessor, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-3">
+                <label class="col-form-label">Data Solicitação</label>
+                @Html.EditorFor(Model => Model.Transferencia.DataSolicitacao, new { htmlAttributes = new { @type = "date", @class = "form-control", @data_input = "", @data_toggle = "tooltip", title = "DD/MM/AAAA", @value = "111111-08-09", @min = "1900-01-01", @max = "9999-12-31" } })
+                @Html.ValidationMessageFor(m => m.Transferencia.DataSolicitacao, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-md-3">
+                <label class="col-form-label">Antecessor</label>
+                @Html.EditorFor(Model => Model.Transferencia.AntecessorInteressado, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 250, @disabled = true } })
+
+            </div>
+            @*<div class="col-md-3">
+                <label class="col-form-label">CPF/CNPJ Sucessor</label>
+                @if (Model.Id != 0)
+                {
+                    if (Model.NaturezaJuridicaId == (int)DER.WebApp.Domain.Models.Enum.NaturezaEnum.PessoaFisica)
+                    {
+                        @Html.EditorFor(Model => Model.CpfCNPJ, new { htmlAttributes = new { @class = "form-control", @data_mask = "000.000.000-00", @data_input = "", @maxlength = 18, @onkeypress = "mascaraMutuario(this,cpfCnpj)", onchange = "ValidarCNPJ(this,cpfCnpj)" } })
+                    }
+                    else
+                    {
+                        @Html.EditorFor(Model => Model.CpfCNPJ, new { htmlAttributes = new { @class = "form-control", @data_mask = "00.000.000/0000-00", @data_input = "", @maxlength = 18, @onkeypress = "mascaraMutuario(this,cpfCnpj)", onchange = "ValidarCNPJ(this,cpfCnpj)" } })
+                    }
+                }
+                else
+                {
+                    @Html.EditorFor(Model => Model.CpfCNPJ, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 18, @onkeypress = "mascaraMutuario(this,cpfCnpj)", onchange = "ValidarCNPJ(this,cpfCnpj)" } })
+                }
+            </div>
+            <div class="col-md-3">
+                <label class="col-form-label">Sucessor *</label>
+                <button class="btn btn-primary center-block" onclick="" type="button" id="btnBuscarSucessor">
+                    <i class="fa fa-search"></i>
+                    <span>Buscar Sucessor</span>
+                </button>
+            </div>
+            <div class="col-md-3">
+                <label class="col-form-label">Sucessor</label>
+                @Html.EditorFor(Model => Model.Interessado, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 250, @disabled = true } })
+
+            </div>*@
+            <div>
+
+            </div>
+        </div>
+
+        @*<div class="form-group row">
+                <div class="col-md-3">
+                    <label class="col-form-label">Cobrança de Anuidade</label>
+                </div>
+                <div class="radio col-md-3">
+                    <label><input type="radio" name="Transferencia_Recolher" id="Transferencia_Recolher" checked>Recolher</label>
+                </div>
+                <div class="radio col-md-3">
+                    <label><input type="radio" name="Transferencia_LiminarDepositoJudicial" id="Transferencia_LiminarDepositoJudicial">Liminar Depósito Judicial</label>
+                </div>
+                <div class="radio col-md-3">
+                    <label><input type="radio" name="Transferencia_LiminarSuspensoRecolhimento" id="Transferencia_LiminarSuspensoRecolhimento">Liminar Suspensão Recolhimento</label>
+                </div>
+            </div>*@
+
+        <div class="form-group row">
+            <div class="col-md-6">
+                <label class="col-form-label">Observação</label>
+                @Html.EditorFor(Model => Model.Transferencia.Observacao, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 250 } })
+                @Html.ValidationMessageFor(m => m.Transferencia.Observacao, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+</div>
+

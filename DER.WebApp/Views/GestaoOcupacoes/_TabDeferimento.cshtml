@@ -1,0 +1,167 @@
+﻿@model DER.WebApp.ViewModels.GestaoOcupacoes.GestaoOcupacoesViewModel
+@{
+    ViewBag.Title = "SGFD - Cadastro de Ocupações";
+
+    var htmlAttributesText = new Dictionary<string, object> 
+    {
+        { "class" , "form-control"},
+        { "data_input", "" },     
+        { "maxlength", 250},            
+    };
+    var htmlAttributesData = new Dictionary<string, object>
+    {
+        { "type" , "date"},
+        { "class" , "form-control"},
+        { "data_input", "" },     
+        { "data_toggle", "tooltip"},     
+        { "title", "DD/MM/AAAA" },     
+        { "min", "1900-01-01" },     
+        { "max", "9999-12-31" },         
+    };
+    var htmlAttributesDataDespachoAutorizativo = new Dictionary<string, object>(htmlAttributesData);
+    htmlAttributesDataDespachoAutorizativo.Add("onblur", "controller.validarDatasParecer();");
+    var disabledReadOnly = "";
+    if (ViewBag.IsUsuarioAdm==false || ViewBag.situacao == "Deferida")
+    {   
+        disabledReadOnly = "disabled=\"disabled\"";
+        htmlAttributesData.Add("disabled", "disabled");
+        htmlAttributesDataDespachoAutorizativo.Add("disabled", "disabled");
+        htmlAttributesText.Add("disabled", "disabled");
+    }
+
+    var htmlAttributesReadOnlyText = new { htmlAttributes=htmlAttributesText};
+    var htmlAttributesReadOnlyData = new { htmlAttributes=htmlAttributesData};
+    var htmlAttributesReadOnlyDataDespachoAutorizativo = new { htmlAttributes=htmlAttributesDataDespachoAutorizativo};
+}
+<div class="tab-pane fade" id="gestao-ocupacao-deferimento@{@ViewBag.idInterno}" role="tabpanel" aria-labelledby="gestao-ocupacao-deferimento-tab@{@ViewBag.idInterno}">
+    <div class="row">
+        <div class="col-md-6">
+            @{
+                if (ViewBag.origemInterno == "cancelamento")
+                {
+                    <label class="col-form-label">
+                        Data Assinatura Cancelamento
+                    </label>
+                }
+                else
+                {
+                    <label class="col-form-label">
+                        Data Assinatura Observação
+                    </label>
+                }
+            }
+            @Html.EditorFor(Model => Model.Deferimento.DataAssinatura, @htmlAttributesReadOnlyData)
+        </div>
+    </div>
+    <br />
+    @{
+        if (ViewBag.origemInterno != "cancelamento")
+        {
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="col-form-label">Número do Termo</label>
+                    @Html.EditorFor(Model => Model.Deferimento.NumeroProcesso, @htmlAttributesReadOnlyText)
+                    @Html.ValidationMessageFor(m => m.Deferimento.NumeroProcesso, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        }
+    }
+
+    <br />
+    <div class="row">
+        <div class="col-md-6">
+
+            @{
+                if (ViewBag.origemInterno == "cancelamento")
+                {
+                    <label class="col-form-label">
+                        Data do Despacho Autorizativo/Termo Cancelamento
+                    </label>
+                }
+                else
+                {
+                    <label class="col-form-label">
+                        Data do Despacho Autorizativo/Termo Observação
+                    </label>
+                }
+            }
+            @Html.EditorFor(Model => Model.Deferimento.DataDespachoAutorizativo, @htmlAttributesReadOnlyDataDespachoAutorizativo)
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-6">
+
+            @{
+                if (ViewBag.origemInterno == "cancelamento")
+                {
+                    <label class="col-form-label">
+                        Data Publicação Cancelamento
+                    </label>
+                }
+                else
+                {
+                    <label class="col-form-label">
+                        Data Publicação Observação
+                    </label>
+                }
+            }
+
+
+            @Html.EditorFor(Model => Model.Deferimento.DataPublicacao, @htmlAttributesReadOnlyData)
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-6">
+
+            @{
+                if (ViewBag.origemInterno == "cancelamento")
+                {
+                    <label class="col-form-label">
+                        Número Processo Cancelamento
+                    </label>
+                }
+                else
+                {
+                    <label class="col-form-label">
+                        Número Processo
+                    </label>
+                }
+            }
+
+            @Html.EditorFor(Model => Model.Deferimento.NumeroProcesso, @htmlAttributesReadOnlyText)
+            @Html.ValidationMessageFor(m => m.Deferimento.NumeroProcesso, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <br />
+    <div class="modal-body form-group form-body col-md-6">
+        <fieldset>
+
+            @{
+                if (ViewBag.origemInterno == "cancelamento")
+                {
+                    <legend>Documento Anexado </legend>
+                }
+                else
+                {
+                    <legend>Termo Anexado </legend>
+                }
+            }
+
+
+            <div class="form-group row">
+                <div class="col-md-10">
+                    <input type="file" name="TermoAnexadoDocumentoUpload" id="TermoAnexadoDocumentoUpload" data-input="" class="form-control" @disabledReadOnly/>
+                    @if (@Model.Deferimento != null && !String.IsNullOrEmpty(@Model.Deferimento.CaminhoArquivo))
+                    {
+                        <button type='button' onclick='controller.DownloadArquivo("@Model.Deferimento.CaminhoArquivo");' class='btn btn-link DownloadArquivoId'><i class='fa fa-download' title='Baixar Arquivo'></i></button>
+                    }
+                </div>
+            </div>
+            @*<button type="button" data-dismiss="modal" onclick="BaixarTermo()" id="btnBaixarTermo" class="btn btn-primary" type="button"><i class="fa fa-download" title="Enviar"></i> Baixar Termo</button>*@
+
+        </fieldset>
+    </div>
+
+</div>

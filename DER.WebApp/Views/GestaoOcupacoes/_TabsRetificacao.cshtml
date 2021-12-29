@@ -1,0 +1,151 @@
+﻿@model DER.WebApp.ViewModels.GestaoOcupacoes.GestaoOcupacoesViewModel
+@{
+    ViewBag.Title = "SGFD - Cadastro de Ocupações";
+
+}
+
+
+<div class="row center-block">
+    <br />
+    <div class="col-md-12">
+        <div class="card card-primary card-tabs">
+            <div class="card-header p-0 pt-1">
+                <ul class="nav nav-tabs" id="gestao-ocupacao-tab@{@ViewBag.id}" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link" id="gestao-retificacao-tab@{@ViewBag.id}" data-toggle="pill" href="#gestao-retificacao@{@ViewBag.id}" role="tab" aria-controls="gestao-retificacao@{@ViewBag.id}" aria-selected="false">Reti-Ratificação</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" id="gestao-ocupacao-ocupacao-tab@{@ViewBag.id}" data-toggle="pill" href="#gestao-ocupacao-ocupacao@{@ViewBag.id}" role="tab" aria-controls="gestao-ocupacao-ocupacao@{@ViewBag.id}" aria-selected="false">Ocupação *</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" id="gestao-ocupacao-trecho-tab@{@ViewBag.id}" data-toggle="pill" href="#gestao-ocupacao-trecho@{@ViewBag.id}" role="tab" aria-controls="gestao-ocupacao-trecho@{@ViewBag.id}" aria-selected="false">Trecho Solicitado *</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="gestao-ocupacao-documentos-tab@{@ViewBag.id}" data-toggle="pill" href="#gestao-ocupacao-documentos@{@ViewBag.id}" role="tab" aria-controls="gestao-ocupacao-documentos@{@ViewBag.id}" aria-selected="false">Documentos *</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="gestao-ocupacao-deferimento-tab@{@ViewBag.id}" data-toggle="pill" href="#gestao-ocupacao-deferimento@{@ViewBag.id}" role="tab" aria-controls="gestao-ocupacao-deferimento@{@ViewBag.id}" aria-selected="false">Deferimento</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="gestao-ocupacao-remuneracao-tab@{@ViewBag.id}" data-toggle="pill" href="#gestao-ocupacao-remuneracao@{@ViewBag.id}" role="tab" aria-controls="gestao-ocupacao-remuneracao@{@ViewBag.id}" aria-selected="false">Remuneração</a>
+                    </li>
+                    @if(ViewBag.IsUsuarioAdm)
+                    {
+                    <li class="nav-item">
+                        <a class="nav-link" id="gestao-ocupacao-notificacao-tab@{@ViewBag.id}" data-toggle="pill" href="#gestao-ocupacao-notificacao@{@ViewBag.id}" role="tab" aria-controls="gestao-ocupacao-notificacao@{@ViewBag.id}" aria-selected="false">Notificações</a>
+                    </li>
+                    }
+                </ul>
+            </div>
+            <div class="card-body">
+                <div class="tab-content" id="gestao-ocupacao-tabContent@{@ViewBag.id}">
+                    <br />
+                    @{
+                        @Html.Partial(
+                         "_TabRetiRatificacao",
+                         new ViewDataDictionary(this.Vi‌​ewData) {
+                           {
+                             "idInterno", @ViewBag.id
+                           }
+                         }
+                       );
+                    }
+
+                    
+                      @{
+                        if(ViewBag.IsUsuarioAdm)
+                        {
+                        @Html.Partial(
+                        "_TabNotificacao",
+                        new ViewDataDictionary(this.Vi‌​ewData) {
+                          {
+                            "idInterno", @ViewBag.id
+                          }
+                        }
+                        );
+                        }
+                     }
+
+
+
+
+                    @{
+                        @Html.Partial(
+                         "_TabGestaoOcupacao",
+                         new ViewDataDictionary(this.Vi‌​ewData) {
+                           {
+                             "idInterno", @ViewBag.id
+                           }
+                         }
+                       );
+                    }
+
+
+                    @{
+
+                        @Html.Partial(
+                        "_TabTrecho",
+                        new ViewDataDictionary(this.Vi‌​ewData) {
+                          {
+                            "idInterno", @ViewBag.id
+                          }
+                        }
+                      );
+                    }
+
+                    @{
+
+                        @Html.Partial(
+                        "_TabTep",
+                        new ViewDataDictionary(this.Vi‌​ewData) {
+                          {
+                            "idInterno", @ViewBag.id
+                          }
+                        }
+                      );
+                    }
+
+                    @{
+
+                        @Html.Partial(
+                        "_TabDocumentos",
+                        new ViewDataDictionary(this.Vi‌​ewData) {
+                          {
+                            "idInterno", @ViewBag.id
+                          }
+                        }
+                      );
+                    }
+
+                    @{
+
+                        @Html.Partial(
+                        "_TabDeferimento",
+                        new ViewDataDictionary(this.Vi‌​ewData) {
+                          {
+                            "idInterno", @ViewBag.id
+                          },
+                            {
+                            "origemInterno", @ViewBag.origem
+                          }
+                        }
+                      );
+                    }
+
+                    @{
+                        @Html.Partial(
+                        "_TabRemuneracao",
+                        new ViewDataDictionary(this.Vi‌​ewData) {
+                          {
+                            "idInterno", @ViewBag.id
+                          }
+                        }
+                      );
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

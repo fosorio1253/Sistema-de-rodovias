@@ -1,0 +1,41 @@
+﻿@model DER.WebApp.ViewModels.GestaoOcupacoes.GestaoOcupacoesViewModel
+@{
+    ViewBag.Title = "SGFD - Cadastro de Ocupações";
+
+    var htmlAttributes = new Dictionary<string, object>
+    {
+        { "class" , "form-control"},
+        { "data_input", "" },     
+    };    
+    
+    if (ViewBag.situacao == "Deferida")
+    {   
+        htmlAttributes.Add("disabled", "disabled");
+    }
+    var htmlAttributesText = new Dictionary<string, object>(htmlAttributes);
+    htmlAttributesText.Add("maxlength", 50);
+    var htmlAttributesReadOnlyText = new { htmlAttributes=htmlAttributesText};
+}
+
+@{
+    string fadeIn = "";
+    if (!string.IsNullOrEmpty(ViewBag.origem))
+    {
+        if (ViewBag.origem == "implantacao" || ViewBag.origem == "regularizacao"){fadeIn = "active in";}
+    }
+}
+
+<div class="tab-pane fade @fadeIn" id="gestao-ocupacao-ocupacao@{@ViewBag.idInterno}" role="tabpanel" aria-labelledby="gestao-ocupacao-ocupacao-tab@{@ViewBag.idInterno}">
+    <div class="col-md-8">
+        <label class="col-form-label">Assunto *</label>
+        @Html.EditorFor(Model => Model.Assunto, @htmlAttributesReadOnlyText)
+        @Html.ValidationMessageFor(m => m.Assunto, "", new { @class = "text-danger" })
+
+        <br />
+
+        <label class="col-form-label">Observação</label>
+        @Html.EditorFor(Model => Model.Observacao, @htmlAttributesReadOnlyText)
+        @Html.ValidationMessageFor(m => m.Observacao, "", new { @class = "text-danger" })
+    </div>
+
+</div>

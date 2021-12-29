@@ -1,0 +1,342 @@
+﻿@model DER.WebApp.ViewModels.Financeiro.FaturamentoPorOcupacao.FaturamentoPorOcupacaoViewModelParam
+@{
+    ViewBag.Title = "Financeiro";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var permissoes = (DER.WebApp.ViewModels.PermissoesViewModel)ViewBag.Permissoes;
+}
+
+<section class="content">
+    <section class="content-header">
+        <h1>Financeiro</h1>
+    </section>
+    <section class="jumbotron">
+        <div class="row" style="margin-right: 10px">
+            <div class="row">
+                <div class="col-sm-2">
+                    <label>Nº de Protocolo:</label>
+                    @Html.TextBoxFor(model => model.Protocolo, new { @class = "form-control" })
+                </div>
+                <div class="col-sm-2">
+                    <label>Nº de Processo:</label>
+                    @Html.TextBoxFor(model => model.Processo, new { @class = "form-control" })
+                </div>
+                <div class="col-sm-2">
+                    <label>Nº de Termo:</label>
+                    @Html.TextBoxFor(model => model.Termo, new { @class = "form-control" })
+                </div>
+                <div class="col-sm-2">
+                    <label>Data inicial:</label>
+                    @Html.TextBoxFor(model => model.DataInicial, new { type = "date", @class = "form-control" })
+                </div>
+                <div class="col-sm-2">
+                    <label>Data Final:</label>
+                    @Html.TextBoxFor(model => model.DataFinal, new { type = "date", @class = "form-control" })
+                </div>
+                <div class="col-sm-2">
+                    <label>Tipo Ocupação:</label>
+                    @Html.DropDownListFor(model => model.TipoOcupacao, Model.Ocupacoes, "Todos", new { @class = "form-control", @data_input = "" })
+                    @Html.ValidationMessageFor(m => m.TipoOcupacao, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-sm-2">
+                    <label>Total valor:</label>
+                    @Html.TextBoxFor(model => model.ValorTotal, new { @class = "form-control" })
+                </div>
+                <div class="col-sm-2">
+                    <label>Interessado:</label>
+                    @Html.DropDownListFor(model => model.InteressadoId, Model.Interessados, "Todos", new { @class = "form-control", @data_input = "" })
+                    @Html.ValidationMessageFor(m => m.InteressadoId, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-sm-2">
+                    <label>Regional:</label>
+                    @Html.DropDownListFor(model => model.Regional, Model.Regionais, "Todos", new { @class = "form-control", @data_input = "" })
+                    @Html.ValidationMessageFor(m => m.Regional, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-sm-2">
+                    <label>Residencia de Conservação:</label>
+                    @Html.DropDownListFor(model => model.ResidenciaConservacao, Model.ResidenciaConservacoes, "Todos", new { @class = "form-control", @data_input = "" })
+                    @Html.ValidationMessageFor(m => m.ResidenciaConservacao, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-sm-2">
+                    <label>Ações judiciais:</label>
+                    @Html.DropDownListFor(model => model.AcoesJudiciais, new SelectList(new string[] { "Todos", "Sim", "Não" }, "Selecione"), htmlAttributes: new { @class = "form-control" })
+                </div>
+                <div class="col-sm-2">
+                    <label>Trecho concedido:</label>
+                    @Html.DropDownListFor(model => model.TrechoConcedido, new SelectList(new string[] { "Todos", "Sim", "Não" }, "Selecione"), htmlAttributes: new { @class = "form-control" })
+                </div>
+                <div class="col-sm-2">
+                    <label>Rodovia:</label>
+                    @Html.DropDownListFor(model => model.RodoviaId, Model.Rodovias, "Todos", new { @class = "form-control", @data_input = "" })
+                    @Html.ValidationMessageFor(m => m.RodoviaId, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-sm-2">
+                    <label>Km inicial:</label>
+                    @Html.TextBoxFor(model => model.KmInicial, new { type = "decimal", @class = "form-control" })
+                </div>
+                <div class="col-sm-2">
+                    <label>Km Final:</label>
+                    @Html.TextBoxFor(model => model.KmFinal, new { type = "decimal", @class = "form-control" })
+                </div>
+                <div class="col-sm-2">
+                    <label>Tipo Faturamento:</label>
+                    <div>
+                        <label>Anuidade</label>
+                        @Html.CheckBoxFor(Model => Model.TipoFaturamentoAnuidade, true)
+                    </div>
+                    <div>
+                        <label>PEP</label>
+                        @Html.CheckBoxFor(Model => Model.TipoFaturamentoPEP, true)
+                    </div>
+                    <div>
+                        <label>Regularização</label>
+                        @Html.CheckBoxFor(Model => Model.TipoFaturamentoRegularizacao, true)
+                    </div>
+                    <div>
+                        <label>Juridica</label>
+                        @Html.CheckBoxFor(Model => Model.TipoFaturamentoJuridica, true)
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <label>Status do Boleto:</label>
+                    <div>
+                        <label>Pendente</label>
+                        @Html.CheckBoxFor(Model => Model.StatusPendente, true)
+                    </div>
+                    <div>
+                        <label>Pago</label>
+                        @Html.CheckBoxFor(Model => Model.StatusPago, true)
+                    </div>
+                    <div>
+                        <label>Vencido</label>
+                        @Html.CheckBoxFor(Model => Model.StatusVencido, true)
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin-bottom:1%; margin-top:1%; margin-right:26px;">
+                <div class="col-sm-1" style="float: right">
+                    <input type="button" id="buscar" value="Buscar" onclick="Tabela()" class="btn btn-primary" />
+                </div>
+                <div class="col-sm-1" style="float: right">
+                    <input type="button" id="relatorio" value="XLS Exportar" onclick="GerarExcel('GerarExcel')" class="btn btn-danger" />
+                </div>
+            </div>
+            <div class="row" style="margin-bottom:1%; margin-top:1%; margin-right:26px;">
+                <div class="col-sm-2" style="float: right; ">
+                    <label>Somatório Total de Valores:</label>
+                    @Html.TextBoxFor(model => model.SomatorioTotalValores, new { @type = "number", @step = "0.01", @class = "form-control", @disabled = "disabled" })
+                </div>
+                <div class="col-sm-4" style="float: right; ">
+                    <input type="button" id="Gerar" value="Gerar" onclick="GerarRelatorio()" class="btn btn-primary" />
+                </div>
+                <div class="col-sm-4" style="float: right; ">
+                    <label>RELATÓRIOS PDF</label>
+                    <select id="RelatoriosPdf" class="form-control">
+                        <option value="" selected> </option>
+                        <option value="BOLETOS_BANCARIOS_EMITIDOS">BOLETOS BANCÁRIOS EMITIDOS</option>
+                        <option value="CREDITOS_DO_ARQUIVO_DE_RETORNO">CRÉDITOS DO ARQUIVO DE RETORNO </option>
+                        <option value="PREVISAO_DE_RECEITA">PREVISÃO DE RECEITA</option>
+                        <option value="RELACAO_DE_ANUIDADES_RECEBIDAS">RELAÇÃO DE ANUIDADES RECEBIDAS</option>
+                        <option value="RELACAO_DE_COBRANCAS_CREDITADAS_vs_DEBITADAS"> RELAÇÃO DE COBRANÇAS (CREDITADAS vs DEBITADAS)</option>
+                        <option value="RELACAO_DE_CONCESSIONARIO">RELAÇÃO DE CONCESSIONÁRIO_</option>
+                        <option value="RELACAO_DE_VALORES_A_RECEBER_COM_DETALHES_SOBRE_A_OCUPACAO">RELAÇÃO DE VALORES A RECEBER COM DETALHES SOBRE A OCUPAÇÃO </option>
+                        <option value="RELACAO_DE_VALORES_A_RECEBER">RELAÇÃO DE VALORES A RECEBER</option>
+                        <option value="RELACAO_DE_VALORES_RECEBIDOS_COM_DETALHES_SOBRE_A_OCUPACAO"> RELAÇÃO DE VALORES RECEBIDOS COM DETALHES SOBRE A OCUPAÇÃO</option>
+                        <option value="RELACAO_SINTETICA_DE_PREVISAO_DE_RECEITA">RELAÇÃO SINTÉTICA DE PREVISÃO DE RECEITA </option>
+                        <option value="RELACAO_SINTETICA_DE_VALORES_A_RECEBER">RELAÇÃO SINTÉTICA DE VALORES A RECEBER </option>
+                        <option value="RELACAO_SINTETICA_DE_VALORES_RECEBIDOS">_RELAÇÃO SINTÉTICA DE VALORES RECEBIDOS</option>
+                    </select>
+                </div>
+
+            </div>
+            <div class="list">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Protocolo</th>
+                            <th scope="col">Periodo</th>
+                            <th scope="col">Interessado</th>
+                            <th scope="col">TipoFaturamento</th>
+                            <th scope="col">TipoOcupacao</th>
+                            <th scope="col">ValorTotal</th>
+                            <th scope="col">ValorPrevisto</th>
+                            <th scope="col">Status</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+    </section>
+</section>
+
+<script>
+    @section Ready
+    {
+    Tabela();
+    }
+
+
+    function Tabela() {
+        if ($.fn.DataTable.isDataTable(".table")) {
+            $(".table").DataTable().ajax.reload();
+            return;
+        }
+
+        $('.table').DataTable(
+            {
+                scrollX: true,
+                processing: true,
+                language: { url: '/Content/DataTables/Pt-Br.json' },
+                ajax:
+                {
+                    url: '/Financeiro/BuscarFaturamentoOcupacao',
+                    method: 'POST',
+                    dataType: 'json',
+                    data: function (d) {
+                        d['Protocolo']              = $('#Protocolo').val();
+                        d['Processo']               = $('#Processo').val();
+                        d['Termo']                  = $('#Termo').val();
+                        d['DataInicial']            = $('#DataInicial').val();
+                        d['DataFinal']              = $('#DataFinal').val();
+                        d['TipoFaturamento']        = $('#TipoFaturamento').val();
+                        d['ValorTotal']             = $('#ValorTotal').val();
+                        d['Interessado']            = $('#Interessado').val();
+                        d['Regional']               = $('#Regional').val();
+                        d['ResidenciaConservacao']  = $('#ResidenciaConservacao').val();
+                        d['AcoesJudiciais']         = $('#AcoesJudiciais').val();
+                        d['PrevisaoReceita']        = $('#PrevisaoReceita').val();
+                        d['TrechoConcedido']        = $('#TrechoConcedido').val();
+                        d['KmInicial']              = $('#KmInicial').val();
+                        d['KmFinal']                = $('#KmFinal').val();
+                        d['AcoesJudiciais']         = $('#AcoesJudiciais').val();
+                        d['TipoFaturamentoAnuidade']= $('#TipoFaturamentoAnuidade').is(":checked");
+                        d['TipoFaturamentoPEP']     = $('#TipoFaturamentoPEP').is(":checked");
+                        d['TipoFaturamentoRegularizacao'] = $('#TipoFaturamentoRegularizacao').is(":checked");
+                        d['TipoFaturamentoJuridica']= $('#TipoFaturamentoJuridica').is(":checked");
+                        d['StatusPendente']         = $('#StatusPendente').is(":checked");
+                        d['StatusPago']             = $('#StatusPago').is(":checked");
+                        d['StatusVencido']          = $('#StatusVencido').is(":checked");
+                    },
+                    dataSrc: function (data) {
+                        $('#SomatorioTotalValores').val(data["calculado"].toFixed(2));
+                        return data["data"];
+                    }
+                },
+                columns:
+                    [
+                        { "data": "Protocolo",      "title": "Protocolo", "width": "25%" },
+                        { "data": "Periodo",        "title": "Periodo", "width": "25%", "type": "date"},
+                        { "data": "Interessado",    "title": "Interessado", "width": "15%" },
+                        { "data": "TipoFaturamento","title": "Tipo Faturamento", "width": "15%" },
+                        { "data": "TipoOcupacao",   "title": "Tipo Ocupacao", "width": "15%" },
+                        { "data": "ValorTotal",     "title": "Valor Total", "width": "15%", render: $.fn.dataTable.render.number('.', ',', 2, 'R$') },
+                        { "data": "ValorPrevisto",  "title": "Valor Previsto", "width": "15%", render: $.fn.dataTable.render.number('.', ',', 2, 'R$') },
+                        { "data": "Status",         "title": "Estado", "width": "15%" },
+                    ]
+            });
+    }
+
+    function GerarExcel(relatorio) {
+        console.log('data get');
+
+        var postData = {
+            Protocolo: $('#Protocolo').val(),
+            Processo: $('#Processo').val(),
+            DataInicial: $('#DataInicial').val(),
+            DataFinal: $('#DataFinal').val(),
+            TipoFaturamento: $('#TipoFaturamento').val(),
+            ValorTotal: $('#ValorTotal').val(),
+            Interessado: $('#Interessado').val(),
+            Regional: $('#Regional').val(),
+            ResidenciaConservacao: $('#ResidenciaConservacao').val(),
+            AcoesJudiciais: $('#AcoesJudiciais').val(),
+            PrevisaoReceita: $('#PrevisaoReceita').val(),
+            TrechoConcedido: $('#TrechoConcedido').val(),
+            KmInicial: $('#KmInicial').val(),
+            KmFinal: $('#KmFinal').val(),
+            AcoesJudiciais: $('#AcoesJudiciais').val(),
+            TipoFaturamentoAnuidade: $('#Protocolo').val(),
+            TipoFaturamentoAnuidade: $('#TipoFaturamentoAnuidade').is(":checked"),
+            TipoFaturamentoPEP: $('#TipoFaturamentoPEP').is(":checked"),
+            TipoFaturamentoRegularizacao: $('#TipoFaturamentoRegularizacao').is(":checked"),
+            TipoFaturamentoJuridica: $('#TipoFaturamentoJuridica').is(":checked"),
+            StatusPendente: $('#StatusPendente').is(":checked"),
+            StatusPago: $('#StatusPago').is(":checked"),
+            StatusVencido: $('#StatusVencido').is(":checked")
+        }
+        console.log(postData);
+
+        xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            var a;
+            if (xhttp.readyState === 4 && xhttp.status === 200) {
+                a = document.createElement('a');
+                a.href = window.URL.createObjectURL(xhttp.response);
+                a.download = relatorio + ".xlsx";
+                a.style.display = 'none';
+                document.body.appendChild(a);
+                a.click();
+            }
+        };
+        xhttp.open("POST", "/Financeiro/ExportDataToXlsxFaturamento");
+        xhttp.setRequestHeader("Content-Type", "application/json");
+        xhttp.responseType = 'blob';
+        xhttp.send(JSON.stringify(postData));
+    }
+
+
+
+    function GerarRelatorio() {
+        console.log('data get');
+        var rel = $('#RelatoriosPdf').val();
+        console.log(rel);
+        var postData = {
+            Protocolo: $('#Protocolo').val(),
+            Processo: $('#Processo').val(),
+            DataInicial: $('#DataInicial').val(),
+            DataFinal: $('#DataFinal').val(),
+            TipoFaturamento: $('#TipoFaturamento').val(),
+            ValorTotal: $('#ValorTotal').val(),
+            Interessado: $('#Interessado').val(),
+            Regional: $('#Regional').val(),
+            ResidenciaConservacao: $('#ResidenciaConservacao').val(),
+            AcoesJudiciais: $('#AcoesJudiciais').val(),
+            PrevisaoReceita: $('#PrevisaoReceita').val(),
+            TrechoConcedido: $('#TrechoConcedido').val(),
+            KmInicial: $('#KmInicial').val(),
+            KmFinal: $('#KmFinal').val(),
+            AcoesJudiciais: $('#AcoesJudiciais').val(),
+            TipoFaturamentoAnuidade: $('#Protocolo').val(),
+            TipoFaturamentoAnuidade: $('#TipoFaturamentoAnuidade').is(":checked"),
+            TipoFaturamentoPEP: $('#TipoFaturamentoPEP').is(":checked"),
+            TipoFaturamentoRegularizacao: $('#TipoFaturamentoRegularizacao').is(":checked"),
+            TipoFaturamentoJuridica: $('#TipoFaturamentoJuridica').is(":checked"),
+            StatusPendente: $('#StatusPendente').is(":checked"),
+            StatusPago: $('#StatusPago').is(":checked"),
+            StatusVencido: $('#StatusVencido').is(":checked"),
+            Relatorio: $('#RelatoriosPdf option:selected').val()
+        }
+        console.log(postData);
+
+        xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            var a;
+            if (xhttp.readyState === 4) {
+                if (xhttp.status === 200) {
+                    a = document.createElement('a');
+                    a.href = window.URL.createObjectURL(xhttp.response);
+                    a.download = rel + ".pdf";
+                    a.style.display = 'none';
+                    document.body.appendChild(a);
+                    a.click();
+                } else {
+                    console.log("Error", xhttp.statusText);
+                    alert("Relatório não implementado");
+                }
+            }
+        };
+        xhttp.open("POST", "/Financeiro/RelatorioPdf");
+        xhttp.setRequestHeader("Content-Type", "application/json");
+        xhttp.responseType = 'blob';
+        xhttp.send(JSON.stringify(postData));
+    }
+
+</script>

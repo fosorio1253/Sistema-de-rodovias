@@ -1,0 +1,128 @@
+﻿@model DER.WebApp.ViewModels.Log.LogViewModelParam
+@{
+    ViewBag.Title = "Logs";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var permissoes = (DER.WebApp.ViewModels.PermissoesViewModel)ViewBag.Permissoes;
+}
+
+<section class="content">
+    <section class="content-header">
+        <h1>Logs</h1>
+    </section>
+    <section class="jumbotron">
+        <div class="row">
+            <div class="col-sm-3">
+                <label>Data inicial:</label>
+                @Html.TextBoxFor(model => model.DataInicial, new { type = "date", @class = "form-control" })
+            </div>
+            <div class="col-sm-3">
+                <label>Data Final:</label>
+                @Html.TextBoxFor(model => model.DataFinal, new { type = "date", @class = "form-control" })
+            </div>
+            <div class="col-sm-3">
+                <label>Tipo Alteração:</label>
+                @Html.DropDownListFor(model => model.TipoAlteracao, new SelectList(new string[] { "Selecione", "Edição", "Exclusão", "Criação" }, "Selecione"), htmlAttributes: new { @class = "form-control" })
+            </div>
+            <div class="col-sm-3 row" style="margin-top: 2%;">
+                <input type="button" id="buscar" value="Buscar" onclick="Tabela()" class="btn btn-primary" />
+                @Html.ActionLink("Exportar", "ExportDataToXlsx", "Log", new { DataInicial = Model.DataInicial, DataFinal = Model.DataFinal, TipoAlteracao = Model.TipoAlteracao }, new { @class = "btn btn-success" })
+            </div>
+        </div>
+        <div class="list">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">ID Usuário</th>
+                        <th scope="col">Usuário</th>
+                        <th scope="col">Data Alteração</th>
+                        <th scope="col">Tipo</th>
+                        <th scope="col">Nome Entidade</th>
+                        <th scope="col">Id Alterado</th>
+                        <th scope="col">Valor Antigo</th>
+                        <th scope="col">Novo Valor</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </section>
+    </section>
+
+
+
+
+<script>
+    @section Ready{
+    Tabela();
+    }
+
+    function Tabela() {
+
+        if ($.fn.DataTable.isDataTable(".table")) {
+            $(".table").DataTable().ajax.reload();
+            return;
+        }
+
+        $('.table').DataTable({
+            scrollX: true,
+            processing: true,
+            language: {
+                url: '/Content/DataTables/Pt-Br.json'
+            },
+            ajax: {
+                url: '/Log/Buscar',
+                method: 'POST',
+                dataType: 'json',
+                data: function (d) {
+                    d['DataInicial'] = $('#DataInicial').val();
+                    d['DataFinal'] = $('#DataFinal').val();
+                    d['TipoAlteracao'] = $('#TipoAlteracao').val();
+                }
+            },
+            columns: [
+                { "data": "Id", "title": "Id", "autowidth": true },
+                { "data": "ReponsavelAlteracao", "title": "Reponsavel Alteração", "autowidth": true },
+                { "data": "NomeUsuarioResponsavel", "title": "Nome Usuário Responsável", "autowidth": true },
+                { "data": "DataAlteracao", "title": "Data Alteração", "autowidth": true },
+                { "data": "TipoAlteracao", "title": "Tipo Alteração", "autowidth": true },
+                { "data": "NomeEntidade", "title": "Nome Entidade", "autowidth": true },
+                { "data": "IdPrimaryKey", "title": "Id PK", "autowidth": true },
+                { "data": "ValorAntigo", "title": "Valor Antigo", "autowidth": true },
+                { "data": "NovoValor", "title": "Novo Valor", "autowidth": true },
+            ],
+        });
+    }
+
+    function Exportar() {
+        let dataInicial = $('#data_inicial').val();
+        let dataFinal = $('#data_final').val();
+        let tipoAlteracao = $('#tipo_alteracao').val();
+
+        let data = {
+            DataInicial: dataInicial,
+            DataFinal: dataFinal,
+            TipoAlteracao: tipoAlteracao
+        }
+
+        $.ajax({
+            type: "POST",
+            url: '/Log/ExportDataToXlsx',
+            data: { logViewModel: data },
+            cache: false,
+            dataType: "text",
+            success: function (response) {                
+                var blob = new Blob([response], { type: "application/vnd.ms-excel" });
+                var donwloadUrl = URL.createObjectURL(blob);
+                var a = document.createElement('a');
+                a.href = donwloadUrl;
+                a.download = 'LogReport.xlsx';
+                document.body.appendChild(a);
+                a.click();
+            },
+            error: function (error) {                
+                console.log(error);
+            }
+        });
+    }
+
+</script>

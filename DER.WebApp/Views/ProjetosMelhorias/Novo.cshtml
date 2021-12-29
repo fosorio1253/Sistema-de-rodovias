@@ -1,0 +1,560 @@
+﻿@model DER.WebApp.ViewModels.ProjetosMelhorias.ProjetosMelhoriasViewModel
+@{
+    ViewBag.Title = "SGFD - Cadastro de Melhorias";
+}
+
+<section class="content">
+    <section class="content-header">
+        <div>
+            <h1>Visualizando Projeto de Melhorias Cadastrado</h1>
+
+            <button onclick="Salvar(event)" class="btn btn-primary" id="btnSalvar">
+                <i class="fa fa-save"></i>
+                <span>Salvar</span>
+            </button>
+
+            <a href="/ProjetosMelhorias/List" class="btn btn-primary">
+                <i class="fa fa-arrow-left"></i>
+                <span>Voltar</span>
+            </a>
+        </div>
+
+        <ol class="breadcrumb">
+            <li><i class="fa fa-home"></i><a href="/Home/Index"> Home </a></li>
+            <li><a href="/ProjetosMelhorias/List">Listar Projetos de Melhorias </a></li>
+            <li class="active"><a> Cadastro </a></li>
+        </ol>
+    </section>
+
+    <section class="jumbotron">
+
+        @using (Html.BeginForm("Salvar", "ProjetosMelhorias", FormMethod.Post, new { id = "projetosMelhorias" }))
+        {
+            <li class="active"><a> Última alteração por: @ViewBag.Usuario em  @ViewBag.DataAtualizacao.</a></li>
+
+            <fieldset>
+                <legend>Informações do Cadastro</legend>
+
+                <button onclick="HabilitarCampos(event)" class="btn btn-primary right hide" id="btnEditar">
+                    <i class="fa fa-pencil"></i>
+                    <span>Editar</span>
+                </button>
+                <br />
+                <br />
+                <div class="row">
+                    <div class="col-md-13">
+                        <div class="form-group row">
+                            <div class="col-md-2">
+                                <label class="col-form-label">Rodovia *</label>
+                                @Html.DropDownListFor(model => model.RodoviaId, Model.Rodovias, "Selecione", new { @class = "form-control", @data_input = "" })
+                                @Html.ValidationMessageFor(m => m.RodoviaId, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="col-form-label">Denominação *</label>
+                                @Html.EditorFor(Model => Model.Nome, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 250 } })
+                                @Html.ValidationMessageFor(m => m.Nome, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="col-md-2">
+                                <label class="col-form-label">Município *</label>
+                                @Html.DropDownListFor(model => model.MunicipioId, Model.Municipios, "Selecione", new { @class = "form-control", @data_input = "" })
+                                @Html.ValidationMessageFor(m => m.MunicipioId, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="col-md-2">
+                                <label class="col-form-label">Regional *</label>
+                                @Html.DropDownListFor(model => model.RegionalId, Model.Regionais, "Selecione", new { @class = "form-control", @data_input = "" })
+                                @Html.ValidationMessageFor(m => m.RegionalId, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="col-form-label">Residência de Conservação *</label>
+                                @Html.EditorFor(Model => Model.UnidadeConservacao, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 50 } })
+                                @Html.ValidationMessageFor(m => m.UnidadeConservacao, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-md-2">
+                                <label class="col-form-label">Km Inicial *</label>
+                                @Html.EditorFor(Model => Model.KmInicial, new { htmlAttributes = new { @class = "form-control", @data_input = "", @type = "decimal", @placeholder = "000,000", @max = "999.999", onkeyup = "formatarKm();", onchange = "ValidKmInicial();" } })
+                                @Html.ValidationMessageFor(m => m.KmInicial, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="col-md-2">
+                                <label class="col-form-label">Km Final *</label>
+                                @Html.EditorFor(Model => Model.KmFinal, new { htmlAttributes = new { @class = "form-control", @data_input = "", @type = "decimal", @placeholder = "000,000", @max = "999.999", onkeyup = "formatarKm();", onchange = "ValidKmFinal();" } })
+                                @Html.ValidationMessageFor(m => m.KmFinal, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="col-md-2">
+                                <label class="col-form-label">Extensão *</label>
+                                @Html.EditorFor(Model => Model.Extensao, new { htmlAttributes = new { @class = "form-control", @data_input = "", @type = "decimal", @max = "999.999" } })
+                                @Html.ValidationMessageFor(m => m.Extensao, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="col-md-2">
+                                <label class="col-form-label">Sentido</label>
+                                @Html.EditorFor(Model => Model.Sentido, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 50 } })
+                                @Html.ValidationMessageFor(m => m.Sentido, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="col-md-2">
+                                <label class="col-form-label">Lado *</label>
+                                @Html.DropDownListFor(Model => Model.LadoId, Model.Lados, "Selecione", new { @class = "form-control", @data_input = "" })
+                                @Html.ValidationMessageFor(m => m.LadoId, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="col-md-2">
+                                <label class="col-form-label">Lote</label>
+                                @Html.EditorFor(Model => Model.Lote, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 100 } })
+                                @Html.ValidationMessageFor(m => m.Lote, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-md-5">
+                                <fieldset>
+                                    <legend>Status</legend>
+                                    <div class="row">
+                                        <p class="col-md-4">
+                                            @Html.RadioButton("statusrbt", "futuro")
+                                            <label>Futuro</label>
+                                        </p>
+                                        <p class="col-md-10">
+                                            @Html.RadioButton("statusrbt", "emandamento", true)
+                                            <label>Em Andamento</label>
+                                        </p>
+                                    </div>
+                                </fieldset>
+                            </div>
+
+                            <div class="col-md-2" id="divNumeroContrato">
+                                <label class="col-form-label">N° Contrato</label>
+                                @Html.EditorFor(Model => Model.NumeroContrato, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 50 } })
+                                @Html.ValidationMessageFor(m => m.NumeroContrato, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="col-md-2">
+                                <label class="col-form-label">Prazo Estimado</label>
+                                @Html.EditorFor(Model => Model.Prazo, new { htmlAttributes = new { @class = "form-control", @data_input = "", @data_toggle = "tooltip", title = "Valor máximo 180", onkeyup = "formatarPrazo();", @type = "number", @min = 0, @max = 180, @maxlength = "3" } })
+                                @Html.ValidationMessageFor(m => m.Prazo, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="col-form-label">Previsão de Início</label>
+                                @Html.EditorFor(Model => Model.PrevisaoInicio, new { htmlAttributes = new { @type = "date", @class = "form-control", @data_input = "", @data_toggle = "tooltip", title = "DD/MM/AAAA", @value = "111111-08-09", @min = "1900-01-01", @max = "9999-12-31" } })
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <label class="col-form-label">Descrição Breve do Projeto</label>
+                            @Html.EditorFor(Model => Model.Descricao, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 500 } })
+                            @Html.ValidationMessageFor(m => m.Descricao, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div hidden>
+                            @Html.EditorFor(Model => Model.Id, new { htmlAttributes = new { @class = "form-control", @data_input = "" } })
+                        </div>
+                    </div>
+
+            </fieldset>
+            <br />
+
+            <fieldset>
+                <legend>Informações Relevantes</legend>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="list">
+                            <button class="btn btn-primary right" onclick="ModalInformacao();" type="button" id="adicionar">
+                                <i class="fa fa-comment"></i>
+                                <span>Adicionar</span>
+                            </button>
+                            <br />
+                            <br />
+
+                            <table class="table table-striped" id="dtInformacoes">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Descrição</th>
+                                        <th scope="col">Adicionado Por</th>
+                                        <th scope="col">Data de Atualização</th>
+                                        <th scope="col">Opções</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="bodyInformacoes">
+                                    @if (Model.Informacoes != null && Model.Informacoes.Count > 0)
+                                    {
+                                        int linha = 1;
+
+                                        foreach (var item in Model.Informacoes)
+                                        {
+                                            string descricaoId = "descricao" + @linha;
+                                            string adicionadoPorId = "adicionadoPor" + @linha;
+                                            string dataAtualizacaoId = "dataAtualizacao" + @linha;
+                                            <tr>
+                                                <td class="leftText"><span id='@descricaoId'>@item.Descricao</span></td>
+                                                <td class="leftText"><span id='@adicionadoPorId'>@item.AdicionadoPor</span></td>
+                                                <td class="leftText"><span id='@dataAtualizacaoId'>@item.DataAtualizacao</span></td>
+                                                <td><button type='button' onclick='ExcluirInfo(@linha);' class='btn btn-link excluirInformacao hide'><i class='fa fa-trash' title='Excluir'></i></button></td>
+                                            </tr>
+                                            linha++;
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="modalInformacao" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content" style="margin-left:150px; width:550px;">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h3 class="modal-title text-center"><b data-title="">Adicionar Informação Relevante</b></h3>
+                            </div>
+                            <form>
+                                <br />
+                                <div class="modal-body form-group form-body">
+                                    <div class="form-group row">
+                                        <div class="col-md-12">
+                                            <label class="col-form-label">Descrição</label>
+                                            @Html.EditorFor(Model => Model.Info.Descricao, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 500 } })
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-primary" data-dismiss="modal" onclick="AdicionarInformacao();" type="button"><i class="fa fa-comment"> Descreva a Informação</i></button>
+                                    <button class="btn btn-primary" data-dismiss="modal" id="btnFechar" name="btnFechar" type="button">Fechar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        }
+    </section>
+</section>
+
+<script>
+@section Ready {
+
+    $('input[type="radio"]').on('click change', function (e) {
+
+        if (e.target.value === "futuro") {
+            $('#divNumeroContrato').addClass("hide")
+        }
+        else {
+            $('#divNumeroContrato').removeClass("hide")
+            $('#divNumeroContrato').removeAttr("hide")
+        }
+    });
+
+
+    if ($(location).attr("href").toLocaleLowerCase().indexOf('visualizar') > 0) {
+        $('[data-input]').attr('disabled', 'disabled');
+        $('[data-check]').attr('disabled', 'disabled');
+        $('.isSelect').multiselect('disable');
+        $('#btnSalvar').hide();
+        $('#adicionar').hide();
+        $('#statusrbt').attr('disabled', 'disabled');
+        $('#btnEditar').removeClass("hide")
+        $('#btnEditar').removeAttr("hide")
+    }
+    else {
+
+            $('.excluirInformacao').removeClass("hide");
+            $('#informacoesColunaOpcoes').removeClass("hide");
+    }
+}
+
+
+    function formatarExtensao() {
+
+        var elemento = document.getElementById("Extensao");
+        var valor = elemento.value;
+
+        valor = valor + '';
+        valor = valor.replace(/\D/g, '');
+
+        if (!isNaN(valor)) {
+            valor = valor + '';
+            valor = valor.replace(/([1-9] [0-9] {0,2} | 1000) $. [1-9] [0-9] {0,2}$/g);
+
+            if (valor.length > 7) {
+                valor = valor.replace(/([0-9]{3}),([0-9]{3}$)/g, "$1,$2");
+            }
+        } else {
+            valor = '';
+        }
+
+        elemento.value = valor;
+    }
+
+    function formatarPrazo() {
+
+        var elemento = document.getElementById("Prazo");
+        var valor = elemento.value;
+
+        valor = valor + '';
+        valor = valor.replace(/\D/g, '');
+        elemento.value = valor;
+    }
+
+    function ValidKmInicial(){
+
+        if ($('#KmInicial').val().length < 7) {
+            $('#KmInicial').val('')
+        }
+    }
+
+    function ValidKmFinal() {
+
+        if ($('#KmFinal').val().length < 7) {
+            $('#KmFinal').val('')
+        }
+    }
+
+    function formatarKm() {
+        
+        $('#KmInicial').mask('000.000', { reverse: true, placeholder: "000,000" });
+        $('#KmFinal').mask('000.000', { reverse: true, placeholder: "000,000" });
+        
+        var KmInicial = parseFloat($("#KmInicial").val().replace(",", "."));
+        var KmFinal = parseFloat($("#KmFinal").val().replace(",", "."));
+
+        if ($("#KmFinal").val() > 0) {
+            var extensao = 0;
+            extensao = Big(KmFinal).plus(KmInicial);
+            
+            if (extensao["c"].length < 6) {
+                extensao = 0 + extensao;
+            };
+        }
+        
+        //console.log("extensao1:", extensao.toNumber());
+        //if (extensao <= 0) extensao = extensao.times(-1);
+        //extensao = extensao.times(1000).toNumber();        
+       
+        $("#Extensao").val(extensao).mask('000.000');        
+    }
+
+    function HabilitarCampos(event) {
+
+        $('[data-input]').removeAttr('disabled', 'disabled');
+        $('[data-check]').removeAttr('disabled', 'disabled');
+        //$('.isSelect').remov('disable');
+        $('#btnSalvar').show();
+        $('#adicionar').show();
+        $('#statusrbt').removeClass("hide")
+        $('#btnEditar').addClass("hide");
+
+        event.preventDefault();
+    }
+
+    function ModalInformacao() {
+        $("#modalInformacao").modal('show');
+    }
+
+    function AdicionarInformacao() {
+        let linha = 1;
+        let informacoes = [];
+
+        $('#dtInformacoes > tbody > tr').each(function () {
+            let descricao = $("#descricao" + linha).html();
+            let adicionadoPor = $("#adicionadoPor" + linha).html();
+            let dataAtualizacao = $("#dataAtualizacao" + linha).html();
+
+            informacoes.push({
+                descricao: descricao,
+                adicionadoPor: adicionadoPor,
+                dataAtualizacao: dataAtualizacao,
+                linha: linha
+            });
+
+            linha++;
+        });
+
+        let inf = $("#Info_Descricao").val();
+
+        if (inf.trim() == '') {
+             swal({
+                type: 'error',
+                title: 'Formulário Inválido',
+                text: 'Campos obrigatórios não foram preenchidos.'
+            })
+        } else {
+            let addPor = "@ViewBag.Usuario";
+            let dataAdd = "@ViewBag.DataAtual";
+
+            informacoes.push({
+                descricao: inf,
+                adicionadoPor: addPor,
+                dataAtualizacao: dataAdd,
+                linha: linha
+            });
+
+            $("#Info_Descricao").val('');
+
+            this.ConstruirListainformacao(informacoes);
+        }
+    }
+
+    function ExcluirInfo(linhaExclusao) {
+        let linha = 1;
+        let informacoes = [];
+
+        $('#dtInformacoes > tbody > tr').each(function () {
+            let descricao = $("#descricao" + linha).html();
+            let adicionadoPor = $("#adicionadoPor" + linha).html();
+            let dataAtualizacao = $("#dataAtualizacao" + linha).html();
+
+            informacoes.push({
+                descricao: descricao,
+                adicionadoPor: adicionadoPor,
+                dataAtualizacao: dataAtualizacao,
+                linha: linha
+            });
+
+            linha++;
+        });
+
+        informacoes.splice(linhaExclusao - 1, 1);
+
+        this.ConstruirListainformacao(informacoes);
+    }
+
+    function ConstruirListainformacao(informacoes) {
+        $("#bodyInformacoes").empty();
+
+        let newContent = "";
+        linha = 1;
+
+        $(informacoes).each(function () {
+            newContent = newContent + "<tr>";
+            newContent = newContent + "<td class='leftText'><span id='descricao" + linha + "' value='" + this.descricao + "'>" + this.descricao + "</span></td>";
+            newContent = newContent + "<td class='leftText'><span id='adicionadoPor" + linha + "' value='" + this.adicionadoPor + "'>" + this.adicionadoPor + "</span></td>";
+            newContent = newContent + "<td class='leftText'><span id='dataAtualizacao" + linha + "' value='" + this.dataAtualizacao + "'>" + this.dataAtualizacao + "</span></td>";
+            newContent = newContent + "<td><button type='button' onclick='ExcluirInfo(" + linha + ");' class='btn btn-link' id='excluirInformacao'><i class='fa fa-trash' title='Excluir'></i></button></td>"
+            newContent = newContent + "</tr>";
+            linha++;
+        });
+
+        $("#bodyInformacoes").append(newContent);
+    }
+
+    async function Salvar(e) {
+        
+        var formValido = $('#projetosMelhorias').valid()
+
+        if (formValido) {
+
+            data = {
+                Id: $("#Id").val(),
+                RodoviaId: parseInt($("#RodoviaId").find('option:selected').val()),
+                Nome: $("#Nome").val(),
+                MunicipioId: parseInt($("#MunicipioId").find('option:selected').val()),
+                RegionalId: parseInt($("#RegionalId").find('option:selected').val()),
+                //KmInicial: parseFloat($("#KmInicial").val()),
+               //KmFinal: parseFloat($("#KmFinal").val()),
+                KmInicial: parseFloat($("#KmInicial").val()),
+                KmFinal: parseFloat($("#KmFinal").val()),
+                Extensao: parseFloat($("#Extensao").val()),
+                Sentido: $("#Sentido").val() != "" ? $("#Sentido").val() : " ",
+                Status: $('input[name=statusrbt]:checked').val(),
+                NumeroContrato: $("#NumeroContrato").val(),
+                Prazo: $("#Prazo").val(),
+                PrevisaoInicio: $("#PrevisaoInicio").val(),
+                Descricao: $("#Descricao").val(),
+                LadoId: parseInt($("#LadoId").find('option:selected').val()),
+                Lote: $("#Lote").val(),
+                UnidadeConservacao: $("#UnidadeConservacao").val(),
+                Informacoes: []
+            };
+
+            let linha = 1;
+
+            $('#dtInformacoes > tbody > tr').each(function () {
+                let descricao = $("#descricao" + linha).html();
+                let adicionadoPor = $("#adicionadoPor" + linha).html();
+
+                data.Informacoes.push({
+                    Descricao: descricao,
+                    AdicionadoPor: adicionadoPor,
+                });
+
+                linha++;
+            });
+
+            linha = 1;
+
+            var response = await salvar(data);
+            if (!response.valid) {
+                    let messagem = "Ocorreu um erro interno";
+
+                    swal({
+                        type: 'error',
+                        title:'Formulário Inválido',
+                        text: messagem
+                    })
+            }
+            else {
+
+                swal({
+                    type: 'success',
+                    title: 'Sucesso',
+                    text: 'Projeto salvo com sucesso!'
+                }).then((result) => {
+                    if (result.value) {
+                        window.location.href = "/ProjetosMelhorias/List";
+                    }
+                })
+            }
+        }
+        else if ($("#KmInicial").val().length < 7) {
+            swal({
+                type: 'error',
+                title: 'Atenção',
+                text: 'Por favor, digite todos os 6 dígitos no campo KmInicial.'
+            })
+        }
+        else if ($("#KmFinal").val().length < 7) {
+            swal({
+                type: 'error',
+                title: 'Atenção',
+                text: 'Por favor, digite todos os 6 dígitos no campo KmFinal.'
+            })
+        }        
+        else if ($("#Prazo").val() > 180) {
+            swal({
+                type: 'error',
+                title: 'Atenção',
+                text: 'O valor máximo do campo Prazo é de 180.'
+            })
+        }
+        else {
+              swal({
+                type: 'error',
+                title: 'Atenção',
+                text: 'Por favor, preencha os campos obrigatórios!'
+            })
+        }
+    }
+
+    async function salvar(data) {
+        return $.ajax({
+            url: '/ProjetosMelhorias/Salvar',
+            processData: false,
+            data: JSON.stringify(data),
+            type: 'POST',
+            //dataType: 'json',
+            contentType: "application/json"
+        }).then(response => response);
+    }
+
+</script>
+
+<script src="~/Scripts/libs/big.js/6.0.0/big.min.js"></script>

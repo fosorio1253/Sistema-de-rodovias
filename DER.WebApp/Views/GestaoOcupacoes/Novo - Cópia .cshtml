@@ -1,0 +1,549 @@
+﻿@model DER.WebApp.ViewModels.GestaoOcupacoes.GestaoOcupacoesViewModel
+@{
+    ViewBag.Title = "SGFD - Cadastro de Ocupações";
+}
+
+<section class="content">
+    <section class="content-header">
+        <div>
+            <h1>Visualizando Cadastro de Ocupação</h1>
+
+            <button onclick="controller.save()" class="btn btn-primary" id="btnSalvar">
+                <i class="fa fa-save"></i>
+                <span>Salvar</span>
+            </button>
+
+            <a href="/GestaoOcupacoes/List" class="btn btn-primary">
+                <i class="fa fa-arrow-left"></i>
+                <span>Voltar</span>
+            </a>
+            <div>
+                @{
+                    foreach (var item in Model.ListaOcupacaoWorkflow)
+                    {
+                        <label>@{item.Sequencia.ToString();}</label>
+                        <label>@item.SituacaoValor</label>
+
+                        <label>@{item.SituacaoValor.ToString();}</label>
+
+                    }
+                }
+            </div>
+            <button class="btn btn-primary">
+
+                <i class="fa fa-download"></i>
+                @if (Model.Regulamento != null)
+                {
+                    @Html.ActionLink("Baixar Regulamento Vigente", "DownloadRegulamentoNorma", new { fileName = Model.Regulamento }, new { @class = "customButton" })
+                }
+                else
+                {
+                    <a href="javascript:alert('Entre em contato com o administrador para fazer o Upload do Regulamento!');" class="customButton">Você precisa realizar o Upload do Regulamento Vigente</a>
+                }
+            </button>
+
+            <button class="btn btn-primary">
+                <i class="fa fa-download"></i>
+                @if (Model.Norma != null)
+                {
+                    @Html.ActionLink("Baixar Normas Vigentes", "DownloadRegulamentoNorma", new { fileName = Model.Norma }, new { @class = "customButton" }) }
+                else
+                {
+                    <a href="javascript:alert('Entre em contato com o administrador para fazer o Upload das Normas!');" class="customButton">Você precisa realizar o Upload das Normas Vigentes</a>
+                }
+            </button>
+
+        </div>
+
+        <ol class="breadcrumb">
+            <li><i class="fa fa-home"></i><a href="/Home/Index"> Home </a></li>
+            <li><a href="/GestaoOcupacoes/List">Listar Gestão de Ocupações </a></li>
+            <li class="active"><a> Cadastro </a></li>
+        </ol>
+    </section>
+    <section class="jumbotron">
+
+        @using (Html.BeginForm("Salvar", "GestaoOcupacoes", FormMethod.Post, new { id = "gestaoOcupacoes" }))
+        {
+            <li class="active"><a> Última alteração por: @ViewBag.Usuario em  @ViewBag.DataAtualizacao.</a></li>
+
+
+
+
+            <div class="row center-block">
+                <hr />
+                <fieldset>
+                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="false">
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingOne" style="height:50px;">
+                                <h2 class="panel-title">
+                                    <a role="button" data-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                        Implantação
+                                    </a>
+                                    <span class="ml-3 float-right">Sequencia 001</span>
+                                    <button class="btn btn-danger float-right" id="btnCancelar" onclick="" type="button">
+                                        <i class="fa fa-times-circle"> </i>Cancelamento
+                                    </button>
+                                    <button class="btn btn-info float-right" id="btnAjuizamento" onclick="" type="button">
+                                        <i class="fa fa-gavel"> </i>Ação Ajuizada
+                                    </button>
+                                    <button class="btn btn-warning float-right" id="btnManutencao" onclick="" type="button">
+                                        <i class="fa fa-exclamation-triangle"> </i>Manutenção
+                                    </button>
+                                    <button class="btn btn-primary float-right" id="btnTransferir" onclick="" type="button">
+                                        <i class="fa fa-address-book"> </i>Transferir Titularidae
+                                    </button>
+                                    <button class="btn btn-success float-right" id="btnRetificar" onclick="" type="button">
+                                        <i class="fa fa-edit"> </i>Retificação
+                                    </button>
+                                </h2>
+
+                            </div>
+                            <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                                <div class="panel-body">
+                                    @{
+                                        @Html.Partial("_InformacaoCadastro",
+                                         new ViewDataDictionary(this.Vi‌​ewData) {
+                                           {
+                                             "id", "01"
+                                           },
+                                           {
+                                                "origem", "implantacao"
+                                           }
+                                         }
+                                       );
+                                    }
+
+                                    @{
+                                        @Html.Partial("_TabsSolicitacao",
+                                         new ViewDataDictionary(this.Vi‌​ewData) {
+                                           {
+                                             "id", "01"
+                                           },
+                                           {
+                                                "origem", "implantacao"
+                                           }
+                                         }
+                                       );
+                                    }
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingOne" style="height:50px;">
+                                <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" href="#collapseTwoRegularizacao" aria-expanded="false" aria-controls="collapseTwo">
+                                        Regularização
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapseTwoRegularizacao" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                                <div class="panel-body">
+
+                                    @{
+                                        @Html.Partial("_InformacaoCadastro",
+                                         new ViewDataDictionary(this.Vi‌​ewData) {
+                                           {
+                                             "id", "02"
+                                           },
+                                           {
+                                                "origem", "regularizacao"
+                                           }
+                                         }
+                                       );
+                                    }
+
+                                    @{
+                                        @Html.Partial("_TabsRegularizacao",
+                                         new ViewDataDictionary(this.Vi‌​ewData) {
+                                           {
+                                             "id", "02"
+                                           },
+                                           {
+                                                "origem", "regularizacao"
+                                           }
+                                         }
+                                       );
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingOne" style="height:50px;">
+                                <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" href="#collapseTwoRetificacao" aria-expanded="false" aria-controls="collapseTwo">
+                                        Retificação
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapseTwoRetificacao" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                                <div class="panel-body">
+
+                                    @{
+                                        @Html.Partial("_InformacaoCadastro",
+                                         new ViewDataDictionary(this.Vi‌​ewData) {
+                                           {
+                                             "id", "03"
+                                           },
+                                           {
+                                                "origem", "retificacao"
+                                           }
+                                         }
+                                       );
+                                    }
+
+                                    @{
+                                        @Html.Partial("_TabsRetificacao",
+                                         new ViewDataDictionary(this.Vi‌​ewData) {
+                                           {
+                                             "id", "03"
+                                           },
+                                           {
+                                                "origem", "retificacao"
+                                           }
+                                         }
+                                       );
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingOne" style="height:50px;">
+                                <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" href="#collapseThreeTransferencia" aria-expanded="false" aria-controls="collapseThree">
+                                        Transferência de Titularidade
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapseThreeTransferencia" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                                <div class="panel-body">
+
+                                    @{
+                                        @Html.Partial("_InformacaoCadastro",
+                                         new ViewDataDictionary(this.Vi‌​ewData) {
+                                           {
+                                             "id", "04"
+                                           },
+                                           {
+                                                "origem", "transferencia"
+                                           }
+                                         }
+                                       );
+                                    }
+
+                                    @{
+                                        @Html.Partial("_TabsTransferencia",
+                                         new ViewDataDictionary(this.Vi‌​ewData) {
+                                           {
+                                             "id", "04"
+                                           },
+                                           {
+                                                "origem", "transferencia"
+                                           }
+                                         }
+                                       );
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingOne" style="height:50px;">
+                                <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" href="#collapseThreeCancelamento" aria-expanded="false" aria-controls="collapseThree">
+                                        Cancelamento
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapseThreeCancelamento" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                                <div class="panel-body">
+                                    @{
+                                        @Html.Partial("_InformacaoCadastro",
+                                         new ViewDataDictionary(this.Vi‌​ewData) {
+                                           {
+                                             "id", "05"
+                                           },
+                                           {
+                                                "origem", "cancelamento"
+                                           }
+                                         }
+                                       );
+                                    }
+
+                                    @{
+                                        @Html.Partial("_TabsCancelamento",
+                                         new ViewDataDictionary(this.Vi‌​ewData) {
+                                           {
+                                             "id", "05"
+                                           },
+                                           {
+                                                "origem", "cancelamento"
+                                           }
+                                         }
+                                       );
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingOne" style="height:50px;">
+                                <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" href="#collapseAjuizamento" aria-expanded="false" aria-controls="collapseThree">
+                                        Ação Ajuizada
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapseAjuizamento" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                                <div class="panel-body">
+                                    @{
+                                        @Html.Partial("_InformacaoCadastro",
+                                         new ViewDataDictionary(this.Vi‌​ewData) {
+                                           {
+                                             "id", "06"
+                                           },
+                                           {
+                                                "origem", "ajuizamento"
+                                           }
+                                         }
+                                       );
+                                    }
+
+                                    @{
+                                        @Html.Partial("_TabsAcoesJudiciais",
+                                         new ViewDataDictionary(this.Vi‌​ewData) {
+                                           {
+                                             "id", "06"
+                                           },
+                                           {
+                                                "origem", "ajuizamento"
+                                           }
+                                         }
+                                       );
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingOne" style="height:50px;">
+                                <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" href="#collapseManutencao" aria-expanded="false" aria-controls="collapseThree">
+                                        Manutenção de Rotina
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapseManutencao" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                                <div class="panel-body">
+                                    @{
+                                        @Html.Partial("_InformacaoCadastro",
+                                         new ViewDataDictionary(this.Vi‌​ewData) {
+                                           {
+                                             "id", "07"
+                                           },
+                                           {
+                                                "origem", "manutencao"
+                                           }
+                                         }
+                                       );
+                                    }
+
+                                    @{
+                                        @Html.Partial("_TabsManutencao",
+                                         new ViewDataDictionary(this.Vi‌​ewData) {
+                                           {
+                                             "id", "07"
+                                           },
+                                           {
+                                                "origem", "manutencao"
+                                           }
+                                         }
+                                       );
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+                    </div>
+                </fieldset>
+            </div>
+
+        }
+    </section>
+</section>
+
+@section importJS {
+    <script>
+
+        //INICIO VALIDACAO CPF/CNPJ
+
+        function mascaraMutuario(o, f) {
+            v_obj = o
+            v_fun = f
+            setTimeout("execmascara();", 1)
+        }
+
+        function execmascara() {
+            v_obj.value = v_fun(v_obj.value);
+        }
+
+        function cpfCnpj(v) {
+
+            //Remove tudo o que não é dígito
+            v = v.replace(/\D/g, "")
+
+            if (v.length <= 14) { //CPF
+
+                //Coloca um ponto entre o terceiro e o quarto dígitos
+                v = v.replace(/(\d{3})(\d)/, "$1.$2")
+
+                //Coloca um ponto entre o terceiro e o quarto dígitos
+                //de novo (para o segundo bloco de números)
+                v = v.replace(/(\d{3})(\d)/, "$1.$2")
+
+                //Coloca um hífen entre o terceiro e o quarto dígitos
+                v = v.replace(/(\d{3})(\d{1,2})$/, "$1-$2")
+
+            } else { //CNPJ
+
+                //Coloca ponto entre o segundo e o terceiro dígitos
+                v = v.replace(/^(\d{2})(\d)/, "$1.$2")
+
+                //Coloca ponto entre o quinto e o sexto dígitos
+                v = v.replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3")
+
+                //Coloca uma barra entre o oitavo e o nono dígitos
+                v = v.replace(/\.(\d{3})(\d)/, ".$1/$2")
+
+                //Coloca um hífen depois do bloco de quatro dígitos
+                v = v.replace(/(\d{4})(\d)/, "$1-$2")
+
+            }
+
+            return v
+        }
+
+        //FINAL VALIDACAO CPF/CNPJ
+        var AdicionadoPor = "@ViewBag.Usuario";
+        var DataAdicionado = "@ViewBag.DataAtual";
+        var Model = @Html.Raw(Json.Encode(@Model));
+        var TipoOcupacoes = @Html.Raw(Json.Encode(@Model.TipoOcupacoes));
+        var ListaTrecho = @Html.Raw(Json.Encode(@Model.ListaTrecho));
+        var Ocorrencias = @Html.Raw(Json.Encode(@Model.ListaOcorrencias));
+        var ListaDocumentos = @Html.Raw(Json.Encode(@Model.ListaDocumentos));
+        var ParecerRegionalId = '@Model.ParecerRegionalId';
+        var ParecerDiretoriaEngenhariaId = '@Model.ParecerDiretoriaEngenhariaId';
+        var ParecerCoordenadoriaOperacoesId = '@Model.ParecerCoordenadoriaOperacoesId';
+        var ParecerFaixaDominioId = '@Model.ParecerFaixaDominioId';
+        var InteressadoId = @Model.InteressadoId;
+        var OcupacaoId = @Model.Id;
+        var DeferimentoTermoAnexadoNome = '@Model.Deferimento.CaminhoArquivo';
+        var ParecerRegionalDocumentoNome = '@Model.CaminhoArquivoRegional';
+        var ParecerDiretoriaDocumentoNome = '@Model.CaminhoArquivoDiretoria';
+        var ParecerCoordenadoriaDocumentoNome = '@Model.CaminhoArquivoCoordenadoria';
+        var ParecerFaixaDominioDocumentoNome = '@Model.CaminhoArquivoFaixaDominio';
+        ListaTrecho = !ListaTrecho ? [] : ListaTrecho;
+        Ocorrencias = !Ocorrencias ? [] : Ocorrencias;
+        ListaDocumentos = !ListaDocumentos ? [] : ListaDocumentos;
+
+        function setEmailContent()
+        {
+            // Adicionar Anexos
+          var selectValue = document.getElementById("notificacaoSelect");
+          var assuntoElmt = document.getElementById("emailAssunto");
+          var conteudoElmt = document.getElementById("emailConteudo");
+
+          var rodovia = ListaTrecho[0].NomeRodovia;
+            var kmInicial = ListaTrecho[0].KmInicial.toString() +"+" +ListaTrecho[0].KmInicialMetragem;
+            var kmFinal = ListaTrecho[0].KmFinal+"+" +ListaTrecho[0].KmFinalMetragem;
+          var tipoOcupacao;
+
+          TipoOcupacoes.forEach(t => {
+           if (t.TipoOcupacaoId == Model.TipoOcupacaoId)
+               tipoOcupacao = t.Nome
+          })
+
+            var response = GET("/Template/Templates");
+
+            response.forEach(value => {
+                console.log(selectValue.value);
+                if (selectValue.value == value.Id) {
+                    assuntoElmt.value = value.Assunto;
+                    conteudoElmt.value = value.Conteudo;
+                    conteudoElmt.value = conteudoElmt.value.replace("#rodovia", rodovia);
+                    conteudoElmt.value = conteudoElmt.value.replace("#kminicial", kmInicial);
+                    conteudoElmt.value = conteudoElmt.value.replace("#kmfinal", kmFinal);
+                    conteudoElmt.value = conteudoElmt.value.replace("#tipoocupacao", tipoOcupacao);
+                }
+            })
+
+        }
+
+        function loadTemplates() {
+            var response = GET("/Template/Templates");
+            response.forEach(value => { $("#notificacaoSelect").append(new Option(value.Assunto, value.Id)); })
+        }
+        loadTemplates();
+
+
+        function enviarEmail(){
+            var assuntoElmt = document.getElementById("emailAssunto").value;
+            var conteudoElmt = document.getElementById("emailConteudo").value;
+            var anexoElmt = document.getElementById("anexo").files[0];
+
+            var data = new FormData();
+
+            data.append("Anexo", anexoElmt, anexoElmt.name);
+            data.append("Assunto", assuntoElmt);
+            data.append("CorpoEmail", conteudoElmt);
+            data.append("Destinatario", Model["InteressadoEmail"]);
+
+            var response = $.ajax({
+                url: '/Email/Enviar',
+                processData: false,
+                data: data,
+                type: 'POST',
+                contentType: false,
+                dataType: 'json'
+            });
+
+                          swal({
+                              type: 'success',
+                              title: 'Sucesso',
+                              text: response.message
+                          }).then((result) => {
+                              console.log(result);
+                          })
+        }
+
+        //AQUI
+        function CalcularPep()
+        {
+            POST("/GestaoOcupacoes/CalcularPEP", JSON.stringify({ IdOcupacao: OcupacaoId }));
+            location.reload();
+        }
+
+        function ValidarCNPJ()
+        {
+            if ($("#CpfCNPJ").val().length > 18) {
+                $("#CpfCNPJ").val('')
+                swal({
+                    type: 'error',
+                    title: 'Atenção',
+                    text: 'Por favor, digite no máximo 18 números.'
+                })
+            }
+        }
+
+    </script>
+    <script src="~/Scripts/libs/moment/2.18.1/moment.min.js"></script>
+    <script src="~/Scripts/libs/big.js/6.0.0/big.min.js"></script>
+    <script src="~/ScriptsDist/GestaoOcupacaoModule.js?data=@ViewBag.DateTimeNow"></script>
+}

@@ -1,0 +1,362 @@
+﻿@model DER.WebApp.ViewModels.GestaoOcupacoes.GestaoOcupacoesViewModel
+@{
+    ViewBag.Title = "SGFD - Cadastro de Ocupações";
+
+}
+<div class="tab-pane fade" id="gestao-ocupacao-trecho@{@ViewBag.idInterno}" role="tabpanel" aria-labelledby="gestao-ocupacao-trecho-tab@{@ViewBag.idInterno}">
+    <div class="list">
+        @if (!ViewBag.SomenteVisualizar && ViewBag.situacao != "Deferida")
+        {
+            <button class="btn btn-primary right" onclick="controller.trechosComponent.ModalTrechoAdd();" type="button" id="adicionarTrecho">
+                <i class="fa fa-comment"></i>
+                <span>Adicionar Trecho</span>
+            </button>
+            <br />
+            <br />
+        }
+
+        <table class="table table-striped" id="dtTrechos">
+            <thead>
+                <tr>
+                    <th scope="col">Trecho</th>
+                    <th scope="col">Tipo de Implantação</th>
+                    <th scope="col">Tipo de Passagem</th>
+                    <th scope="col">Lado</th>
+                    <th scope="col">Rodovia</th>
+                    <th scope="col">KmInicial</th>
+                    <th scope="col">KmFinal</th>
+                    <th scope="col">Extensão</th>
+                    <th scope="col">Localização</th>
+                    <th scope="col">Opções</th>
+                </tr>
+            </thead>
+            <tbody id="bodyTrecho">
+                @if (Model.ListaTrecho != null && Model.ListaTrecho.Count > 0)
+                {
+                    int linha = 0;
+
+                    foreach (var item in Model.ListaTrecho)
+                    {
+                        string trechoId = "trecho" + @linha;
+                        string lado = "lado" + @linha;
+                        string kmInicialId = "kmInicial" + @linha;
+                        string kmInicial = @item.KmInicial.ToString();
+                        if (!string.IsNullOrEmpty(@item.KmInicialMetragem.ToString())) kmInicial = kmInicial + "+" + @item.KmInicialMetragem.ToString();
+                        string kmFinalId = "kmFinal" + @linha;
+                        string kmFinal = @item.KmFinal.ToString();
+                        if (!string.IsNullOrEmpty(@item.KmFinalMetragem.ToString())) kmFinal = kmFinal + "+" + @item.KmFinalMetragem.ToString();
+                        string extensao = "extensao" + @linha;
+                        <tr>
+                            <td class="leftText"><span id='@trechoId'>@item.Id</span></td>
+                            <td class="leftText"><span id='@item.TipoImplantacao.TipoImplantacaoId'>@item.TipoImplantacao.Nome</span></td>
+                            <td class="leftText"><span id='@item.TipoPassagem.TipoPassagemId'>@item.TipoPassagem.Nome</span></td>
+                            <td class="leftText"><span id='@lado'>@item.Lado.Nome</span></td>
+                            <td class="leftText"><span id='@item.Rodovia.RodoviaId'>@item.Rodovia.Nome</span></td>
+                            <td class="leftText"><span id='@kmInicialId'>@kmInicial</span></td>
+                            <td class="leftText"><span id='@kmFinalId'>@kmFinal</span></td>
+                            <td class="leftText"><span id='@extensao'>@item.Extensao</span></td>
+                            <td class="leftText"><span id='@item.Localizacao.LocalizacaoId'>@item.Localizacao.Nome</span></td>
+                            <td>
+                                <button type='button' onclick="controller.trechosComponent.VisualizarTrecho('@linha')" class="btn btn-link" title="Visualizar"><i class="fa fa-search"></i></button>
+                                @if (!ViewBag.SomenteVisualizar && ViewBag.situacao != "Deferida")
+                                {
+                                    <button type='button' onclick="controller.trechosComponent.EditarTrecho('@linha')" class="btn btn-link editarTrecho hide" title="Editar"><i class="fa fa-pencil"></i></button>
+                                    <button type='button' onclick='controller.trechosComponent.ExcluirTrecho(@linha);' class='btn btn-link excluirTrecho hide'><i class='fa fa-trash' title='Excluir'></i></button>
+                                }
+                            </td>
+                        </tr>
+                        linha++;
+                    }
+                }
+            </tbody>
+        </table>
+        <br /><br /><br /><br /><br />
+        <!-- <div class="resumotrecho" style="margin-left:200px; width:550px;"> -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card-body table-responsive p-0">
+                    <table class="table table-hover text-nowrap">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Faixa de Domínio</th>
+                                <th>Non Aedificandi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Extensão Total da Ocupação Longitudinal</td>
+                                <td id="extTotalDominioLongitudinal">0</td>
+                                <td id="extTotalNonAedificandiLongitudinal">0</td>
+                            </tr>
+                            <tr>
+                                <td>Extensão Total da Ocupação Transversal</td>
+                                <td id="extTotalDominioTransversal">0</td>
+                                <td id="extTotalNonAedificandiTransversal">0</td>
+                            </tr>
+                            <!-- <tr>
+                                <td>Área Total de Ocupação Pontual</td>
+                                <td id="extTotalDominioPontual">0</td>
+                                <td id="extTotalNonAedificandiPontual">0</td>
+                            </tr> -->
+                            <tr>
+                                <td>Extensão Total</td>
+                                <td id="extTotalDominio">0</td>
+                                <td id="extTotalNonAedificandi">0</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card-body table-responsive p-0">
+                    <table class="table table-hover text-nowrap">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Faixa de Domínio</th>
+                                <th>Non Aedificandi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Área Total de Ocupação Pontual</td>
+                                <td id="extTotalDominioPontual">0</td>
+                                <td id="extTotalNonAedificandiPontual">0</td>
+                            </tr>
+                            <tr>
+                                <td>Área Total de Interferência</td>
+                                <td id="extTotalDominioInterferencia">0</td>
+                                <td id="extTotalNonAedificandiInterferencia">0</td>
+                            </tr>
+                            <tr>
+                                <td>Área Total</td>
+                                <td id="extTotalDominioPontualInterferencia">0</td>
+                                <td id="extTotalNonAedificandiPontualInterferencia">0</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- </div> -->
+
+        <div class="modal fade" id="modalTrecho" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content" style="margin-left:100px; width:870px;">
+                    <fieldset>
+                        <legend>Adicionar Trecho</legend>
+
+                        <div class="card-header p-0 pt-1" style="margin-left:20px">
+                            <ul class="nav nav-tabs" id="gestao-ocupacao-tab-modal-trecho" role="tablist">
+                                <li class="nav-item active">
+                                    <a class="nav-link active" id="gestao-ocupacao-tab-modal-trecho-adicionar" data-toggle="pill" href="#gestao-ocupacao-trecho-adicionar" role="tab" aria-controls="gestao-ocupacao-trecho-adicionar" aria-selected="true">Trecho *</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="gestao-ocupacao-tab-modal-interferencia-adicionar" data-toggle="pill" href="#gestao-ocupacao-interferencia-adicionar" role="tab" aria-controls="gestao-ocupacao-interferencia-adicionar" aria-selected="false">Ocupações Pontuais</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="tab-content" id="gestao-ocupacao-modal-trechotabContent">
+                                <br />
+
+                                <div class="tab-pane fade active in" id="gestao-ocupacao-trecho-adicionar" role="tabpanel" aria-labelledby="gestao-ocupacao-tab-modal-trecho-adicionar">
+
+                                    <div class="modal-body form-group form-body">
+                                        <div class="form-group row">
+                                            <div class="col-md-12" style="margin-top:20px">
+                                                <div class="row">
+                                                    <p class="col-md-6">
+                                                        @Html.RadioButton("resumotrechorbt", "faixadominio", true)
+                                                        <label>Faixa de Domínio</label>
+                                                    </p>
+                                                    <p class="col-md-6">
+                                                        @Html.RadioButton("resumotrechorbt", "nonaedificandi")
+                                                        <label>Non Aedificandi</label>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-md-6">
+                                                <label class="col-form-label">Tipo de Ocupação *</label>
+                                                @Html.DropDownListFor(model => model.TipoOcupacaoId, Model.TipoOcupacoesSelectList, "Selecione", new { @class = "form-control", @data_input = "" })
+                                                @*@Html.DropDownListFor(model => model.TipoOcupacaoId, Enumerable.Empty<SelectListItem>(), "Selecione", new { @class = "form-control", @data_input = "" })*@
+                                                @Html.ValidationMessageFor(m => m.TipoOcupacaoId, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <div class="col-md-3">
+                                                <label class="col-form-label">Rodovia *</label>
+                                                @Html.DropDownListFor(model => model.RodoviaId, Model.Rodovias, "Selecione", new { @class = "form-control", @data_input = "" })
+                                                @Html.ValidationMessageFor(m => m.RodoviaId, "", new { @class = "text-danger" })
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="col-form-label">Tipo Implantação *</label>
+                                                @Html.DropDownListFor(model => model.TipoImplantacaoId, Model.TipoImplantacoes, "Selecione", new { @class = "form-control", @data_input = "" })
+                                                @Html.ValidationMessageFor(m => m.TipoImplantacaoId, "", new { @class = "text-danger" })
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="col-form-label">Tipo Passagem *</label>
+                                                @Html.DropDownListFor(model => model.TipoPassagemId, Model.TipoPassagens, "Selecione", new { @class = "form-control", @data_input = "" })
+                                                @Html.ValidationMessageFor(m => m.TipoPassagemId, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <div class="col-md-4">
+                                                <label class="col-form-label">Km Inicial *</label>
+                                                @Html.EditorFor(Model => Model.KmInicial, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = "7", @min = 0, @placeholder = "000,000" } })
+                                                @Html.ValidationMessageFor(m => m.KmInicial, "", new { @class = "text-danger" })
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="col-form-label">Km Final *</label>
+                                                @Html.EditorFor(Model => Model.KmFinal, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = "7", @min = 0, @disabled = true, @placeholder = "000,000" } })
+                                                @Html.ValidationMessageFor(m => m.KmFinal, "", new { @class = "text-danger" })
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="col-form-label" id="ExtensaoLabel">Extensão *</label>
+                                                @Html.EditorFor(Model => Model.Extensao, new { htmlAttributes = new { @class = "form-control", @data_input = "", @min = 0, @maxlength = "11", @placeholder = "000,000" } })
+                                                @Html.ValidationMessageFor(m => m.Extensao, "", new { @class = "text-danger" })
+                                            </div>
+
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <div class="col-md-4">
+                                                <label class="col-form-label">Lado *</label>
+                                                @*@Html.EditorFor(Model => Model.Lado, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 50 } })*@
+                                                @Html.DropDownListFor(model => model.LadoId, Model.Lados, "Selecione", new { @class = "form-control", @data_input = "" })
+                                                @Html.ValidationMessageFor(m => m.LadoId, "", new { @class = "text-danger" })
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="col-form-label">Altura *</label>
+                                                @Html.EditorFor(Model => Model.Altura, new { htmlAttributes = new { @class = "form-control", @data_input = "", @value = 0 } })
+                                                @Html.ValidationMessageFor(m => m.Altura, "", new { @class = "text-danger" })
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <label class="col-form-label">Profundidade *</label>
+                                                @Html.EditorFor(Model => Model.Profundidade, new { htmlAttributes = new { @class = "form-control", @data_input = "", @value = 0 } })
+                                                @Html.ValidationMessageFor(m => m.Profundidade, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-primary" id="btnAdicionarTrechoInterferencia" onclick="controller.trechosComponent.AdicionarTrechoInterferencia();" type="button"><i class="fa fa-plus"> </i>Adicionar Ocupações Pontuais</button>
+                                        <a href="#" data-toggle="tooltip" title="Se tratam das instalações pontuais, como postes, caixas de inspeção, poços de visitas, estação de controles de pressão, válvulas, ou seja, qualquer objeto que ocupe a faixa de domínio em m²">(?)</a>
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane fade" id="gestao-ocupacao-interferencia-adicionar" role="tabpanel" aria-labelledby="gestao-ocupacao-tab-modal-interferencia-adicionar">
+                                    <div class="form-group row col-md-12">
+                                        <div class="col-md-3">
+                                            <label class="col-form-label">Tipo de Interferência</label>
+                                            @Html.DropDownListFor(model => model.TipoInterferenciaId, Model.TipoInterferencias, "Selecione", new { @class = "form-control", @data_input = "", @id = "TrechoInterferencia_TipoInterferencia" })
+                                            @Html.ValidationMessageFor(m => m.TipoInterferenciaId, "", new { @class = "text-danger" })
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <label class="col-form-label">Volume Unitário(m²)</label>
+                                            @Html.EditorFor(Model => Model.TrechoInterferencia.volume_unitario, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = "7" } })
+                                            @Html.ValidationMessageFor(m => m.TrechoInterferencia.volume_unitario, "", new { @class = "text-danger" })
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <label class="col-form-label">Quantidade</label>
+                                            @Html.EditorFor(Model => Model.TrechoInterferencia.quantidade, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = "7" } })
+                                            @Html.ValidationMessageFor(m => m.TrechoInterferencia.quantidade, "", new { @class = "text-danger" })
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <label class="col-form-label">Volume Total(m²)</label>
+                                            @Html.EditorFor(Model => Model.TrechoInterferencia.volume_total, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 11, @limit = 11 } })
+                                            @Html.ValidationMessageFor(m => m.TrechoInterferencia.volume_total, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <br />
+                                    <div>
+                                        <button class="btn btn-primary" id="btn_cad_trecho_interferencia" style="margin-left:15px" onclick="controller.trechosComponent.cad_trecho_interferencias();" type="button"><i class="fa fa-plus"> </i>Adicionar Interferência</button>
+                                    </div>
+                                    <br />
+
+                                    <div style="height: 150px;overflow-x: hidden;overflow-y: scroll;">
+                                        <table class="table table-striped" id="dtTrechosInterferencia" style="margin-left:10px">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Tipo de Interferência</th>
+                                                    <th scope="col">Volume Unitário(m²)</th>
+                                                    <th scope="col">Quantidade</th>
+                                                    <th scope="col">Volume Total(m²)</th>
+                                                    <th scope="col">Opções</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="bodyTrechoInterferencia">
+                                                @if (Model.ListaTrechoInterferencia != null && Model.ListaTrechoInterferencia.Count > 0)
+                                                {
+                                                    int linha = 0;
+
+                                                    foreach (var item in Model.ListaTrechoInterferencia)
+                                                    {
+
+                                                        string interferenciaId = "interferenciaId" + @linha;
+                                                        string volume = "volume" + @linha;
+                                                        string quantidade = "quantidade" + @linha;
+                                                        string volumetotal = "volumetotal" + @linha;
+                                                        <tr>
+                                                            <td class="leftText"><span id='TipoInterferencia@item.Id'>@item.interferencia_tipo</span></td>
+                                                            <td class="leftText"><span id='Volume@item.Id'>@item.volume_unitario</span></td>
+                                                            <td class="leftText"><span id='Quantidade@item.Id'>@item.quantidade</span></td>
+                                                            <td class="leftText"><span id='VolumeTotal@item.Id'>@item.volume_total</span></td>
+                                                            <td>
+                                                                <button type='button' onclick='controller.trechosComponent.exc_trecho_interferencia(@linha);' class='btn btn-link excluirTrechoInterferencia hide'><i class='fa fa-trash' title='Excluir'></i></button>
+                                                            </td>
+                                                        </tr>
+                                                        linha++;
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <br />
+                                    <div class="interferenciaTrecho" style="margin-left: 10px; width: 85%;">
+                                        <fieldset>
+                                            <legend>Resumo das Interferências</legend>
+                                            <div class="card-body table-responsive p-0">
+                                                <table class="table table-hover text-nowrap">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Tipo de Interferência</th>
+                                                            <th>Quantidade de Interferência</th>
+                                                            <th>Volume Total(m²)</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="bodyInterferenciaTrechoTotais">
+                                                        <tr>
+                                                            <td id="resumoIdTipodeInterferencia">Postes</td>
+                                                            <td id="resumoIdQtdInterferencia">8</td>
+                                                            <td id="resumoIdVolumeTotal">11</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-primary" id="btnAdicionarTrecho" onclick="controller.trechosComponent.AdicionarTrecho();" type="button"><i class="fa fa-plus"> </i>Adicionar Trecho</button>
+                                <button class="btn btn-primary" id="btnAlterarTrecho" onclick="controller.trechosComponent.EditarTrechoSalvar();" type="button"><i class="fa fa-plus"> </i>Alterar</button>
+                                <button class="btn btn-primary" data-dismiss="modal" id="btnFecharTrecho" name="btnFecharTrecho" type="button">Fechar</button>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

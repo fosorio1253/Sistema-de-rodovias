@@ -1,0 +1,103 @@
+﻿@model List<DER.WebApp.Domain.Models.Usuario>
+@{
+    ViewBag.Title = "SGFD - Usuários Internos";
+    var permissoes = (DER.WebApp.ViewModels.PermissoesViewModel)ViewBag.Permissoes;
+
+}
+<section class="content">
+    <section class="content-header">
+        <h1>Usuários Internos Cadastrados</h1>
+        <button onclick="window.location.href = '/UsuarioInterno/Novo'" @(permissoes.Criar ? "" : "disabled" ) class="btn btn-primary">
+            <i class="fa fa-save"></i>
+            <span>Novo</span>
+        </button>
+        <ol class="breadcrumb">
+            <li><i class="fa fa-home"></i><a href="/Home/Index"> Home </a></li>
+            <li class="active"><a> Listagem de Usuários Externos </a></li>
+        </ol>
+    </section>
+    @if (permissoes.Listagem)
+    {
+        <section class="jumbotron">
+            <div class="list">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Nome </th>
+                            <th scope="col">Login </th>
+                            <th scope="col">E-mail </th>
+                            <th scope="col">Cargo </th>
+                            <th scope="col">Grupo de Acesso </th>
+                            <th scope="col">Situação </th>
+                            <th scope="col">Opções</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var usuario in Model)
+                        {
+                            <tr data-id="@usuario.Id">
+                                <th scope="row">@usuario.Nome</th>
+                                <td>@usuario.Login</td>
+                                <td>@usuario.Email</td>
+                                <td>@usuario.Cargo</td>
+                                <td>@(String.Join(", ", usuario.Grupos.Select(x => x.Nome).ToList()))</td>
+                                <td>@(usuario.Ativo ? "Ativo" : "Inativo")</td>
+                                <td>
+                                    <button type="submit" onclick="location.href='/UsuarioInterno/Visualizar/@usuario.Id'" @(permissoes.Visualizar ? "" : "disabled" ) class="btn btn-link"><i class="fa fa-search"></i></button>
+                                    <button type="submit" onclick="location.href='/UsuarioInterno/Editar/@usuario.Id'" @(permissoes.Editar ? "" : "disabled" ) class="btn btn-link"><i class="fa fa-pencil"></i></button>
+                                    <button onclick="Excluir(@usuario.Id)" class="btn btn-link excluir" @(permissoes.Excluir ? "" : "disabled" )><i class="fa fa-trash"></i></button>
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+
+            </div>
+        </section>
+    }
+</section>
+<script>
+@section Ready{
+    $('.table').DataTable({
+        language: {
+            url: '/Content/DataTables/Pt-Br.json'
+        }
+    });
+    var idUsuario = getCookie('idUsuario');
+    $('[data-id]').each((i, e) => {
+        if ($(e).attr('data-id') == idUsuario) {
+            $(e).find('.excluir').attr('disabled', 'disabled');
+        }
+    });
+}
+    function Excluir(id) {
+        swal({
+            title: 'Exclusão',
+            text: "Deseja realmente excluir o usuário",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'Não',
+            confirmButtonText: 'Sim'
+        }).then((result) => {
+            if (result.value) {
+                var response = POST("/UsuarioInterno/Excluir", JSON.stringify({ id: id }));
+                if (response.status == true) {
+                    swal({
+                        type: 'success',
+                        title: 'Sucesso',
+                        text: 'Usuario Excluido com sucesso!'
+                    }).then((result) => {
+                        if (result.value) {
+                            $('[data-id=' + id + ']').remove()
+                        }
+                    })
+
+                }
+            }
+        });
+        
+    }
+</script>

@@ -1,0 +1,215 @@
+﻿@model DER.WebApp.ViewModels.GestaoOcupacoes.GestaoOcupacoesViewModel
+@{
+    ViewBag.Title = "SGFD - Cadastro de Ocupações";
+
+    var htmlAttributesObservacao = new Dictionary<string, object>
+    {
+        { "class" , "form-control"},
+        { "data_input", "" },     
+        { "maxlength", 250},     
+        { "placeholder", "Observação" },     
+    };
+    var htmlAttributesData = new Dictionary<string, object>
+    {
+        { "type" , "date"},
+        { "class" , "form-control"},
+        { "data_input", "" },     
+        { "data_toggle", "tooltip"},     
+        { "title", "DD/MM/AAAA" },     
+        { "min", "1900-01-01" },     
+        { "max", "9999-12-31" },         
+    };
+    var disabledReadOnly = "";
+    if (ViewBag.IsUsuarioAdm==false || ViewBag.situacao == "Deferida")
+    {   
+        disabledReadOnly = "disabled=\"disabled\"";
+        htmlAttributesObservacao.Add("disabled", "disabled");
+        htmlAttributesData.Add("disabled", "disabled");
+    }
+
+    var htmlAttributesReadOnlyObservacao = new { htmlAttributes=htmlAttributesObservacao};
+    var htmlAttributesReadOnlyData = new { htmlAttributes=htmlAttributesData};
+}
+<div class="tab-pane fade" id="gestao-ocupacao-parecer@{@ViewBag.idInterno}" role="tabpanel" aria-labelledby="gestao-ocupacao-parecer-tab@{@ViewBag.idInterno}">
+
+    <div class="form-group row">
+        <fieldset>
+            <legend>Parecer da Regional</legend>
+            <div class="row">
+                <div class="row">
+                    <div class="col-md-11" style="float:left;margin-left:15px;">
+                        @Html.EditorFor(Model => Model.ParecerRegionalObservacao, @htmlAttributesReadOnlyObservacao)
+                    </div>
+                </div>
+
+                <div class="col-md-3" style="margin-top:5px;">
+                    <label class="col-form-label">Data</label>
+                    @Html.EditorFor(Model => Model.ParecerRegionalData, @htmlAttributesReadOnlyData)
+                </div>
+                <div class="col-md-8" style="margin-top:5px;margin-left:27px;">
+                    <label class="col-form-label">Documento Regional</label>
+                    <input type="file" name="ParecerRegionalDocumentoUpload" id="ParecerRegionalDocumentoUpload" data-input="" class="form-control" data-val="true" @disabledReadOnly/>
+                    <span class="field-validation-valid text-danger" data-valmsg-for="ParecerRegionalDocumentoUpload" data-valmsg-replace="true"></span>
+                    @if (!String.IsNullOrEmpty(@Model.CaminhoArquivoRegional))
+                    {
+                        <button type='button' onclick='controller.DownloadArquivo("@Model.CaminhoArquivoRegional");' class='btn btn-link DownloadArquivoId'><i class='fa fa-download' title='Baixar Arquivo'></i></button>
+                    }
+                </div>
+
+                <div class="col-md-9">
+                    <div class="row">
+                        <div style="float:left;margin-right:15px;margin-left:15px;margin-top:15px;">
+                            <input type="radio" name="ParecerRegionalId" value="1" id="ParecerRegionalFavoravel" @disabledReadOnly  />
+                            <label for="ParecerRegionalFavoravel">Favorável</label>
+                        </div>
+                        <div style="float:left;margin-right:15px;margin-top:15px;">
+                            <input type="radio" name="ParecerRegionalId" value="2" id="ParecerRegionalExcepcionalidade" @disabledReadOnly />
+                            <label for="ParecerRegionalExcepcionalidade">Favorável com Excepcionalidade</label>
+                        </div>
+                        <div style="float:left;margin-top:15px;">
+                            <input type="radio" name="ParecerRegionalId" value="3" id="ParecerRegionalDesfavoravel" @disabledReadOnly />
+                            <label for="ParecerRegionalDesfavoravel">Desfavorável</label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </fieldset>
+    </div>
+
+    <br />
+    <div class="form-group row">
+        <fieldset>
+            <legend>Parecer da Diretoria de Engenharia</legend>
+            <div class="row">
+                <div class="row">
+                    <div class="col-md-11" style="float:left;margin-left:15px;">
+                        @Html.EditorFor(Model => Model.ParecerDiretoriaEngenhariaObservacao, @htmlAttributesReadOnlyObservacao)
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="col-form-label">Data</label>
+                    @Html.EditorFor(Model => Model.ParecerDiretoriaEngenhariaData, @htmlAttributesReadOnlyData)
+                </div>
+                <div class="col-md-8" style="margin-top:5px;margin-left:27px;">
+                    <label class="col-form-label">Documento Engenharia</label>
+                    <input type="file" name="ParecerDiretoriaEngenhariaDocumentoUpload" id="ParecerDiretoriaEngenhariaDocumentoUpload" data-input="" class="form-control" data-val="true" @disabledReadOnly/>
+                    <span class="field-validation-valid text-danger" data-valmsg-for="ParecerDiretoriaEngenhariaDocumentoUpload" data-valmsg-replace="true"></span>
+                    @if (!String.IsNullOrEmpty(@Model.CaminhoArquivoDiretoria))
+                    {
+                        <button type='button' onclick='controller.DownloadArquivo("@Model.CaminhoArquivoDiretoria");' class='btn btn-link DownloadArquivoId'><i class='fa fa-download' title='Baixar Arquivo'></i></button>
+                    }
+                </div>
+
+                <div class="col-md-9">
+                    <div class="row">
+                        <div style="float:left;margin-right:15px;margin-left:15px;margin-top:15px;">
+                            <input type="radio" name="ParecerDiretoriaEngenhariaId" value="1" id="ParecerDiretoriaFavoravel" @disabledReadOnly/>
+                            <label for="ParecerDiretoriaFavoravel">Favorável</label>
+                        </div>
+                        <div style="float:left;margin-right:15px;margin-top:15px;">
+                            <input type="radio" name="ParecerDiretoriaEngenhariaId" value="2" id="ParecerDiretoriaExcepcionalidade" @disabledReadOnly/>
+                            <label for="ParecerDiretoriaExcepcionalidade">Favorável com Excepcionalidade</label>
+                        </div>
+                        <div style="float:left;margin-top:15px;">
+                            <input type="radio" name="ParecerDiretoriaEngenhariaId" value="3" id="ParecerDiretoriaDesfavoravel" @disabledReadOnly/>
+                            <label for="ParecerDiretoriaDesfavoravel">Desfavorável</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    <br />
+
+    <div class="form-group row">
+        <fieldset>
+            <legend>Parecer da Coordenadoria de Operações</legend>
+            <div class="row">
+                <div class="row">
+                    <div class="col-md-11" style="float:left;margin-left:15px;">
+                        @Html.EditorFor(Model => Model.ParecerCoordenadoriaOperacoesObservacao, @htmlAttributesReadOnlyObservacao)
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="col-form-label">Data</label>
+                    @Html.EditorFor(Model => Model.ParecerCoordenadoriaOperacoesData, @htmlAttributesReadOnlyData)
+                </div>
+                <div class="col-md-8" style="margin-top:5px;margin-left:27px;">
+                    <label class="col-form-label">Documento Coordenadoria</label>
+                    <input type="file" name="ParecerCoordenadoriaDocumentoUpload" id="ParecerCoordenadoriaDocumentoUpload" data-input="" class="form-control" data-val="true" @disabledReadOnly/>
+                    <span class="field-validation-valid text-danger" data-valmsg-for="ParecerCoordenadoriaDocumentoUpload" data-valmsg-replace="true"></span>
+                    @if (!String.IsNullOrEmpty(@Model.CaminhoArquivoCoordenadoria))
+                    {
+                        <button type='button' onclick='controller.DownloadArquivo("@Model.CaminhoArquivoCoordenadoria");' class='btn btn-link DownloadArquivoId'><i class='fa fa-download' title='Baixar Arquivo'></i></button>
+                    }
+                </div>
+
+                <div class="col-md-9">
+                    <div class="row">
+                        <div style="float:left;margin-right:15px;margin-left:15px;margin-top:15px;">
+                            <input type="radio" name="ParecerCoordenadoriaOperacoesId" value="1" id="ParecerCoordenadoriaFavoravel" @disabledReadOnly/>
+                            <label for="ParecerCoordenadoriaFavoravel">Favorável</label>
+                        </div>
+                        <div style="float:left;margin-right:15px;margin-top:15px;">
+                            <input type="radio" name="ParecerCoordenadoriaOperacoesId" value="2" id="ParecerCoordenadoriaExcepcionalidade" @disabledReadOnly/>
+                            <label for="ParecerCoordenadoriaExcepcionalidade">Favorável com Excepcionalidade</label>
+                        </div>
+                        <div style="float:left;margin-top:15px;">
+                            <input type="radio" name="ParecerCoordenadoriaOperacoesId" value="3" id="ParecerCoordenadoriaDesfavoravel" @disabledReadOnly/>
+                            <label for="ParecerCoordenadoriaDesfavoravel">Desfavorável</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    <br />
+
+    <div class="form-group row">
+        <fieldset>
+            <legend>Parecer da Faixa de Domínio</legend>
+            <div class="row">
+                <div class="row">
+                    <div class="col-md-11" style="float:left;margin-left:15px;">
+                        @Html.EditorFor(Model => Model.ParecerFaixaDominioObservacao, @htmlAttributesReadOnlyObservacao)
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="col-form-label">Data</label>
+                    @Html.EditorFor(Model => Model.ParecerFaixaDominioData, @htmlAttributesReadOnlyData)
+                </div>
+                <div class="col-md-8" style="margin-top:5px;margin-left:27px;">
+                    <label class="col-form-label">Documento Faixa de Domínio</label>
+                    <input type="file" name="ParecerFaixaDominioDocumentoUpload" id="ParecerFaixaDominioDocumentoUpload" data-input="" class="form-control" data-val="true" @disabledReadOnly/>
+                    <span class="field-validation-valid text-danger" data-valmsg-for="ParecerFaixaDominioDocumentoUpload" data-valmsg-replace="true"></span>
+                    @if (!String.IsNullOrEmpty(@Model.CaminhoArquivoFaixaDominio))
+                    {
+                        <button type='button' onclick='controller.DownloadArquivo("@Model.CaminhoArquivoFaixaDominio");' class='btn btn-link DownloadArquivoId'><i class='fa fa-download' title='Baixar Arquivo'></i></button>
+                    }
+                </div>
+
+                <div class="col-md-9">
+                    <div class="row">
+                        <div style="float:left;margin-right:15px;margin-left:15px;margin-top:15px;">
+                            <input type="radio" name="ParecerFaixaDominioId" value="1" id="ParecerFaixaDominioFavoravel" @disabledReadOnly/>
+                            <label for="ParecerFaixaDominioFavoravel">Favorável</label>
+                        </div>
+                        <div style="float:left;margin-right:15px;margin-top:15px;">
+                            <input type="radio" name="ParecerFaixaDominioId" value="2" id="ParecerFaixaDominioExcepcionalidade" @disabledReadOnly/>
+                            <label for="ParecerFaixaDominioExcepcionalidade">Favorável com Excepcionalidade</label>
+                        </div>
+                        <div style="float:left;margin-top:15px;">
+                            <input type="radio" name="ParecerFaixaDominioId" value="3" id="ParecerFaixaDominioDesfavoravel" @disabledReadOnly/>
+                            <label for="ParecerFaixaDominioDesfavoravel">Desfavorável</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+
+</div>

@@ -1,0 +1,47 @@
+﻿@model DER.WebApp.ViewModels.GestaoOcupacoes.GestaoOcupacoesViewModel
+@{
+    ViewBag.Title = "SGFD - Cadastro de Ocupações";
+
+    var disabledReadOnly = "";
+    if (ViewBag.situacao == "Deferida")
+    {   
+        disabledReadOnly = "disabled=\"disabled\"";
+    }
+}
+
+<div class="tab-pane fade" id="gestao-ocupacao-notificacao@{@ViewBag.idInterno}" role="tabpanel" aria-labelledby="gestao-ocupacao-notificacao-tab@{@ViewBag.idInterno}">
+    <div class="row">
+        <div class="col-md-6">
+            <label class="col-form-label">Tipo notificação</label><br />
+            <select name="notificacao" id="notificacaoSelect" class="form-control" onchange="setEmailContent()" @disabledReadOnly>
+                <option value="branco">Em branco</option>
+                <option value="at">Análise Técnica</option>
+                <option value="arq">Arquivamento</option>
+            </select>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-6">
+            <label class="col-form-label">Assunto</label>
+            <input type="text" class="form-control" id="emailAssunto" @disabledReadOnly/>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-6">
+            <label class="col-form-label">Conteúdo</label>
+            <textarea class="form-control" id="emailConteudo" rows="15" cols="120" @disabledReadOnly></textarea>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-6">
+            <label class="col-form-label">Anexo</label>
+            <input type="file" class="form-control" id="anexo" name="Anexo" @disabledReadOnly/>
+        </div>
+    </div>
+    <br />
+    <button type='button' onclick='enviarEmail()' class='btn btn-primary' @disabledReadOnly><i class='fa fa-paper-plane' title='Enviar'></i>Enviar</button>
+
+</div>

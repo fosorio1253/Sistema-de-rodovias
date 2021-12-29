@@ -1,0 +1,229 @@
+﻿@model DER.WebApp.ViewModels.InadimplentesViewModel
+@{
+    ViewBag.Title = "Inadimplentes";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="content">
+    <section class="content-header">
+        <h1>Inadimplentes</h1>
+    </section>
+    <section class="jumbotron">
+        <div class="row" style="margin-right: 10px">
+            <div class="row">
+                <div class="col-sm-2">
+                    <label>Interessado:</label>
+                    @Html.TextBoxFor(model => model.NomeInteressado, new { @class = "form-control" })
+                </div>
+                <div class="col-sm-2">
+                    <label>CNPJ:</label>
+                    @Html.TextBoxFor(model => model.CpfCnpj, new { @class = "form-control" })
+                </div>
+                <div class="col-sm-2">
+                    <label>Protocolo:</label>
+                    @Html.TextBoxFor(model => model.Protocolo, new { @class = "form-control" })
+                </div>
+                <div class="col-sm-2">
+                    <label>Processo:</label>
+                    @Html.TextBoxFor(model => model.Processo, new { @class = "form-control" })
+                </div>
+                <div class="col-sm-2">
+                    <label>Data Primeiro Venciemnto:</label>
+                    @Html.TextBoxFor(model => model.DataVenciemntoPrimeiro, new { @class = "form-control" })
+                </div>
+                <div class="col-sm-2">
+                    <label>Data Segundo Venciemnto:</label>
+                    @Html.TextBoxFor(model => model.DataVenciemntoSegundo, new { @class = "form-control" })
+                </div>
+                <div class="col-sm-2">
+                    <label>FiltroValor:</label>
+                    @Html.DropDownListFor(model => model.FiltroValor, new SelectList(new string[] { "Abaixo de 600,00R$", "Acima de 600,00R$", "Todos" }, "Todos"), new { @class = "form-control", @data_input = "" })
+                </div>
+                <div class="col-sm-2">
+                    <label>Valor:</label>
+                    @Html.TextBoxFor(model => model.Valor, new { @class = "form-control" })
+                </div>
+                <div class="col-sm-2">
+                    <label>FiltroDias:</label>
+                    @Html.DropDownListFor(model => model.FiltroDias, new SelectList(new string[] { "30 dias", "60 dias", "90 dias", "Todos" }, "Todos"), new { @class = "form-control", @data_input = "" })
+                </div>
+            </div>
+
+            <div class="row" style="margin-bottom:1%; margin-top:1%; margin-right:26px;">
+                <div class="col-sm-4">
+                    <label>RELATÓRIOS PDF</label>
+                    <select id="RelatoriosPdf" class="form-control">
+                        <option value="" selected> </option>
+                        <option value="BOLETOS_BANCARIOS_EMITIDOS">BOLETOS BANCÁRIOS EMITIDOS</option>
+                        <option value="CREDITOS_DO_ARQUIVO_DE_RETORNO">CRÉDITOS DO ARQUIVO DE RETORNO </option>
+                        <option value="PREVISAO_DE_RECEITA">PREVISÃO DE RECEITA</option>
+                        <option value="RELACAO_DE_ANUIDADES_RECEBIDAS">RELAÇÃO DE ANUIDADES RECEBIDAS</option>
+                        <option value="RELACAO_DE_COBRANCAS_CREDITADAS_vs_DEBITADAS"> RELAÇÃO DE COBRANÇAS (CREDITADAS vs DEBITADAS)</option>
+                        <option value="RELACAO_DE_CONCESSIONARIO">RELAÇÃO DE CONCESSIONÁRIO_</option>
+                        <option value="RELACAO_DE_VALORES_A_RECEBER_COM_DETALHES_SOBRE_A_OCUPACAO">RELAÇÃO DE VALORES A RECEBER COM DETALHES SOBRE A OCUPAÇÃO </option>
+                        <option value="RELACAO_DE_VALORES_A_RECEBER">RELAÇÃO DE VALORES A RECEBER</option>
+                        <option value="RELACAO_DE_VALORES_RECEBIDOS_COM_DETALHES_SOBRE_A_OCUPACAO"> RELAÇÃO DE VALORES RECEBIDOS COM DETALHES SOBRE A OCUPAÇÃO</option>
+                        <option value="RELACAO_SINTETICA_DE_PREVISAO_DE_RECEITA">RELAÇÃO SINTÉTICA DE PREVISÃO DE RECEITA </option>
+                        <option value="RELACAO_SINTETICA_DE_VALORES_A_RECEBER">RELAÇÃO SINTÉTICA DE VALORES A RECEBER </option>
+                        <option value="RELACAO_SINTETICA_DE_VALORES_RECEBIDOS">_RELAÇÃO SINTÉTICA DE VALORES RECEBIDOS</option>
+                    </select>
+                </div>
+                <div class="col-sm-1">
+                    <input type="button" id="Gerar" value="Gerar" onclick="GerarRelatorio()" class="btn btn-primary" />
+                </div>
+                <div class="col-sm-2">
+                    <input type="button" id="buscar" value="Buscar" onclick="Tabela()" class="btn btn-primary" />
+                </div>
+                <div class="col-sm-2">
+                    <input type="button" id="relatorio" value="XLS Exportar" onclick="GerarExcel('GerarExcel')" class="btn btn-danger" />
+                </div>
+            </div>
+
+            <div class="list">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Protocolo</th>
+                            <th scope="col">Interessado</th>
+                            <th scope="col">TipoFaturamento</th>
+                            <th scope="col">TipoOcupacao</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">ValorTotal</th>
+                            <th scope="col">ValorPrevisto</th>
+                            <th scope="col">Periodo</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+    </section>
+</section>
+
+<script>
+    @section Ready
+    {
+    Tabela();
+    }
+
+
+    function Tabela() {
+        if ($.fn.DataTable.isDataTable(".table")) {
+            $(".table").DataTable().ajax.reload();
+            return;
+        }
+
+        $('.table').DataTable(
+            {
+                scrollX: true,
+                processing: true,
+                language: { url: '/Content/DataTables/Pt-Br.json' },
+                ajax:
+                {
+                    url: '/Inadimplentes/Buscar',
+                    method: 'POST',
+                    dataType: 'json',
+                    data: function (d) {
+                        d['NomeInteressado']        = $('#NomeInteressado').val();
+                        d['CpfCnpj']                = $('#CpfCnpj').val();
+                        d['Protocolo']              = $('#Protocolo').val();
+                        d['Processo']               = $('#Processo').val();
+                        d['FiltroValor']            = $('#FiltroValor').val();
+                        d['FiltroDias']             = $('#FiltroDias').val();
+                        d['Valor']                  = $('#Valor').val();
+                        d['DataVenciemntoPrimeiro'] = $('#DataVenciemntoPrimeiro').val();
+                        d['DataVenciemntoSegundo']  = $('#DataVenciemntoSegundo').val();
+                    },
+                    dataSrc: function (data){return data["data"];}
+                },
+                columns:
+                    [
+                        { "data": "Protocolo",          "title": "Protocolo",           "width": "25%" },
+                        { "data": "NomeInteressado",    "title": "Interessado",         "width": "25%" },
+                        { "data": "TipoFaturamento",    "title": "Tipo Faturamento",    "width": "15%" },
+                        { "data": "TipoOcupacao",       "title": "Tipo Ocupacao",       "width": "15%" },
+                        { "data": "StatusBoleto",       "title": "Estado",              "width": "15%" },
+                        { "data": "ValorTotal",         "title": "Valor Total",         "width": "15%", render: $.fn.dataTable.render.number('.', ',', 2, 'R$') },
+                        { "data": "ValorPrevisto",      "title": "Valor Previsto",      "width": "15%", render: $.fn.dataTable.render.number('.', ',', 2, 'R$') },
+                        { "data": "Periodo",            "title": "Periodo",             "width": "15%", "type": "date" },
+                    ]
+            });
+    }
+
+    function GerarExcel(relatorio) {
+        console.log('data get');
+
+        var postData = {
+            Protocolo       : $('#Protocolo').val(),
+            NomeInteressado : $('#NomeInteressado').val(),
+            CpfCnpj         : $('#CpfCnpj').val(),
+            Protocolo       : $('#Protocolo').val(),
+            Processo        : $('#Processo').val(),
+            FiltroValor     : $('#FiltroValor').val(),
+            FiltroDias      : $('#FiltroDias').val(),
+            Valor           : $('#Valor').val(),
+            DataVenciemntoPrimeiro  : $('#DataVenciemntoPrimeiro').val(),
+            DataVenciemntoSegundo   : $('#DataVenciemntoSegundo').val()
+        }
+        console.log(postData);
+
+        xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            var a;
+            if (xhttp.readyState === 4 && xhttp.status === 200) {
+                a = document.createElement('a');
+                a.href = window.URL.createObjectURL(xhttp.response);
+                a.download = relatorio + ".xlsx";
+                a.style.display = 'none';
+                document.body.appendChild(a);
+                a.click();
+            }
+        };
+        xhttp.open("POST", "/Inadimplentes/ExportDataToXlsx");
+        xhttp.setRequestHeader("Content-Type", "application/json");
+        xhttp.responseType = 'blob';
+        xhttp.send(JSON.stringify(postData));
+    }
+
+
+
+    function GerarRelatorio() {
+        console.log('data get');
+        var rel = $('#RelatoriosPdf').val();
+        console.log(rel);
+        var postData = {
+            Protocolo       : $('#Protocolo').val(),
+            NomeInteressado : $('#NomeInteressado').val(),
+            CpfCnpj         : $('#CpfCnpj').val(),
+            Protocolo       : $('#Protocolo').val(),
+            Processo        : $('#Processo').val(),
+            FiltroValor     : $('#FiltroValor').val(),
+            FiltroDias      : $('#FiltroDias').val(),
+            Valor           : $('#Valor').val(),
+            DataVenciemntoPrimeiro  : $('#DataVenciemntoPrimeiro').val(),
+            DataVenciemntoSegundo   : $('#DataVenciemntoSegundo').val()
+        }
+        console.log(postData);
+
+        xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            var a;
+            if (xhttp.readyState === 4) {
+                if (xhttp.status === 200) {
+                    a = document.createElement('a');
+                    a.href = window.URL.createObjectURL(xhttp.response);
+                    a.download = rel + ".pdf";
+                    a.style.display = 'none';
+                    document.body.appendChild(a);
+                    a.click();
+                } else {
+                    console.log("Error", xhttp.statusText);
+                    alert("Relatório não implementado");
+                }
+            }
+        };
+        xhttp.open("POST", "/Financeiro/RelatorioPdf");
+        xhttp.setRequestHeader("Content-Type", "application/json");
+        xhttp.responseType = 'blob';
+        xhttp.send(JSON.stringify(postData));
+    }
+
+</script>

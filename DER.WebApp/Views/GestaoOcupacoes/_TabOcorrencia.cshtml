@@ -1,0 +1,126 @@
+﻿@model DER.WebApp.ViewModels.GestaoOcupacoes.GestaoOcupacoesViewModel
+@{
+    ViewBag.Title = "SGFD - Cadastro de Ocupações";
+
+}
+
+<div class="tab-pane fade" id="gestao-ocupacao-ocorrencias@{@ViewBag.idInterno}" role="tabpanel" aria-labelledby="gestao-ocupacao-ocorrencias-tab@{@ViewBag.idInterno}">
+    <div class="list">
+        
+        @if(ViewBag.IsUsuarioAdm && ViewBag.situacao != "Deferida")
+        {
+            <button class="btn btn-primary right" onclick="controller.ocorrenciasComponent.ModalOcorrenciaAdd();" type="button" id="adicionarOcorrencia">
+                <i class="fa fa-comment"></i>
+                <span>Adicionar Ocorrência</span>
+            </button>
+            <br /><br />
+        }
+
+        <table class="table table-striped" id="dtOcorrencias">
+            <thead>
+                <tr>
+                    <th scope="col">Data da Ocorrência</th>
+                    <th scope="col">Autor</th>
+                    <th scope="col">Ocorrência</th>
+                    <th scope="col">Área</th>
+                    <th scope="col" id="opcoesId">Opções</th>
+                </tr>
+            </thead>
+            <tbody id="bodyOcorrencia">
+                @if (Model.ListaOcorrencias != null && Model.ListaOcorrencias.Count > 0)
+                {
+                    int linha = 1;
+
+                    foreach (var item in Model.ListaOcorrencias)
+                    {
+                        string dataOcorrencia = "dataOcorrencia" + @linha;
+                        string autor = "autor" + @linha;
+                        string area = "area" + @linha;
+                        string ocorrencia = "ocorrencia" + @linha;
+                        <tr>
+                            <td class="leftText"><span id='@dataOcorrencia'>@item.DataOcorrencia</span></td>
+                            <td class="leftText"><span id='@autor'>@item.Autor</span></td>
+                            <td class="leftText"><span id='@ocorrencia'>@item.Ocorrencia</span></td>
+                            <td class="leftText"><span id='@area'>@item.Area</span></td>
+                            <td id="tdOpcoesId">
+                                <button type='button' onclick="controller.ocorrenciasComponent.VisualizarOcorrencia(@linha)" class="btn btn-link visualizarOcorrencia" title="Visualizar"><i class="fa fa-search"></i></button>
+                                @if(ViewBag.IsUsuarioAdm && ViewBag.situacao != "Deferida")
+                                {
+                                    <button type='button' onclick="controller.ocorrenciasComponent.EditarOcorrencia(@linha)" class="btn btn-link editarOcorrencia" title="Editar"><i class="fa fa-pencil"></i></button>
+                                    <button type='button' onclick='controller.ocorrenciasComponent.ExcluirOcorrencia(@linha);' class='btn btn-link excluirOcorrencia'><i class='fa fa-trash' title='Excluir'></i></button>
+                                }
+                            </td>
+                        </tr>
+                        linha++;
+                    }
+                }
+            </tbody>
+        </table>
+        <div class="modal fade" id="modalOcorrencia" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content" style="margin-left:200px; width:550px;">
+                    <div class="modal-header">
+                    </div>
+                    <form>
+                        <br />
+                        <fieldset>
+                            <legend>Adicionar Ocorrência</legend>
+                            <div class="modal-body form-group form-body">
+                                <div class="form-group row">
+                                    <div class="col-md-12">
+                                        <label class="col-form-label">Área *</label>
+                                        @Html.DropDownListFor(model => model.AreaId, Model.Areas, new { @class = "form-control", @data_input = "" })
+                                        @Html.ValidationMessageFor(m => m.AreaId, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-12">
+                                        <label class="col-form-label">Ocorrência *</label>
+                                        @Html.EditorFor(Model => Model.Ocorrencia, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 250 } })
+                                        @*@Html.TextAreaFor(Model => Model.Ocorrencia, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 250 } })*@
+                                        @Html.ValidationMessageFor(m => m.Ocorrencia, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-primary" id="btnAdicionarOcorrencia" onclick="controller.ocorrenciasComponent.AdicionarOcorrencia();" type="button"><i class="fa fa-plus"> </i>Adicionar</button>
+                                <button class="btn btn-primary" id="btnAlterarOcorrencia" onclick="controller.ocorrenciasComponent.EditarOcorrenciaSalvar();" type="button"><i class="fa fa-plus"> </i>Alterar</button>
+                                <button class="btn btn-primary" data-dismiss="modal" id="btnFecharOcorrencia" name="btnFecharOcorrencia" type="button">Fechar</button>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="modalVisualizarOcorrencia" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content" style="margin-left:150px; width:750px;">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h3 class="modal-title text-center"><b data-title="">Visualizar Ocorrência</b></h3>
+                    </div>
+                    <form>
+                        <div class="modal-body form-group form-body">
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <label class="col-form-label">Área</label>
+                                    @Html.DropDownListFor(model => model.AreaId, Model.Areas, new { @class = "form-control", @data_input = "" })
+                                    @Html.ValidationMessageFor(m => m.AreaId, "", new { @class = "text-danger" })
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="col-form-label">Ocorrência</label>
+                                    @Html.EditorFor(Model => Model.Ocorrencia, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 250 } })
+                                    @Html.ValidationMessageFor(m => m.Ocorrencia, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" id="btnFecharVisualizarOcorrencia" name="btnFecharVisualizarOcorrencia" data-dismiss="modal" class="btn btn-primary">Fechar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

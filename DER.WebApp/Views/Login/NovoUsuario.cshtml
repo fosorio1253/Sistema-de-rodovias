@@ -1,0 +1,417 @@
+﻿@model DER.WebApp.ViewModels.UsuarioExternoViewModel
+@{
+    ViewBag.Title = "SGFD - Novo Usuário";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>@ViewBag.Title</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link href="~/Content/AdminLTE.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/plugins/sweetalert2.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Content/ionicons.min.css" rel="stylesheet" />
+    <link href="~/Content/jquery-jvectormap.css" rel="stylesheet" />
+    <link href="~/Content/AdminLTE.min.css" rel="stylesheet" />
+    <link href="~/Content/skin-blue.min.css" rel="stylesheet" />
+    <link href="~/Content/Base.css" rel="stylesheet" />
+    <link href="~/Content/plugins/sweetalert2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+</head>
+<body class="hold-transition login-page">
+    <section class="content center">
+        <section class="content-header">
+            <div>
+                <h1>
+                    Novo Usuario
+                </h1>
+            </div>
+        </section>
+        <section class="jumbotron">
+            @using (Html.BeginForm("Salvar", "UsuarioExterno", FormMethod.Post, new { id = "usuario" }))
+            {
+
+                @Html.Hidden("Empresa", String.Join(",", Model.EmpresasIDs), new { @id = "hdnEmpresa" })
+                <div class="container">
+                    <div class="form-group row empresa">
+                        <label class="col-sm-2 col-form-label">Empresa de atuação *</label>
+                        <div class="col-sm-7 input selected">
+                            @Html.DropDownListFor(model => model.EmpresasIDs, new SelectList(ViewBag.Empresas, "Value", "Text"), "Selecione...", new { @class = "form-control isSelect", @data_input = "" })
+                            <span class="erroEmpresa hide text-danger">Campo Obrigatório</span>
+                        </div>
+                        <div class="col-sm-3 hide input">
+                            @Html.EditorFor(Model => Model.NomeEmpresa, new { htmlAttributes = new { @class = "form-control", @data_input = "", @placeholder = "Nome da empresa", @maxlength = 150 } })
+                            <span class="erroEmpresa hide text-danger">Campo Obrigatório</span>
+                        </div>
+                        <div class="col-sm-4 hide input">
+                            @Html.EditorFor(Model => Model.CNPJEmpresa, new { htmlAttributes = new { @class = "form-control", @data_input = "", @placeholder = "CNPJ", id = "cnpj" } })
+                            <span class="erroEmpresa hide text-danger">Campo Obrigatório</span>
+                            @Html.ValidationMessageFor(m => m.CNPJEmpresa, "", new { @class = "text-danger  " })
+                        </div>
+
+                        <div class="col-sm-3">
+                            <button class="btn btn-block" onclick="NovaEmpresa(event)">Nova Empresa</button>
+                        </div>
+
+                    </div>
+                    <div class="formComum">
+                        @Html.HiddenFor(x => x.Id, new { data_input = "" })
+                        @Html.HiddenFor(x => x.StatusAprovacaoId, new { data_input = "" })
+
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Cargo *</label>
+                            <div class="col-sm-10">
+                                @Html.EditorFor(Model => Model.Cargo, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 50 } })
+                                @Html.ValidationMessageFor(m => m.Cargo, "", new { @class = "text-danger  " })
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Nome *</label>
+                            <div class="col-sm-10">
+                                @Html.EditorFor(Model => Model.Nome, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 150 } })
+                                @Html.ValidationMessageFor(m => m.Nome, "", new { @class = "text-danger  " })
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">CPF *</label>
+                            <div class="col-sm-10">
+                                @Html.EditorFor(Model => Model.CPF, new { htmlAttributes = new { @class = "form-control", @data_input = "", @data_mask = "000.000.000-00" } })
+                                @Html.ValidationMessageFor(m => m.CPF, "", new { @class = "text-danger  " })
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Login *</label>
+                            <div class="col-sm-10">
+                                @Html.EditorFor(Model => Model.Login, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 10 } })
+                                @Html.ValidationMessageFor(m => m.Login, "", new { @class = "text-danger  " })
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="exampleInputEmail1" class="col-sm-2 col-form-label">E-mail *</label>
+                            <div class="col-sm-10">
+                                @Html.EditorFor(Model => Model.Email, new { htmlAttributes = new { @class = "form-control", @type = "email", @data_input = "", @maxlength = 50 } })
+                                @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger  " })
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">DDD</label>
+                            <div class="col-sm-10">
+                                @Html.EditorFor(Model => Model.DDD, new { htmlAttributes = new { @class = "form-control", @data_mask = "99", @data_input = "" } })
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Telefone e Ramal</label>
+                            <div class="col-sm-10">
+                                @Html.EditorFor(Model => Model.TelefoneRamal, new { htmlAttributes = new { @class = "form-control", @data_mask = "0000-00009", @data_input = "" } })
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Documento com foto *</label>
+                            <div class="col-sm-10">
+                                @Html.TextBoxFor(Model => Model.DocumentoFoto, new { type = "file", @class = "form-control", @data_input = "" })
+                                @Html.ValidationMessageFor(m => m.DocumentoFoto, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Procuração *</label>
+                            <div class="col-sm-10">
+                                @Html.TextBoxFor(Model => Model.Procuracao, new { type = "file", @class = "form-control", @data_input = "" })
+                                @Html.ValidationMessageFor(m => m.Procuracao, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" onclick="Enviar(event)">
+                        <i class="fa fa-save"></i>
+                        <span>Enviar</span>
+                    </button>
+                </div>
+            }
+        </section>
+    </section>
+
+    <script src="~/Content/js/jquery-3.4.1.min.js"></script>
+    <script src="~/Content/js/bootstrap.min.js"></script>
+    <script src="~/Content/js/multiselect.js"></script>
+    <script src="~/Content/js/fastclick.js"></script>
+    <script src="~/Content/js/adminlte.min.js"></script>
+    <script src="~/Content/js/jquery.sparkline.min.js"></script>
+    <script src="~/Content/js/jquery.slimscroll.min.js"></script>
+    <script src="~/Content/js/jquery.validate.min.js"></script>
+    <script src="~/Content/js/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Content/plugins/jquery.mask.js"></script>
+    <script src="~/Content/plugins/sweetalert2.min.js"></script>
+    <script src="~/Scripts/Service.js"></script>
+    <script src="~/Content/DataTables/datatables.js"></script>
+    <script src="~/Content/DataTables/helperDataTable.js"></script>
+    <script src="~/Scripts/Base.js"></script>
+
+    <script>
+        $('document').ready(() => {
+            $('input:file').change((e) => {
+                var ext = $(e.target).val().split('.').pop().toLowerCase();
+                if ($.inArray(ext, ['pdf', 'jpg', 'jpeg']) == -1) {
+                    swal({
+                        title: "Erro",
+                        type: 'error',
+                        text: 'Tipo de arquivo não permitido. Selecionar somente arquivos JPG, JPEG ou PDF.'
+                    });
+                    $(e.target).val('')
+                }
+            });
+
+            $('[data-mask]').each((e, i) => {
+                $(i).mask($(i).attr("data-mask"))
+            });
+
+            $('#TelefoneRamal').keyup(function (event) {
+                if ($(this).val().length == 10) {
+                    $(this).mask('00000-0009');
+                } else {
+                    $(this).mask('0000-00009');
+                }
+            })
+
+            $('#hdnEmpresa').val().split(',').forEach((e) => {
+                $('#EmpresasIDs option[value="' + e + '"]').prop('selected', true);
+            });
+
+            $('select').multiselect();
+            if ($(location).attr("href").toLocaleLowerCase().indexOf('token') > 0 && $('#Id').val() == 0) {
+                swal({
+                    title: "Usuario não encontrado",
+                    type: 'warning',
+                    text: 'token inválido, ou já utilizado'
+                })
+            }
+
+        });
+        function NovaEmpresa(event) {
+            event.preventDefault();
+            $('.empresa .input').toggleClass('hide').toggleClass('selected');
+        }
+        $('.empresa .selected [data-input]').keyup(() => { $('.empresa .selected .erroEmpresa').addClass('hide'); })
+
+        document.getElementById('cnpj').addEventListener('input', function (e) {
+            var x = e.target.value.replace(/\D/g, '').match(/(\d{0,2})(\d{0,3})(\d{0,3})(\d{0,4})(\d{0,2})/);
+            e.target.value = !x[2] ? x[1] : x[1] + '.' + x[2] + (x[3] ? '.' + x[3] : '') + (x[4] ? '/' + x[4] : '') + (x[5] ? '-' + x[5] : '');
+        });
+
+        async function Enviar(event) {
+            event.preventDefault();
+
+            var todosPreenchidos = true
+            $('.empresa .selected [data-input]').each((i, e) => {
+                todosPreenchidos = todosPreenchidos && $(e).val() != "";
+            })
+
+            if (!todosPreenchidos) {
+                $('.empresa .selected .erroEmpresa').removeClass('hide');
+            }
+            else {
+                $('.empresa .selected .erroEmpresa').addClass('hide');
+            }
+
+            //var cnpjValido = TestaCNPJ($('#CNPJEmpresa'));
+            //var cpfValido = TestaCPF($('#CPF'));
+
+            if ($('#usuario').valid() && todosPreenchidos) {
+
+                var data = new FormData();
+
+                $('input').each(function () {
+                    var type = $(this).attr("type");
+                    if (type == "file") {
+                        var FileData = $(this).get(0).files[0];
+
+                        if (FileData != null) {
+                            data.append("Files", FileData);
+                        }
+                    }
+                });
+
+                $('#usuario [data-check]').each((i, e) => {
+                    data.append($(e).attr("name"), $(e).is(':checked'));
+                });
+
+                $('#usuario [data-input]').each((i, e) => {
+                    data.append($(e).attr("name"), $(e).val());
+                });
+
+                swal({
+                    title: 'Carregando!',
+                    html: 'Enviando dados...',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    allowEnterKey: false,
+                    onBeforeOpen: () => {
+                        swal.showLoading()
+                    },
+                });
+
+                swal.showLoading();
+
+                let response = await salvarNovoUsuario(data);
+                if (response.valid) {
+
+                    swal.close();
+
+                    swal({
+                        type: 'success',
+                        title: 'Sucesso',
+                        text: 'Enviamos um e-mail de confirmação de conta para cadastro de nova senha!'
+                    }).then((result) => {
+                        if (result.value) {
+                            window.location.href = "/Login/Index";
+                        }
+                    })
+                }
+                else {
+
+                    swal.close();
+
+                    var validador = "";
+
+                    if (response.CNPJExists) {
+                        swal({
+                            type: 'error',
+                            title: 'Formulário inválido',
+                            text: 'CNPJ já cadastrado, verifique a lista de empresas.'
+                        }).then((result) => {
+                            console.log(response.html);
+                        })
+                    } else if (!response.validCNPJ) {
+                        swal({
+                            type: 'error',
+                            title: 'Formulário inválido',
+                            text: 'Por favor, insira um CNPJ válido.'
+                        }).then((result) => {
+                            console.log(response.html);
+                        })
+                    } else if (!response.validCPF) {
+                        swal({
+                            type: 'error',
+                            title: 'Formulário invalido',
+                            text: 'Por favor, insira um CPF válido.'
+                        }).then((result) => {
+                            console.log(response.html);
+                        })
+                    } else {
+                        //messagem = 'Ocorreu um erro, entrar em contato com o suporte.'
+                        var validador = "";
+
+                        if (!response.anyDocumento || !response.anyProcuracao) {
+                            if (!response.anyDocumento)
+                                validador += (validador == "" ? " " : ", ") + "Documento com foto"
+
+                            if (!response.anyProcuracao)
+                                validador += (validador == "" ? " " : ", ") + "Procuração"
+
+                            if (validador != "")
+                                messagem = "Campo(s) Obrigatório(s): " + validador;
+                        }
+                        else {
+                        if (response.anyCNPJ)
+                            validador += (validador == "" ? " " : ", ") + "CNPJ"
+                        if (response.anyCPF)
+                            validador += (validador == "" ? " " : ", ") + "CPF"
+                        if (response.anyLogin)
+                            validador += (validador == "" ? " " : ", ") + "Login"
+                        if (response.anyEmail)
+                            validador += (validador == "" ? " " : ", ") + "Email"
+
+                            if (validador != "")
+                                messagem = "Usuario já cadastrado, verifique: " + validador;
+                        }
+
+                        swal({
+                            type: (validador != "" ? 'warning' : 'error'),
+                            title: (validador != "" ? 'Atenção' : 'Formulário Inválido'),
+                            text: messagem
+                        })
+                    }
+                }
+
+                //if (response.anyDocumento && response.anyProcuracao) {
+
+                //    if (response.anyCPF)
+                //        validador += "CPF"
+                //    if (response.anyLogin)
+                //        validador += (validador == "" ? " " : ", ") + "Login"
+                //    if (response.anyEmail)
+                //        validador += (validador == "" ? " " : ", ") + "Email"
+
+                //    if (validador != "")
+                //        messagem = "Usuario já cadastrado, verifique: " + validador;
+                //}
+                //else {
+                //    if (!response.anyDocumento)
+                //        validador += (validador == "" ? " " : ", ") + "Documento com foto"
+
+                //    if (!response.anyProcuracao)
+                //        validador += (validador == "" ? " " : ", ") + "Procuração"
+
+                //    if (validador != "")
+                //        messagem = "Campo(s) Obrigatório(s): " + validador;
+                //}
+            }
+            else {
+
+                swal.close();
+                //messagem = 'Ocorreu um erro, entrar em contato com o suporte.'
+
+                swal({
+                    type: 'error',
+                    title: 'Atenção',
+                    text: 'Por favor, preencha os campos obrigatórios!'
+                })
+
+                var validador = "";
+                if (response.anyCPF)
+                    validador += "CPF"
+                if (response.anyLogin)
+                    validador += (validador == "" ? " " : ", ") + "Login"
+                if (response.anyEmail)
+                    validador += (validador == "" ? " " : ", ") + "Email"
+
+                if (validador != "")
+                    messagem = "Usuario já cadastrado, verifique: " + validador;
+
+                swal({
+                    type: (validador != "" ? 'warning' : 'error'),
+                    title: (validador != "" ? 'Atenção' : 'Formulário Inválido'),
+                    text: messagem
+                })
+            }
+        }
+
+
+        async function salvarNovoUsuario(data) {
+            return $.ajax({
+                url: '/Login/CadastrarUsuario',
+                processData: false,
+                data: data,
+                type: 'POST',
+                contentType: false,
+                dataType: 'json'
+            }).then(response => response);
+        }
+
+
+
+    </script>
+</body>
+</html>

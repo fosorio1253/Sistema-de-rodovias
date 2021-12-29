@@ -1,0 +1,114 @@
+﻿@model List<DER.WebApp.Domain.Models.DTO.ListaGestaoOcupacaoDTO>
+@{
+    ViewBag.Title = "SGFD - Gestão de Ocupações";
+    var permissoes = (DER.WebApp.ViewModels.PermissoesViewModel)ViewBag.Permissoes;
+    var UsuarioPerfilId = DER.WebApp.Common.Helper.PerfilUsuario.UsuarioPerfilId;
+}
+
+<section class="content">
+    <section class="content-header">
+        <h1>Consultar Ocupações Cadastradas</h1>
+        <button onclick="window.location.href = '/GestaoOcupacoes/Novo/?regularizacao=false'" class="btn btn-primary">
+            <i class="fa fa-save"></i>
+            <span>Nova Implantação</span>
+        </button>
+        <button onclick="window.location.href = '/GestaoOcupacoes/Novo/?regularizacao=true'" class="btn btn-primary">
+            <i class="fa fa-save"></i>
+            <span>Nova Regularização</span>
+        </button>
+        
+        <ol class="breadcrumb">
+            <li><i class="fa fa-home"></i><a href="/Home/Index"> Home </a></li>
+            <li class="active"><a> Consultar Ocupações Cadastradas </a></li>
+        </ol>
+    </section>
+    <section class="jumbotron">
+        <div class="list">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Id Ocupação</th>
+                        <th scope="col">Interessado</th>
+                        <th scope="col">Regional</th>
+                        <th scope="col">Número Processo</th>
+                        <th scope="col">Número SPDOC</th>
+                        <th scope="col">Origem Solicitação</th>
+                        <th scope="col">Situação Solicitação </th>
+                        <th scope="col">Data Solicitação</th>
+                        <th scope="col">Data Provável da Implantação </th>
+                        <th scope="col">Opções</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Count > 0)
+                    {
+                        foreach (var item in Model)
+                        {                           
+                    <tr data-id="@item.Id">
+                        <th scope="row">@item.Id</th>
+                        <th>@item.Interessado</th>
+                        <th>@item.Regional</th>
+                        <th>@item.NumeroProcesso</th>
+                        <th>@item.NumeroSPDOC</th>
+                        <th>@item.OrigemSolicitacao</th>
+                        <th>@item.SituacaoSolicitacao</th>
+                        <th>@item.DataSolicitacao</th>
+                        <th>@item.DataImplantacao</th>
+                        <td>
+                            <button type="submit" onclick="location.href='/GestaoOcupacoes/Visualizar/@item.Id'" @(permissoes.Visualizar ? "" : "disabled") class="btn btn-link"><i class="fa fa-search"></i></button>
+                            <button type="submit" onclick="location.href='/GestaoOcupacoes/Editar/@item.Id'" @(permissoes.Editar ? "" : "disabled") class="btn btn-link" title="Editar"><i class="fa fa-pencil"></i></button>
+                            <button onclick="Excluir(@item.Id)" @(permissoes.Excluir ? "" : "disabled") class="btn btn-link excluir"><i class="fa fa-trash"></i></button>
+                        </td>
+                    </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="10">
+                                Nenhum dado encontrado.
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </section>
+</section>
+<script>
+@section Ready{
+    $('.table').DataTable({
+        language: {
+            url: '/Content/DataTables/Pt-Br.json'
+        }
+    });
+}
+    function Excluir(id) {        
+        swal({
+            title: 'Exclusão',
+            text: "Deseja realmente excluir a ocupação?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'Não',
+            confirmButtonText: 'Sim'
+        }).then((result) => {
+            if (result.value) {
+                var response = POST("/GestaoOcupacoes/Excluir", JSON.stringify({ id: id }));               
+                if (response.status == true) {
+                    swal({
+                        type: 'success',
+                        title: 'Sucesso',
+                        text: 'Ocupação Excluída com sucesso!'
+                    }).then((result) => {
+                        if (result.value) {                           
+                            $('[data-id=' + id + ']').remove()                            
+                        }
+                    })                    
+                }
+            }
+        });
+    }
+</script>

@@ -1,0 +1,110 @@
+﻿@model DER.WebApp.ViewModels.GestaoOcupacoes.GestaoOcupacoesViewModel
+@{
+    ViewBag.Title = "SGFD - Cadastro de Ocupações";
+
+}
+
+<div class="tab-pane fade" id="gestao-ocupacao-acoesjudiciais@{@ViewBag.idInterno}" role="tabpanel" aria-labelledby="gestao-ocupacao-acoesjudiciais-tab@{@ViewBag.idInterno}">
+    <div class="row">
+        <div class="col-md-4 text-center">
+            <label class="col-form-label">Interessado</label>
+            @Html.EditorFor(Model => Model.Interessado, new { htmlAttributes = new { @class = "form-control", @data_input = "", @disabled = "disabled" } })
+        </div>
+        <div class="col-md-4 text-center">
+            <label class="col-form-label">CNPJ</label>
+            @Html.EditorFor(Model => Model.CpfCNPJ, new { htmlAttributes = new { @class = "form-control", @data_input = "", @disabled = "disabled" } })
+        </div>
+        <div class="col-md-4 text-center">
+            <label class="col-form-label">Protocolo</label>
+            @Html.EditorFor(Model => Model.AcoesJudiciais.Protocolo, new { htmlAttributes = new { @class = "form-control", @data_input = "" } })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 text-center">
+            <label class="col-form-label">Tipo ocupação</label>
+            @Html.EditorFor(model => model.TipoOcupacao, new { htmlAttributes = new { @class = "form-control", @data_input = "", @disabled = "disabled" } })
+        </div>
+        <div class="col-md-6 text-center">
+            <label class="col-form-label">Nº processo judicial</label>
+            @Html.EditorFor(Model => Model.AcoesJudiciais.ProcessoJudicial, new { htmlAttributes = new { @class = "form-control", @data_input = "" } })
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <label class="col-form-label">Histórico resumido - Petição inicial</label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 text-center">
+            @Html.EditorFor(Model => Model.AcoesJudiciais.HistoricoResumido, new { htmlAttributes = new { @class = "form-control", @data_input = "" } })
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <label class="col-form-label">Lista Situação processual</label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 text-center">
+            @*Html.DropDownListFor(model => model.AcoesJudiciais.IdSituacaoProcessual, Model.AcoesJudiciais.SituacoesProcessuais, htmlAttributes: new { @class = "form-control" })*@
+            @Html.DropDownListFor(model => model.AcoesJudiciais.SituacaoProcessual, new SelectList(new string[] { "Não", "Sim" }, Model.AcoesJudiciais.SituacaoProcessual), htmlAttributes: new { @class = "form-control" })
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-md-3">
+            <label class="col-form-label">Cobrança PEP</label>
+            @Html.DropDownListFor(model => model.AcoesJudiciais.CobrancaPEP, new SelectList(new string[] { "Não", "Sim" }, Model.AcoesJudiciais.CobrancaPEP), htmlAttributes: new { @class = "form-control" })
+        </div>
+        <div class="col-md-3">
+            <label class="col-form-label">Cobrança regularização</label>
+            @Html.DropDownListFor(model => model.AcoesJudiciais.CobrancaRegularizacao, new SelectList(new string[] { "Não", "Sim" }, Model.AcoesJudiciais.CobrancaRegularizacao), htmlAttributes: new { @class = "form-control" })
+        </div>
+        <div class="col-md-3">
+            <label class="col-form-label">Cobrança anuidade</label>
+            @Html.DropDownListFor(model => model.AcoesJudiciais.CobrancaAnuidade, new SelectList(new string[] { "Não", "Sim" }, Model.AcoesJudiciais.CobrancaAnuidade), htmlAttributes: new { @class = "form-control" })
+        </div>
+        <div class="col-md-3">
+            <label class="col-form-label">Cobrança levantamento</label>
+            @Html.DropDownListFor(model => model.AcoesJudiciais.CobrancaLevantamento, new SelectList(new string[] { "Não", "Sim" }, Model.AcoesJudiciais.CobrancaLevantamento), htmlAttributes: new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <label class="col-form-label">Rodovia</label>
+            @Html.EditorFor(Model => Model.Rodovia, new { htmlAttributes = new { @class = "form-control", @data_input = "", @disabled = "disabled" } })
+        </div>
+        <div class="col-md-3"></div>
+        <div class="col-md-3">
+            <label class="col-form-label">Quilometro inicial</label>
+            @Html.EditorFor(Model => Model.AcoesJudiciais.KmInicial, new { htmlAttributes = new { @class = "form-control", @data_input = "", @type = "decimal", @placeholder = "000,000", @max = "999.999", onkeyup = "formatarKm();" } })
+        </div>
+        <div class="col-md-3">
+            <label class="col-form-label">Quilometro final</label>
+            @Html.EditorFor(Model => Model.AcoesJudiciais.KmFinal, new { htmlAttributes = new { @class = "form-control", @data_input = "", @type = "decimal", @placeholder = "000,000", @max = "999.999", onkeyup = "formatarKm();" } })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <label class="col-form-label">Cobrança levantamento</label>
+            @Html.DropDownListFor(model => model.AcoesJudiciais.Assinatura, new SelectList(new string[] { "Não", "Sim" }, Model.AcoesJudiciais.Assinatura), htmlAttributes: new { @class = "form-control" })
+        </div>
+        <div class="col-md-6">
+            <label class="col-form-label">Motivo</label>
+            @Html.EditorFor(Model => Model.AcoesJudiciais.MotivoAssinatura, new { htmlAttributes = new { @class = "form-control", @data_input = "" } })
+        </div>
+        <div class="col-md-3">
+            <label class="col-form-label">Data despacho</label>
+            @Html.TextBoxFor(Model => Model.AcoesJudiciais.DataDespacho, "{0:yyyy-MM-dd}", new { type = "date", @class = "form-control", @data_input = "" })
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-md-12  text-center">
+            <label class="col-form-label">Observação</label>
+            @Html.EditorFor(Model => Model.AcoesJudiciais.Observacao, new { htmlAttributes = new { @class = "form-control", @data_input = "" } })
+        </div>
+    </div>
+</div>

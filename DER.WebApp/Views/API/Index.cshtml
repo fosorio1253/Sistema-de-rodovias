@@ -1,0 +1,73 @@
+﻿@model List<DER.WebApp.ViewModels.API.APIViewModel>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="content">
+    <section class="content-header">
+        <h1>Serviços de API</h1>
+    </section>
+    <section class="jumbotron">
+        <div class="list">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Nome do Serviço</th>
+                        <th scope="col">Ação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Count > 0)
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <th>@item.Id</th>
+                                <th>@item.NomeDoServico</th>
+                                <td>
+                                    <button type="submit" onclick="Executar(@item.Id)" class="btn btn-link" title="Executar Serviço"><i class="fa fa-arrow-circle-right"></i></button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="3">
+                                Nenhum serviço encontrado.
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </section>
+</section>
+<script>
+@section Ready{
+    $('.table').DataTable({
+    language: {
+    url: '/Content/DataTables/Pt-Br.json'
+    }
+    });
+}
+    function Executar(id) {
+        var response = POST("/API/ExecutarServico/", JSON.stringify({ id: id }));
+        if (response.Sucesso == true) {
+            swal({
+                type: 'success',
+                title: 'Sucesso',
+                text: response.Mensagem
+            }).then((result) => {})
+        } else {
+            swal({
+                type: 'error',
+                title: 'Erro',
+                text: response.Mensagem
+            }).then((result) => { })
+        }
+    }
+</script>

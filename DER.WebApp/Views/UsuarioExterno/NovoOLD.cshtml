@@ -1,0 +1,342 @@
+﻿@model DER.WebApp.ViewModels.UsuarioExternoViewModel
+@{
+    ViewBag.Title = "DER - Novo Usuario";
+}
+<section class="content">
+    <section class="content-header">
+        <div>
+            <h1>
+                Usuario Externo
+            </h1>
+            <button onclick="Salvar(event)" class="btn btn-primary" id="salvar">
+                <i class="fa fa-save"></i>
+                <span>Salvar</span>
+            </button>
+            <a href="/usuarioExterno/List" class="btn btn-primary">
+                <span>Voltar</span> 
+            </a>
+        </div>
+
+        <ol class="breadcrumb">
+            <li><i class="fa fa-home"></i><a href="/Home/Index"> Home </a></li>
+            <li><a href="/UsuarioExterno/List"> Listar Usuário Externo </a></li>
+            <li class="active"><a> Cadastro </a></li>
+        </ol>
+    </section>
+    <section class="jumbotron">
+        @using (Html.BeginForm("Salvar", "UsuarioExterno", FormMethod.Post, new { id = "usuario", enctype = "multipart/form-data" }))        
+        {
+            @Html.HiddenFor(x => x.StatusAprovacaoId, new { data_input = "" })
+            @Html.HiddenFor(model => model.DataCriacao, new { data_input = "" })
+            @Html.Hidden("Grupo", String.Join(",", Model.GruposIDs), new { @id = "hdnGrupo" })
+            @Html.Hidden("Empresa", String.Join(",", Model.EmpresasIDs), new { @id = "hdnEmpresa" })
+            @Html.HiddenFor(model => model.Id, new { data_input = "" })
+            @Html.Hidden("PermissaoAprovacao", (bool)ViewBag.PermissaoAprovacao)
+            <div class="container">
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Ativo</label>
+                    <div class="col-sm-10">
+                        <label class="switch">
+                            @Html.CheckBoxFor(model => model.Ativo, new { @id = "customSwitch", @data_check = "" })
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Grupo de Acesso *</label>
+                    <div class="col-sm-10">
+                        @Html.DropDownListFor(model => model.GruposIDs, new SelectList(ViewBag.Grupos, "Value", "Text"), new { @class = "form-control isSelect", @multiple = "multiple", @data_input = "" })
+                        @Html.ValidationMessageFor(m => m.GruposIDs, "", new { @class = "text-danger  " })
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Empresas *</label>
+                    <div class="col-sm-10">
+                        @Html.DropDownListFor(model => model.EmpresasIDs, new SelectList(ViewBag.Empresas, "Value", "Text"), new { @class = "form-control isSelect", @multiple = "multiple", @data_input = "" })
+                        @Html.ValidationMessageFor(m => m.EmpresasIDs, "", new { @class = "text-danger  " })
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Cargo *</label>
+                    <div class="col-sm-10">
+                        @Html.EditorFor(Model => Model.Cargo, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 150 } })
+                        @Html.ValidationMessageFor(m => m.Cargo, "", new { @class = "text-danger  " })
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Nome *</label>
+                    <div class="col-sm-10">
+                        @Html.EditorFor(Model => Model.Nome, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 150 } })
+                        @Html.ValidationMessageFor(m => m.Nome, "", new { @class = "text-danger  " })
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">CPF *</label>
+                    <div class="col-sm-10">
+                        @Html.EditorFor(Model => Model.CPF, new { htmlAttributes = new { @class = "form-control", @data_mask = "000.000.000-00", @data_input = "" } })
+                        @Html.ValidationMessageFor(m => m.CPF, "", new { @class = "text-danger  " })
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Login *</label>
+                    <div class="col-sm-10">
+                        @Html.EditorFor(Model => Model.Login, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 100 } })
+                        @Html.ValidationMessageFor(m => m.Login, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="exampleInputEmail1" class="col-sm-2 col-form-label">E-mail *</label>
+                    <div class="col-sm-10">
+                        @Html.EditorFor(Model => Model.Email, new { htmlAttributes = new { @class = "form-control", @type = "email", @data_input = "", @maxlength = 255 } })
+                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger  " })
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">DDD</label>
+                    <div class="col-sm-10">
+                        @Html.EditorFor(Model => Model.DDD, new { htmlAttributes = new { @class = "form-control", @data_mask = "99", @data_input = "" } })
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Telefone e Ramal</label>
+                    <div class="col-sm-10">
+                        @Html.EditorFor(Model => Model.TelefoneRamal, new { htmlAttributes = new { @class = "form-control", @data_mask = "0000-00009", @data_input = "" } })
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="file" class="col-sm-2 col-form-label">Documento com foto *</label>
+                    <div class="col-sm-10">
+                        <input type="file" name="file" id="file" class="form-control" accept="image/jpeg, image/jpg, application/pdf" />
+                        @*@Html.ValidationMessageFor(m => m.Files, "", new { @class = "text-danger  " })*@
+                    </div>
+                </div>
+
+                <!--<div class="form-group row">
+                <label for="file2" class="col-sm-2 col-form-label">Procuração *</label>
+                <div class="col-sm-10">
+                    <input type="file" name="files" id="Procuracao" class="form-control" accept="image/jpeg, image/jpg, application/pdf" />-->
+                @*@Html.ValidationMessageFor(m => m.Files, "", new { @class = "text-danger  " })*@
+                <!--</div>
+            </div>-->
+
+                <div class="form-group row hide" id="pendenteAprovacao">
+                    <label class="col-sm-2 col-form-label">Pendente aprovação</label>
+                    <div class="col-sm-5">
+                        <button class="btn btn-success btn-block" onclick="Aprovar(event, true)">Aprovar</button>
+                    </div>
+                    <div class="col-sm-5">
+                        <button class="btn btn-danger btn-block" onclick="Aprovar(event, false)">Reprovar</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </section>
+</section>
+
+<script>
+
+
+@section Ready{
+    $('input:file').change((e) => {
+        var ext = $(e.target).val().split('.').pop().toLowerCase();
+        if ($.inArray(ext, ['pdf', 'jpg', 'jpeg']) == -1) {
+            swal({
+                title: "Erro",
+                type: 'error',
+                text: 'tipo de arquivo não permitido'
+            });
+            $(e.target).val('')
+        }
+    });
+
+    $('[data-mask]').each((e, i) => {
+        $(i).mask($(i).attr("data-mask"))
+    });
+
+    $('#TelefoneRamal').keyup(function (event) {
+        if ($(this).val().length == 10) {
+            $(this).mask('00000-0009');
+        } else {
+            $(this).mask('0000-00009');
+        }
+    })
+
+    $('.isSelect').multiselect({
+        includeSelectAllOption: true,
+        allSelectedText: 'Todos',
+        nonSelectedText: 'Nada selecionado',
+        nSelectedText: ' - Selecionados',
+        allSelectedText: 'Todos',
+        selectAllText: 'Todos'
+    });
+
+
+    $('#hdnGrupo').val().split(',').forEach((e) => {
+        $('#GruposIDs option[value="' + e + '"]').prop('selected', true);
+    });
+
+    $('#GruposIDs').multiselect('refresh');
+
+    $('#hdnEmpresa').val().split(',').forEach((e) => {
+        $('#EmpresasIDs option[value="' + e + '"]').prop('selected', true);
+    });
+
+    $('#EmpresasIDs').multiselect('refresh');
+
+
+    if ($(location).attr("href").toLocaleLowerCase().indexOf('visualizar') > 0) {
+        $('[data-input]').attr('disabled', 'disabled');
+        $('[data-check]').attr('disabled', 'disabled');
+        $('.isSelect').multiselect('disable');
+        $('#salvar').addClass("hide")
+    }
+    else {
+        if ($('#StatusAprovacaoId').val() == statusAprovacao.AguardandoAprovacao && $('#PermissaoAprovacao').val() == 'True') $('#pendenteAprovacao').removeClass("hide");
+    }
+
+    $('#customSwitch').after('<span class="slider round" for="customSwitch"></span>');
+}
+
+
+
+    function Aprovar(evt, aprovar) {
+        evt.preventDefault();
+
+        swal({
+            title: 'Aprovação',
+            text: "Deseja realmente " + (aprovar ? "aprovar" : "reprovar") + " o usuário",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'Não',
+            confirmButtonText: 'Sim'
+        }).then((result) => {
+            if (result.value) {
+                var data = { aprovar: aprovar, idUsuario : $('#Id').val() }
+                if (aprovar){
+                    var response = POST('/UsuarioExterno/Aprovar', JSON.stringify(data))
+                    if (response.status == true) {
+                        swal({
+                            type: 'success',
+                            title: 'Sucesso',
+                            text: 'Usuario aprovado com sucesso!'
+                        }).then((result) => {
+                            if (result.value) {
+                                window.location.href = "/UsuarioExterno/List";
+                            }
+                        })
+                    }
+                } else {
+                    obterReprova(data)
+                }
+            }
+
+        })
+    }
+
+    function obterReprova(data, recall = false) {
+        swal({
+            title: recall ? 'digite uma justificativa' : 'Qual a justificativa da reprova?',
+            input: 'text',
+            inputAttributes: {
+                autocapitalize: 'off'
+            },
+            showCancelButton: true,
+            cancelButtonText: 'Cancelar',
+            confirmButtonText: 'Enviar'
+        }).then((result) => {
+            if (result.value == "") {
+                obterReprova(data, true);
+
+            }
+            else if (result.value != undefined) {
+                data.justificativa = result.value
+                var response = POST('/UsuarioExterno/Aprovar', JSON.stringify(data))
+                if (response.status == true) {
+                    swal({
+                        type: 'success',
+                        title: 'Sucesso',
+                        text: 'Usuario reprovado com sucesso!'
+                    }).then((result) => {
+                        if (result.value) {
+                            window.location.href = "/UsuarioExterno/List";
+                        }
+                    })
+                }
+
+            }
+        })
+    }
+
+    function Salvar(e) {
+
+        var data = {};
+        var formValido = $('#usuario').valid();
+        var cpfValido = TestaCPF($('#CPF'));
+
+        if (formValido && cpfValido) {
+
+            $('#usuario [data-check]').each((i, e) => {
+                data[$(e).attr("name")] = $(e).is(':checked')
+            })
+
+            $('#usuario [data-input]').each((i, e) => {
+                data[$(e).attr("name")] = $(e).val()
+            });
+
+            //var response = POST('/UsuarioExterno/Salvar', JSON.stringify(data))
+
+            $.ajax({
+                type: "POST",
+                url: '/UsuarioExterno/Salvar',
+                contentType: false,
+                processData: false,
+                data: data,
+                success: function (result) {
+                    console.log(result);
+                },
+                error: function (xhr, status, p3, p4) {
+                    var err = "Error " + " " + status + " " + p3 + " " + p4;
+                    if (xhr.responseText && xhr.responseText[0] == "{")
+                        err = JSON.parse(xhr.responseText).Message;
+                    console.log(err);
+                }
+            });
+
+            if (!response.valid) {
+                messagem = 'Ocorreu um erro, entrar em contato com o suporte.'
+
+                var validador = "";
+                if (response.anyCPF)
+                    validador += " CPF"
+                if (response.anyLogin)
+                    validador += (validador == "" ? " " : ", ") + "Login"
+                if (response.anyEmail)
+                    validador += (validador == "" ? " " : ", ") + "Email"
+
+                if (validador != "")
+                    messagem = "Usuario já cadastrado, verifique: " + validador;
+
+                swal({
+                    type: (validador != "" ? 'warning' : 'error'),
+                    title: (validador != "" ? 'Atenção' : 'Formulário Inválido'),
+                    text: messagem
+                })
+            }
+            else {
+                swal({
+                    type: 'success',
+                    title: 'Sucesso',
+                    text: 'Usuario salvo com sucesso!'
+                }).then((result) => {
+                    if (result.value) {
+                        window.location.href = "/UsuarioInterno/List";
+                    }
+                })
+            }
+        }
+    }
+    
+
+    
+</script>

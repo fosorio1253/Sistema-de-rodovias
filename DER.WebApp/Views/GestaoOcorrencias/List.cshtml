@@ -1,0 +1,103 @@
+﻿@model List<DER.WebApp.Domain.Models.DTO.ListaGestaoOcorrenciaDTO>
+@{
+    ViewBag.Title = "SGFD - Gestão de Ocorrências";
+    var permissoes = (DER.WebApp.ViewModels.PermissoesViewModel)ViewBag.Permissoes;
+    var PerfilUsuarioId = DER.WebApp.Common.Helper.PerfilUsuario.UsuarioPerfilId;
+}
+
+<section class="content">
+    <section class="content-header">
+        <h1>Consultar Ocorrências Cadastradas</h1>
+        <button onclick="window.location.href = '/GestaoOcorrencias/Novo'" class="btn btn-primary">
+            <i class="fa fa-save"></i>
+            <span>Novo</span>
+        </button>
+        <ol class="breadcrumb">
+            <li><i class="fa fa-home"></i><a href="/Home/Index"> Home </a></li>
+            <li class="active"><a> Consultar Ocorrências Cadastradas </a></li>
+        </ol>
+    </section>
+    <section class="jumbotron">
+        <div class="list">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Código da Ocorrência</th>
+                        <th scope="col">Interessado</th>
+                        <th scope="col">Tipo de Ocupação</th>
+                        <th scope="col">Regional</th>
+                        <th scope="col">Rodovia</th>
+                        <th scope="col">Data Cadastro</th>
+                        <th scope="col">Opções</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Count > 0)
+                    {
+                        foreach (var item in Model)
+                        {                           
+                    <tr data-id="@item.Id">
+                        <th scope="row">@item.CodigoOcorrencia</th>
+                        <th>@item.Interessado</th>
+                        <th>@item.TipoOcupacao</th>
+                        <th>@item.Regional</th>
+                        <th>@item.Rodovia</th>
+                        <th>@item.DataCadastro</th>
+                        <td>
+                            <button type="submit" onclick="location.href='/GestaoOcorrencias/Visualizar/@item.Id'" @(permissoes.Visualizar ? "" : "disabled") class="btn btn-link"><i class="fa fa-search"></i></button>
+                            <button type="submit" onclick="location.href='/GestaoOcorrencias/Editar/@item.Id'" @(permissoes.Editar ? "" : "disabled") class="btn btn-link" title="Editar"><i class="fa fa-pencil"></i></button>
+                            <button onclick="Excluir(@item.Id)" @(permissoes.Excluir ? "" : "disabled") class="btn btn-link excluir"><i class="fa fa-trash"></i></button>
+                        </td>
+                    </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7">
+                                Nenhum dado encontrado.
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </section>
+</section>
+<script>
+@section Ready{
+    $('.table').DataTable({
+        language: {
+            url: '/Content/DataTables/Pt-Br.json'
+        }
+    });
+}
+    function Excluir(id) {        
+        swal({
+            title: 'Exclusão',
+            text: "Deseja realmente excluir a ocorrência?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'Não',
+            confirmButtonText: 'Sim'
+        }).then((result) => {
+            if (result.value) {
+                var response = POST("/GestaoOcorrencias/Excluir", JSON.stringify({ id: id }));               
+                if (response.status == true) {
+                    swal({
+                        type: 'success',
+                        title: 'Sucesso',
+                        text: 'Ocorrência Excluída com sucesso!'
+                    }).then((result) => {
+                        if (result.value) {                           
+                            $('[data-id=' + id + ']').remove()                            
+                        }
+                    })                    
+                }
+            }
+        });
+    }
+</script>

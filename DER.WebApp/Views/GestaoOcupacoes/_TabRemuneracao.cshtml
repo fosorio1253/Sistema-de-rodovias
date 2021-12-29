@@ -1,0 +1,61 @@
+﻿@model DER.WebApp.ViewModels.GestaoOcupacoes.GestaoOcupacoesViewModel
+@{
+    ViewBag.Title = "SGFD - Cadastro de Ocupações";
+}
+<div class="tab-pane fade" id="gestao-ocupacao-remuneracao@{@ViewBag.idInterno}" role="tabpanel" aria-labelledby="gestao-ocupacao-remuneracao-tab@{@ViewBag.idInterno}">
+    <!--AQUI-->
+    <div class="card-body table-responsive p-0">
+        <table id="tableRemuneracao" class="table table-hover text-nowrap" style="border: 1px solid black">
+            <thead>
+                <tr>
+                    <th style="background-color:gray">Data</th>
+                    <th style="background-color:gray">Valor</th>
+                    <th style="background-color:gray">Descrição</th>
+                    <th style="background-color:gray">Status</th>
+                    <th style="background-color:gray">Print</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Remuneracao != null)
+                {
+                    foreach (var item in Model.Remuneracao)
+                    {
+                        <tr>
+                            <td id="dtRemuneracao">
+                                @Html.TextBoxFor(x => item.DataRemuneracao, "{0:yyyy-MM-dd}", new { type = "date", @class = "form-control", @data_input = "", @disabled = "disabled" })
+                            </td>
+                            <td id="valRemuneracao">
+                                @Html.TextBoxFor(x => item.ValorRemuneracao, new { @class = "form-control", @data_input = "", @maxlength = 250, @disabled = "disabled" })
+                            </td>
+                            <td id="valDescricao">
+                                @Html.TextBoxFor(x => item.Descricao, new { @class = "form-control", @data_input = "", @maxlength = 250, @disabled = "disabled" })
+                            </td>
+                            <td id="valStatus">
+                                @Html.TextBoxFor(x => item.Status, new { @class = "form-control", @data_input = "", @maxlength = 250, @disabled = "disabled" })
+                            </td>
+                            <td>
+                                @if (item.Liberado)
+                                {
+                                    <button class="btn btn-primary">
+                                        <i class="fa fa-download"></i>
+                                        @Html.ActionLink("Imprimir", "BaixarBoletoRemuneracao", new { idocupacao = @Model.Id, idremuneracao = item.IdGestaoOcupacoesRemuneracao, Liberado = item.Liberado }, new { @class = "customButton" })
+                                    </button>
+                                }
+                                else
+                                {
+                                    if (ViewBag.IsUsuarioAdm && ViewBag.situacao != "Deferida")
+                                    {
+                                        <button class="btn btn-primary">
+                                            <i class="fa fa-download"></i>
+                                            @Html.ActionLink("Liberar", "LiberarBoletoRemuneracao", new { ocupacao = @Model, idocupacao = @Model.Id, idremuneracao = item.IdGestaoOcupacoesRemuneracao }, new { @class = "customButton" })
+                                        </button>
+                                    }
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

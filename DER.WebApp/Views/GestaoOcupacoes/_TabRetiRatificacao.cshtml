@@ -1,0 +1,17 @@
+﻿@model DER.WebApp.ViewModels.GestaoOcupacoes.GestaoOcupacoesViewModel
+@{
+    ViewBag.Title = "SGFD - Cadastro de Ocupações";
+}
+
+<div class="tab-pane fade active in" id="gestao-retificacao@{@ViewBag.idInterno}" role="tabpanel" aria-labelledby="gestao-retificacao-tab@{@ViewBag.idInterno}">
+    <div class="col-md-8">
+
+        <label class="col-form-label">Data da Solicitação</label>
+        @Html.EditorFor(Model => Model.Retificacao.DataSolicitacao, new { htmlAttributes = new { @type = "date", @class = "form-control", @data_input = "", @data_toggle = "tooltip", title = "DD/MM/AAAA", @value = "111111-08-09", @min = "1900-01-01", @max = "9999-12-31" } })
+        @Html.ValidationMessageFor(m => m.Retificacao.DataSolicitacao, "", new { @class = "text-danger" })
+        <br />
+        <label class="col-form-label">Objeto do Termo de Reti-Rtificação</label>
+        @Html.EditorFor(Model => Model.Retificacao.ObjetoTermoRetificacao, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 250 } })
+        @Html.ValidationMessageFor(m => m.Retificacao.ObjetoTermoRetificacao, "", new { @class = "text-danger" })
+    </div>
+</div>

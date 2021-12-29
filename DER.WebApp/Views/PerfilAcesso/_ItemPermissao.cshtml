@@ -1,0 +1,28 @@
+﻿@model DER.WebApp.ViewModels.ListaPermissaoViewModel
+
+
+@if(Model.PermissaoFilho?.Count() > 0)
+{
+    <div class="combo">
+        <span class="caret"></span>
+        <input type="checkbox" class="parent" value="@Model.Id" id="@("Custom" + Model.Id)"><label for="@("Custom" + Model.Id)">@Model.Nome</label>
+        <ul class="nested">
+
+            @foreach (var item in Model.PermissaoFilho)
+            {
+                <li>
+                    @Html.Partial("_ItemPermissao", item)
+                </li>
+            }
+        
+        </ul>
+    </div>
+
+}
+else
+{
+    <div class="custom-control custom-switch">
+        <input type="checkbox" class="child" value="@Model.Id" id="@("Custom" + Model.Id)">
+        <label for="@("Custom" + Model.Id)">@Model.Nome</label>
+    </div>
+}

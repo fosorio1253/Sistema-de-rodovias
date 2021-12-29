@@ -1,0 +1,90 @@
+﻿@model DER.WebApp.ViewModels.GestaoOcupacoes.GestaoOcupacoesViewModel
+@{
+    ViewBag.Title = "SGFD - Cadastro de Ocupações";
+}
+
+<div class="row center-block">
+    <br />
+    <div class="col-md-12">
+        <div class="card card-primary card-tabs">
+            <div class="card-header p-0 pt-1">
+                <ul class="nav nav-tabs" id="gestao-cancelamento-tab@{@ViewBag.id}" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link" id="gestao-cancelamento-tab@{@ViewBag.id}" data-toggle="pill" href="#gestao-cancelamento@{@ViewBag.id}" role="tab" aria-controls="gestao-cancelamento@{@ViewBag.id}" aria-selected="true">Cancelamento</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="gestao-ocupacao-documentos-tab@{@ViewBag.id}" data-toggle="pill" href="#gestao-ocupacao-documentos@{@ViewBag.id}" role="tab" aria-controls="gestao-ocupacao-documentos@{@ViewBag.id}" aria-selected="false">Documentos *</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="gestao-ocupacao-deferimento-tab@{@ViewBag.id}" data-toggle="pill" href="#gestao-ocupacao-deferimento@{@ViewBag.id}" role="tab" aria-controls="gestao-ocupacao-deferimento@{@ViewBag.id}" aria-selected="false">Deferimento</a>
+                    </li>
+                    @if(ViewBag.IsUsuarioAdm)
+                    {
+                    <li class="nav-item">
+                        <a class="nav-link" id="gestao-ocupacao-notificacao-tab@{@ViewBag.id}" data-toggle="pill" href="#gestao-ocupacao-notificacao@{@ViewBag.id}" role="tab" aria-controls="gestao-ocupacao-notificacao@{@ViewBag.id}" aria-selected="false">Notificações</a>
+                    </li>
+                    }
+                </ul>
+            </div>
+            <div class="card-body">
+                <div class="tab-content" id="gestao-cancelamento-tabContent@{@ViewBag.id}">
+                    <br />
+                    
+                    @{
+                      if(ViewBag.IsUsuarioAdm)
+                      {
+                      @Html.Partial(
+                        "_TabNotificacao",
+                        new ViewDataDictionary(this.Vi‌​ewData) {
+                          {
+                            "idInterno", @ViewBag.id
+                          }
+                        }
+                      );
+                      }
+                    }
+
+                    @{
+                        @Html.Partial(
+                         "_TabCancelamento",
+                         new ViewDataDictionary(this.Vi‌​ewData) {
+                           {
+                            "idInterno", @ViewBag.id
+                           }
+                         }
+                       );
+                    }
+                    
+                    @{
+
+                        @Html.Partial(
+                        "_TabDeferimento",
+                        new ViewDataDictionary(this.Vi‌​ewData) {
+                          {
+                            "idInterno", @ViewBag.id
+                          },
+                            {
+                            "origemInterno", @ViewBag.origem
+                          }
+                        }
+                      );
+                    }
+
+                    @{
+
+                        @Html.Partial(
+                        "_TabDocumentos",
+                        new ViewDataDictionary(this.Vi‌​ewData) {
+                          {
+                            "idInterno", @ViewBag.id
+                          }
+                        }
+                      );
+                    }
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

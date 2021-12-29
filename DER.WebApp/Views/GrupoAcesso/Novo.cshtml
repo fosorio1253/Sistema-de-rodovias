@@ -1,0 +1,164 @@
+﻿@model DER.WebApp.ViewModels.GrupoViewModel
+@{
+
+    ViewBag.Title = "SGFD - Cadastro de grupo de acesso";
+}
+
+<section class="content">
+    <section class="content-header">
+        <div>
+            <h1>Grupo de Acesso</h1>
+            <button type="submit" class="btn btn-primary" onclick="Salvar()" id="btnSalvar">
+                <i class="fa fa-save"></i>
+                <span>Salvar</span>
+            </button>
+            <a href="/GrupoAcesso/List" class="btn btn-primary">
+                <i class="fa fa-arrow-left"></i>
+                <span>Voltar</span>
+            </a>
+        </div>
+
+        <ol class="breadcrumb">
+            <li><i class="fa fa-home"></i><a href="/Home/Index"> Home </a></li>
+            <li><a href="/GrupoAcesso/List">Listar Grupo de Acesso </a></li>
+            <li class="active"><a> Cadastro </a></li>
+        </ol>
+    </section>
+    <section class="jumbotron">
+        @using (Html.BeginForm("Salvar", "GrupoAcesso", FormMethod.Post, new { id = "grupo" }))
+        {
+            @Html.HiddenFor(model => model.Id, new { data_input=""})
+            <div class="container">
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Nome *</label>
+                    <div class="col-sm-10">
+                        @Html.EditorFor(model => model.Nome, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 50 } })
+                        @Html.ValidationMessageFor(m => m.Nome, "", new { @class = "text-danger  " })
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Perfil associado</label>
+                    <div class="col-sm-10">
+                        @Html.DropDownListFor(model => model.PerfilId, new SelectList(ViewBag.Perfis, "Value", "Text"), "Selecione..", new { @class = "form-control isSelect", @data_input = "" })
+                        @Html.ValidationMessageFor(m => m.PerfilId, "", new { @class = "text-danger  " })
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Descrição</label>
+                    <div class="col-sm-10">
+                        @Html.TextAreaFor(model => model.Descricao, new { @class = "form-control", @rows = 5, @data_input = "", @maxlength = 150 })
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Usuarios de grupo</label>
+                </div>
+                @*</div>*@
+
+                <div class="list">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Nome <i class="fa fa-sort"></i></th>
+                                <th scope="col">Login <i class="fa fa-sort"></i></th>
+                                <th scope="col">E-mail <i class="fa fa-sort"></i></th>
+                                <th scope="col">Status <i class="fa fa-sort"></i></th>
+                                <th scope="col">Regional <i class="fa fa-sort"></i></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Usuarios)
+                            {
+                                <tr class="linhaTables">
+                                    <th scope="row"><input type="checkbox" value="@item.Id" @(Model.UsuariosIds.Contains(item.Id) ? "checked='true'" : "") class="UsuariosIds" data-input></th>
+                                    <td>@item.Nome</td>
+                                    <td>@item.Login</td>
+                                    <td>@item.Email</td>
+                                    <td>@(item.Ativo ? "Ativo" : "Inativo")</td>
+                                    <td>@item.Regional</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+    </section>
+</section>
+
+<script>
+@section Ready{
+
+    $('.isSelect').multiselect({
+        includeSelectAllOption: true,
+        allSelectedText: 'Todos',
+        nonSelectedText: 'Nada selecionado',
+        nSelectedText: ' - Selecionados',
+        allSelectedText: 'Todos',
+        selectAllText: 'Todos'
+    });
+    
+    if ($(location).attr("href").toLocaleLowerCase().indexOf('visualizar') > 0) {
+        $('[data-input]').attr('disabled', 'disabled');
+        $('#btnSalvar').addClass("hide");
+        $('.isSelect').multiselect('disable');
+    } else {
+        $('.linhaTables').click((e, i) => {
+            if (e.target.type != 'checkbox') {
+                var input = $(e.currentTarget).find('input');
+                input.prop('checked', !input.is(':checked'));
+            }
+
+        })
+    }
+}
+
+    function Salvar(e) {
+        var data = {};
+
+        if ($('#grupo').valid()) {
+            $('#grupo [data-input]').each((i, e) => {
+                data[$(e).attr("name")] = $(e).val()
+            });
+
+            var usuarios = [];
+
+            $('#grupo .UsuariosIds:checked').each((i, e) => {
+                usuarios.push($(e).val())
+            })
+
+            data['UsuariosIds'] = usuarios;
+            
+            var response = POST('/GrupoAcesso/Salvar', JSON.stringify(data))
+            if (response.status == true) {
+                swal({
+                    type: 'success',
+                    title: 'Sucesso',
+                    text: 'Grupo salvo com sucesso!'
+                }).then((result) => {
+                    if (result.value) {
+                        window.location.href = "/GrupoAcesso/List";
+                    }
+                })
+            }
+            else if (response.exists == true) {
+                 swal({
+                    type: 'error',
+                    title: 'Formulário invalido',
+                    text: 'Este nome de grupo já esta sendo usado'
+                }).then((result) => {
+                    console.log(response.html);
+                })
+            }
+            else {
+                swal({
+                    type: 'error',
+                    title: 'Formulário invalido',
+                    text: 'Favor verifique os campos!'
+                }).then((result) => {
+                    console.log(response.html);
+                })
+            }
+        }
+    }
+</script>

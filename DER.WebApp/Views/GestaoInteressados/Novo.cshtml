@@ -1,0 +1,1576 @@
+﻿@model DER.WebApp.ViewModels.GestaoInteressados.GestaoInteressadosViewModel
+@{
+    ViewBag.Title = "SGFD - Cadastro de interessado";
+}
+
+<section class="content">
+    <section class="content-header">
+        <div>
+            <h1>Visualizando Cadastro de Interessado</h1>
+
+            <button type="submit" onclick="Salvar()" class="btn btn-primary" id="btnSalvar">
+                <i class="fa fa-save"></i>
+                <span>Salvar</span>
+            </button>
+
+            <a href="/GestaoInteressados/List" class="btn btn-primary">
+                <i class="fa fa-arrow-left"></i>
+                <span>Voltar</span>
+            </a>
+        </div>
+
+        <ol class="breadcrumb">
+            <li><i class="fa fa-home"></i><a href="/Home/Index"> Home </a></li>
+            <li><a href="/GestaoInteressados/List">Listar Credenciamento de Interessados </a></li>
+            <li class="active"><a> Cadastro </a></li>
+        </ol>
+    </section>
+    <section class="jumbotron">
+        @using (Html.BeginForm("Salvar", "GestaoInteressados", FormMethod.Post, new { id = "gestaoInteressado", onkeydown = "return event.keyCode!=13" }))
+        {
+            @Html.HiddenFor(model => model.Id, new { data_input = "" })
+            <fieldset>
+                <legend>Informações do Cadastro</legend>
+                <div class="row">
+                    <div class="col-md-8">
+                        @if (User.Identity.Name == "Admin")
+                        {
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <label class="col-form-label">Número SPDOC</label>
+                                    @Html.EditorFor(Model => Model.NumeroSPDOC, new { htmlAttributes = new { @class = "form-control", @data_input = "" } })
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="col-form-label">Status SPDOC</label>
+                                    @Html.EditorFor(Model => Model.StatusSPDOC, new { htmlAttributes = new { @class = "form-control", @data_input = "" } })
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="col-form-label">Expiração Credenciamento</label>
+                                    @Html.EditorFor(Model => Model.Validade, new { htmlAttributes = new { @class = "form-control", disabled = "disabled"} })
+                                    @Html.ValidationMessageFor(m => m.Validade, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <label class="col-form-label">Número SPDOC</label>
+                                    @Html.EditorFor(Model => Model.NumeroSPDOC, new { htmlAttributes = new { @class = "form-control", @data_input = "", disabled = "disabled" } })
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="col-form-label">Status SPDOC</label>
+                                    @Html.EditorFor(Model => Model.StatusSPDOC, new { htmlAttributes = new { @class = "form-control", @data_input = "", disabled = "disabled" } })
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="col-form-label">Expiração Credenciamento</label>
+                                    @Html.EditorFor(Model => Model.Validade, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } })
+                                    @Html.ValidationMessageFor(m => m.Validade, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        }
+
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <label class="col-form-label">Nome *</label>
+                                @Html.EditorFor(Model => Model.Nome, new { htmlAttributes = new { @class = "form-control", @data_input = "" } })
+                                @Html.ValidationMessageFor(m => m.Nome, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="col-form-label">Telefone *</label>
+                                @Html.EditorFor(Model => Model.Telefone, new { htmlAttributes = new { @class = "form-control", @data_input = "" } })
+                                @Html.ValidationMessageFor(m => m.Telefone, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="col-form-label">Natureza Jurídica *</label>
+                                @Html.DropDownListFor(model => model.NaturezaJuridicaId, Model.NaturezasJuridicas, "Selecione", new { @class = "form-control", @data_input = "" })
+                                @Html.ValidationMessageFor(m => m.NaturezaJuridicaId, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <label class="col-form-label">CPF / CNPJ *</label>
+
+                                @if (Model.Id != 0)
+                                {
+                                    if (Model.NaturezaJuridicaId == (int)DER.WebApp.Domain.Models.Enum.NaturezaEnum.PessoaFisica)
+                                    {
+                                        @Html.EditorFor(Model => Model.Documento, new { htmlAttributes = new { @class = "form-control", @data_mask = "000.000.000-00", @data_input = "", @maxlength = 18, disabled = "disabled" } })
+                                    }
+                                    else
+                                    {
+                                        @Html.EditorFor(Model => Model.Documento, new { htmlAttributes = new { @class = "form-control", @data_mask = "00.000.000/0000-00", @data_input = "", @maxlength = 18, disabled = "disabled" } })
+                                    }
+                                }
+                                else
+                                {
+                                    @Html.EditorFor(Model => Model.Documento, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 18, disabled = "disabled" } })
+                                }
+
+                                @Html.ValidationMessageFor(m => m.Documento, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="col-form-label">Matriz*</label>
+                                @Html.DropDownListFor(model => model.TipoEmpresaId, Model.TiposEmpresas, "Matriz", new { @class = "form-control", @data_input = "", @disabled = "disabled" })
+                                @Html.ValidationMessageFor(m => m.TipoEmpresaId, "", new { @class = "text-danger" })
+                            </div>
+
+                            @if (User.Identity.Name == "Admin")
+                            {
+                                <div class="col-md-4">
+                                    <label class="col-form-label">Status *</label>
+                                    @Html.DropDownListFor(model => model.StatusId, Model.Status, new { @class = "form-control", @data_input = "", @value = 1 })
+                                    @Html.ValidationMessageFor(m => m.StatusId, "", new { @class = "text-danger" })
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-md-4">
+                                    <label class="col-form-label">Status *</label>
+                                    @Html.DropDownListFor(model => model.StatusId, Model.Status, new { @class = "form-control", @data_input = "", @value = 1, disabled = "disabled" })
+                                    @Html.ValidationMessageFor(m => m.StatusId, "", new { @class = "text-danger" })
+                                </div>
+                            }
+
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <label class="col-form-label">Nome Fantasia *</label>
+                                @Html.EditorFor(Model => Model.NomeFantasia, new { htmlAttributes = new { @class = "form-control", @data_input = "" } })
+                                @Html.ValidationMessageFor(m => m.NomeFantasia, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="col-form-label">Tipo de Interessado *</label>
+                                @Html.DropDownListFor(model => model.TipoInteressadoId, Model.TiposInteressados, "Selecione", new { @class = "form-control", @data_input = "" })
+                                @Html.ValidationMessageFor(m => m.TipoInteressadoId, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <fieldset>
+                            <legend>Tipo de Concessão</legend>
+                            <div class="checkbox-list">
+                                @foreach (var tipoDeConcessao in Model.TiposDeConcessoes)
+                                {
+                                    @Html.CheckBoxFor(check => tipoDeConcessao.Marcado, new { id = tipoDeConcessao.TipoConcessaoId })
+                                    @Html.DisplayFor(check => tipoDeConcessao.Nome)
+                                    <br />
+                                }
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+                <br />
+
+
+                <!-- Contatos e Endereços -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="list">
+                            <label class="col-form-label">Contatos</label>
+                            <table class="table table-striped" id="dtContatos">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Nome</th>
+                                        <th scope="col">Cargo</th>
+                                        <th scope="col">E-mail</th>
+                                        <th scope="col">Opções</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="bodyContatos">
+                                    @if (Model.Contatos != null && Model.Contatos.Count > 0)
+                                    {
+                                        int linha = 1;
+
+                                        foreach (var item in Model.Contatos)
+                                        {
+                                            string usuarioId = "usuarioId" + @linha;
+                                            string nomeId = "nome" + @linha;
+                                            string cargoId = "cargo" + @linha;
+                                            string emailId = "email" + @linha;
+
+
+                                            <tr>
+                                                <td class="leftText hide"><span id='@usuarioId'>@item.UsuarioId</span></td>
+                                                <td class="leftText"><span id='@nomeId'>@item.Nome</span></td>
+                                                <td class="leftText"><span id='@cargoId'>@item.Cargo</span></td>
+                                                <td class="leftText"><span id='@emailId'>@item.Email</span></td>
+
+                                                <td>
+                                                    <button type='button' onclick='VisualizarContato(@item.UsuarioId)' class="btn btn-link" title="Visualizar"><i class="fa fa-search"></i></button>
+                                                    <button type='button' onclick='ExcluirContato(@linha);' class='btn btn-link hide excluirContato'><i class='fa fa-trash' title='Excluir'></i></button>
+                                                </td>
+                                            </tr>
+                                            linha++;
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        @if (!ViewBag.SomenteVisualizar)
+                        {
+                            <button class="btn btn-primary right" onclick="ModalAdicionarContato();" type="button">
+                                <i class="fa fa-user"></i>
+                                <span>Adicionar Contato</span>
+                            </button>
+                        }
+                    </div>
+                    <div class="col-md-6">
+                        <div class="list">
+                            <label class="col-form-label">Endereços</label>
+                            <table class="table table-striped" id="dtEnderecos">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Unidade</th>
+                                        <th scope="col">Endereço</th>
+                                        <th scope="col">Opções</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="bodyEnderecos">
+                                    @if (Model.Enderecos != null && Model.Enderecos.Count > 0)
+                                    {
+                                        int linha = 1;
+
+                                        foreach (var item in Model.Enderecos)
+                                        {
+                                            string estadoId = "estadoId" + @linha;
+                                            string logradouroId = "logradouro" + @linha;
+                                            string unidadeId = "unidade" + @linha;
+                                            string cepId = "cep" + @linha;
+                                            string numeroId = "numero" + @linha;
+                                            string complementoId = "complemento" + @linha;
+                                            string bairroId = "bairro" + @linha;
+                                            string municipioId = "municipioId" + @linha;
+                                            string nomeContatoId = "nomeContato" + @linha;
+                                            <tr>
+                                                <td><span id='@estadoId' value='@item.EstadoId'>@item.EstadoId</span></td>
+                                                <td><span id='@logradouroId' value='@item.Logradouro'>@item.Logradouro</span></td>
+                                                <td class="hide"><span id='@unidadeId' value='@item.Unidade'>@item.Unidade</span></td>
+                                                <td class="hide"><span id='@cepId' value='@item.CEP'>@item.CEP</span></td>
+                                                <td class="hide"><span id='@numeroId' value='@item.Numero'>@item.Numero</span></td>
+                                                <td class="hide"><span id='@complementoId' value='@item.Complemento'>@item.Complemento</span></td>
+                                                <td class="hide"><span id='@bairroId' value='@item.Bairro'>@item.Bairro</span></td>
+                                                <td class="hide"><span id='@municipioId' value='@item.MunicipioId'>@item.MunicipioId</span></td>
+                                                <td class="hide"><span id='@estadoId' value='@item.EstadoId'>@item.EstadoId</span></td>
+                                                <td class="hide"><span id='@nomeContatoId' value='@item.NomeContato'>@item.NomeContato</span></td>
+                                                <td>
+                                                    <button type='button' onclick='VisualizarEndereco(@linha)' class="btn btn-link" title="Visualizar"><i class="fa fa-search"></i></button>
+                                                    <button type='button' onclick='ExcluirEndereco(@linha);' class='btn btn-link hide excluirEndereco'><i class='fa fa-trash' title='Excluir'></i></button>
+                                                </td>
+                                            </tr>
+
+                                            linha++;
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        @if (!ViewBag.SomenteVisualizar)
+                        {
+                            <button class="btn btn-primary right" onclick="ModalEndereco(true);" type="button">
+                                <i class="fa fa-map-marker"></i>
+                                <span>Adicionar Endereço</span>
+                            </button>
+                        }
+                    </div>
+                </div>
+
+                <div class="modal fade" id="modalAdicionarContato" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content" style="margin-left:150px; width:800px;">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h3 class="modal-title text-center"><b data-title="">Adicionar Contato</b></h3>
+                            </div>
+                            <form>
+                                <div class="modal-body form-group form-body">
+                                    <fieldset>
+                                        <legend>Buscar Contato</legend>
+                                        <div class="form-group row">
+                                            <div class="col-md-6">
+                                                <label class="col-form-label">Empresa de Atuação</label>
+                                                @Html.DropDownListFor(model => model.Contato.EmpresaId, Model.Contato.Empresas, "Selecione", new { @class = "form-control", @data_input = "" })
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="col-form-label">Login</label>
+                                                @Html.EditorFor(Model => Model.Contato.Login, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 10 } })
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-md-6">
+                                                <label class="col-form-label">Cargo</label>
+                                                @Html.EditorFor(Model => Model.Contato.Cargo, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 50 } })
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="col-form-label">E-mail</label>
+                                                @Html.EditorFor(Model => Model.Contato.Email, new { htmlAttributes = new { @class = "form-control", @type = "email", @data_input = "", @maxlength = 50 } })
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-md-6">
+                                                <label class="col-form-label">Nome</label>
+                                                @Html.EditorFor(Model => Model.Contato.Nome, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 50 } })
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="col-form-label">Estado</label>
+                                                @Html.DropDownListFor(model => model.Contato.EstadoId, Model.Contato.Estados, "Selecione", new { @class = "form-control", @data_input = "" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <button class="btn btn-primary right" onclick="PesquisarContato();">
+                                                <i class="fa fa-search"></i>
+                                                <span>Buscar</span>
+                                            </button>
+                                        </div>
+                                        <div class="list">
+                                            <table class="table table-striped" id="dtConsultaContatos">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Nome</th>
+                                                        <th scope="col">Cargo</th>
+                                                        <th scope="col">E-Mail</th>
+                                                        <th scope="col">Opções</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="bodyConsultaContatos"></tbody>
+                                            </table>
+                                        </div>
+                                    </fieldset>
+                                    <fieldset>
+                                        <legend>Contatos Vinculados</legend>
+                                        <div class="list">
+                                            <table class="table table-striped" id="dtAdicionaContatos">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Nome</th>
+                                                        <th scope="col">Cargo</th>
+                                                        <th scope="col">E-Mail</th>
+                                                        <th scope="col">Opções</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="bodyAdicionaContatos"></tbody>
+                                            </table>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-primary" data-dismiss="modal" onclick="SalvarContatos();" type="button"><i class="fa fa-user-plus">Adicionar Contatos</i></button>
+                                    <button type="button" id="btnFechar" name="btnFechar" data-dismiss="modal" class="btn btn-primary">Fechar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="modalVisualizarContato" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content" style="margin-left:150px; width:750px;">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h3 class="modal-title text-center"><b data-title="">Visualizar Contato</b></h3>
+                            </div>
+                            <form>
+                                <div class="modal-body form-group form-body">
+                                    <div class="form-group row">
+                                        <div class="col-md-6">
+                                            <label class="col-form-label">Grupo de Acesso</label>
+                                            @Html.DropDownListFor(model => model.ContatoVisualizar.GruposIDs, new SelectList(ViewBag.Grupos, "Value", "Text"), new { @class = "form-control isSelect", @multiple = "multiple", @data_input = "", @disabled = "disabled" })
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="col-form-label">Empresa de Atuação</label>
+                                            @Html.DropDownListFor(model => model.ContatoVisualizar.EmpresasIDs, new SelectList(ViewBag.Empresas, "Value", "Text"), new { @class = "form-control isSelect", @multiple = "multiple", @data_input = "", @disabled = "disabled" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-12">
+                                            <label class="col-form-label">Cargo</label>
+                                            @Html.EditorFor(Model => Model.ContatoVisualizar.Cargo, new { htmlAttributes = new { @class = "form-control", @data_input = "", @disabled = "disabled" } })
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-6">
+                                            <label class="col-form-label">Nome</label>
+                                            @Html.EditorFor(Model => Model.ContatoVisualizar.Nome, new { htmlAttributes = new { @class = "form-control", @data_input = "", @disabled = "disabled" } })
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="col-form-label">Login</label>
+                                            @Html.EditorFor(Model => Model.ContatoVisualizar.Login, new { htmlAttributes = new { @class = "form-control", @data_input = "", @disabled = "disabled" } })
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-12">
+                                            <label class="col-form-label">E-mail</label>
+                                            @Html.EditorFor(Model => Model.ContatoVisualizar.Email, new { htmlAttributes = new { @class = "form-control", @type = "email", @data_input = "", @disabled = "disabled" } })
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-3">
+                                            <label class="col-form-label">DDD</label>
+                                            @Html.EditorFor(Model => Model.ContatoVisualizar.DDD, new { htmlAttributes = new { @class = "form-control", @data_mask = "99", @data_input = "", @disabled = "disabled" } })
+                                        </div>
+                                        <div class="col-md-9">
+                                            <label class="col-form-label">Telefone e Ramal</label>
+                                            @Html.EditorFor(Model => Model.ContatoVisualizar.Telefone, new { htmlAttributes = new { @class = "form-control", @data_input = "", @disabled = "disabled" } })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" id="btnFechar" name="btnFechar" data-dismiss="modal" class="btn btn-primary">Fechar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="modalEndereco" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content" style="margin-left:150px; width:550px;">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h3 class="modal-title text-center"><b data-title="">Endereço de Cobrança</b></h3>
+                            </div>
+                            <form>
+                                <br />
+                                <div class="modal-body form-group form-body">
+                                    <div class="form-group row">
+                                        <div class="col-md-12">
+                                            <label class="col-form-label">Unidade</label>
+                                            @Html.EditorFor(Model => Model.Endereco.Unidade, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 50 } })
+                                            @Html.ValidationMessageFor(m => m.Endereco.Unidade, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-8">
+                                            <label class="col-form-label">Endereço</label>
+                                            @Html.EditorFor(Model => Model.Endereco.Logradouro, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 50 } })
+                                            @Html.ValidationMessageFor(m => m.Endereco.Logradouro, "", new { @class = "text-danger" })
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label class="col-form-label">CEP</label>
+                                            @Html.EditorFor(Model => Model.Endereco.CEP, new { htmlAttributes = new { @class = "form-control", @data_input = "", @data_mask = "00000-000", @maxlength = 9 } })
+                                            @Html.ValidationMessageFor(m => m.Endereco.CEP, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-6">
+                                            <label class="col-form-label">Número</label>
+                                            @Html.EditorFor(Model => Model.Endereco.Numero, new { htmlAttributes = new { @type = "number", @class = "form-control", @data_input = "", @maxlength = 5, @data_mask = "00000" } })
+                                            @Html.ValidationMessageFor(m => m.Endereco.Numero, "", new { @class = "text-danger" })
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label class="col-form-label">Complemento</label>
+                                            @Html.EditorFor(Model => Model.Endereco.Complemento, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 50 } })
+                                            @Html.ValidationMessageFor(m => m.Endereco.Complemento, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <label class="col-form-label">Bairro</label>
+                                            @Html.EditorFor(Model => Model.Endereco.Bairro, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 50 } })
+                                            @Html.ValidationMessageFor(m => m.Endereco.Bairro, "", new { @class = "text-danger" })
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label class="col-form-label">Município</label>
+                                            @Html.DropDownListFor(model => model.Endereco.MunicipioId, Model.Endereco.Municipios, "Selecione", new { @class = "form-control", @data_input = "" })
+                                            @Html.ValidationMessageFor(m => m.Endereco.MunicipioId, "", new { @class = "text-danger" })
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="col-form-label">Estado</label>
+                                            @Html.DropDownListFor(model => model.Endereco.EstadoId, Model.Endereco.Estados, "Selecione", new { @class = "form-control", @data_input = "" })
+                                            @Html.ValidationMessageFor(m => m.Endereco.EstadoId, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-12">
+                                            <label class="col-form-label">Nome do Contato</label>
+                                            @Html.EditorFor(Model => Model.Endereco.NomeContato, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 50 } })
+                                            @Html.ValidationMessageFor(m => m.Endereco.NomeContato, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-primary" onclick="AdicionarEndereco();" type="button" id="btnAdicionarEndereco"><i class="fa fa-map-marker">Adicionar Endereço</i></button>
+                                    <button type="button" id="btnFechar" name="btnFechar" data-dismiss="modal" class="btn btn-primary">Fechar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fim Contatos e Endereços-->
+                <!-- Documentos -->
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="list">
+                            <label class="col-form-label">Documentos</label>
+                            <table class="table table-striped" id="dtDocumentos">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Documento</th>
+                                        <th scope="col">Arquivo</th>
+                                        <th scope="col">Adicionado Por</th>
+                                        @*<th scope="col">Data</th>*@
+                                        <th scope="col">Opções</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="bodyDocumentos">
+                                    @if (Model.Documentos != null && Model.Documentos.Count > 0)
+                                    {
+                                        int linha = 1;
+
+                                        foreach (var item in Model.Documentos)
+                                        {
+                                            string idId = "id" + @linha;
+                                            string documentoId = "documentoInteressado" + @linha;
+                                            string arquivoId = "arquivo" + @linha;
+                                            string tipoDocumentoId = "tipoDocumentoId" + @linha;
+                                            string adicionadoPorId = "adicionadoPor" + @linha;
+                                            //string dataAdicionadoId = "dataAdicionado" + @linha;
+
+                                            <tr>
+                                                <td class="leftText hide"><span id='@idId'>@item.Id</span></td>
+                                                <td class="leftText"><span id='@documentoId'>@item.Documento</span></td>
+                                                <td class="leftText"><span id='@arquivoId'>@item.Arquivo</span></td>
+                                                <td class="leftText"><span id='@adicionadoPorId'>@item.AdicionadoPor</span></td>
+                                                <td class="leftText hide"><span id='@tipoDocumentoId'>@item.TipoDocumentoId</span></td>
+                                                @*<td class="leftText"><span id='@dataAdicionadoId'>@item.DataCadastro</span></td>*@
+                                                <td>
+                                                    <button type='button' onclick='controller.documentosComponent.ExcluirDocumento(@linha);' class='btn btn-link hide excluirDocumento'><i class='fa fa-trash' title='Excluir'></i></button>
+                                                    @if (!String.IsNullOrEmpty(item.Arquivo))
+                                                    {
+                                                        <button type='button' onclick='controller.DownloadArquivo("@item.Arquivo");' class='btn btn-link DownloadArquivoId'><i class='fa fa-download' title='Baixar Arquivo'></i></button>
+                                                    }
+                                                </td>
+                                            </tr>
+                                            linha++;
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        @if (!ViewBag.SomenteVisualizar)
+                        {
+                            <button class="btn btn-primary right" onclick="controller.documentosComponent.ModalDocumento();" type="button">
+                                <i class="fa fa-book"></i>
+                                <span>Adicionar Documento</span>
+                            </button>
+                        }
+                    </div>
+                </div>
+                <div class="modal fade" id="modalDocumento" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content" style="margin-left:150px; width:550px;">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h3 class="modal-title text-center"><b data-title="">Adicionar Documento</b></h3>
+                            </div>
+                            <form>
+                                <br />
+                                <div class="modal-body form-group form-body">
+                                    <div class="form-group row">
+                                        <div class="col-md-12">
+                                            <label class="col-form-label">Tipo de Documento</label>
+                                            @Html.DropDownListFor(model => model.TipoDeDocumentoId, Model.TipoDeDocumentos, new { @class = "form-control", @data_input = "" })
+                                            @Html.ValidationMessageFor(m => m.TipoDeDocumentoId, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-12">
+                                            <input type="file" name="DocumentoUpload" id="DocumentoUpload" data-input="" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" onclick="controller.documentosComponent.AdicionarDocumento()" class="btn btn-primary"><i class="fa fa-cloud-upload" title="Enviar"></i> Enviar</button>
+                                    <button type="button" id="btnFecharDocumento" name="btnFecharDocumento" data-dismiss="modal" class="btn btn-primary">Fechar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fim Documentos -->
+                <!-- Observacoes -->
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="list">
+                            <label class="col-form-label">Observações</label>
+                            <table class="table table-striped" id="dtObservacoes">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Observação</th>
+                                        <th scope="col">Adicionado Por</th>
+                                        <th scope="col">Data</th>
+                                        <th scope="col">Opções</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="bodyObservacoes">
+                                    @if (Model.Observacoes != null && Model.Observacoes.Count > 0)
+                                    {
+                                        int linha = 1;
+
+                                        foreach (var item in Model.Observacoes)
+                                        {
+                                            string observacaoId = "observacao" + @linha;
+                                            string adicionadoPorId = "adicionadoPor" + @linha;
+                                            string dataAdicionadoId = "dataAdicionado" + @linha;
+
+                                            <tr>
+                                                <td class="leftText"><span id='@observacaoId'>@item.Observacao</span></td>
+                                                <td class="leftText"><span id='@adicionadoPorId'>@item.AdicionadoPor</span></td>
+                                                <td class="leftText"><span id='@dataAdicionadoId'>@item.Data</span></td>
+                                                <td>
+                                                    <button type='button' onclick="VisualizarObservacao('@item.Observacao')" class="btn btn-link" title="Visualizar"><i class="fa fa-search"></i></button>
+                                                    <button type='button' onclick='ExcluirObs(linha);' class='btn btn-link  excluirObservacao hide'><i class='fa fa-trash' title='Excluir'></i></button>
+                                                </td>
+                                            </tr>
+                                            linha++;
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        @if (!ViewBag.SomenteVisualizar)
+                        {
+                            <button class="btn btn-primary right" onclick="ModalObservacao(true);" type="button">
+                                <i class="fa fa-comment"></i>
+                                <span>Adicionar Observação</span>
+                            </button>
+                        }
+                    </div>
+                </div>
+                <div class="modal fade" id="modalObservacao" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content" style="margin-left:150px; width:550px;">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h3 class="modal-title text-center"><b data-title="">Adicionar Observação</b></h3>
+                            </div>
+                            <form>
+                                <br />
+                                <div class="modal-body form-group form-body">
+                                    <div class="form-group row">
+                                        <div class="col-md-12">
+                                            <label class="col-form-label">Observação</label>
+                                            @Html.EditorFor(Model => Model.Obs.Observacao, new { htmlAttributes = new { @class = "form-control", @data_input = "", @maxlength = 50 } })
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-primary" data-dismiss="modal" onclick="AdicionarObservacao();" id="btnAdicionarObservacao" type="button"><i class="fa fa-comment">Adicionar Observação</i></button>
+                                    <button type="button" id="btnFechar" name="btnFechar" data-dismiss="modal" class="btn btn-primary">Fechar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fim Observacoes -->
+            </fieldset>
+        }
+    </section>
+</section>
+
+<script>
+    @section Ready {
+
+
+    $("#NaturezaJuridicaId").change(function () {
+        $("#Documento").unmask();
+        let idNatureza = $("#NaturezaJuridicaId").val();
+
+        if (idNatureza == 32) {
+            $("#Documento").prop( "disabled", false)
+            $("#Documento").mask("99.999.999/9999-99");
+        } else if (idNatureza == 33) {
+            $("#Documento").prop( "disabled", false)
+            $("#Documento").mask("999.999.999-99");
+        } else {
+            $("#Documento").prop( "disabled", true )
+            $("#Documento").unmask();
+        }
+    });
+
+    swal({
+        type: 'warning',
+        title: 'Atenção',
+        text: 'O Credenciamento deverá ser solicitado exclusivamente pela Matriz, contendo as documentações da mesma!'
+    })
+
+    if ($(location).attr("href").toLocaleLowerCase().indexOf('visualizar') > 0) {
+        $('[data-input]').attr('disabled', 'disabled');
+        $('[data-check]').attr('disabled', 'disabled');
+        $('input[type="checkbox"]').attr('disabled', 'disabled');
+        $('.isSelect').multiselect('disable');
+        $('.isSelect').multiselect('disable');
+        $('#btnSalvar').addClass("hide")
+    }
+    else {
+        $('.excluirEndereco').removeClass("hide");
+        $('.excluirContato').removeClass("hide");
+        $('.excluirDocumento').removeClass("hide");
+        $('.editarContato').removeClass("hide");
+        $('.excluirObservacao').removeClass("hide");
+        $('#observacoesColunaOpcoes').removeClass("hide");
+
+    }
+
+    $('#Telefone').mask('(00) 0000-00009');
+    $('#Telefone').blur(function (event) {
+        if ($(this).val().length == 15) { // Celular com 9 dígitos + 2 dígitos DDD e 4 da máscara
+            $('#Telefone').mask('(00) 00000-0009');
+        } else {
+            $('#Telefone').mask('(00) 0000-00009');
+        }
+    });
+}
+
+
+    //Contato
+
+    function ModalAdicionarContato() {
+        $("#modalAdicionarContato").modal('show');
+        $("#bodyConsultaContatos").empty();
+        $("#bodyAdicionaContatos").empty();
+    }
+
+    function VisualizarContato(usuarioId) {
+        console.log(usuarioId)
+
+            $.ajax({
+            type: "POST",
+            url: "/GestaoInteressados/VisualizarContato",
+            data: { usuarioId: usuarioId },
+            cache: false,
+            dataType: "json",
+            success: function (data) {
+                VisualizarContatoCallBack(data);
+            }
+        });
+
+        this.ModalVisualizarContato();
+    }
+
+    function VisualizarContatoCallBack(data) {
+        console.log(data);
+        $("#ContatoVisualizar_GruposIDs").val(data.GruposIDs);
+        $("#ContatoVisualizar_EmpresasIDs").val(data.EmpresasIDs);
+        $("#ContatoVisualizar_Nome").val(data.Nome);
+        $("#ContatoVisualizar_Cargo").val(data.Cargo);
+        $("#ContatoVisualizar_Login").val(data.Login);
+        $("#ContatoVisualizar_Email").val(data.Email);
+        $("#ContatoVisualizar_DDD").val(data.DDD);
+        $("#ContatoVisualizar_Telefone").val(data.Telefone);
+    }
+
+    function ModalVisualizarContato() {
+        $("#modalVisualizarContato").modal('show');
+    }
+
+    function RemoverContato(linhaRemocao) {
+        let linha = 1;
+        let data = [];
+        let dataConsulta = [];
+        let contato = [];
+
+        $('#dtAdicionaContatos > tbody > tr').each(function () {
+            let _usuarioId = $("#usuarioId" + linha).html();
+            let _nome = $("#nome" + linha).html();
+            let _cargo = $("#cargo" + linha).html();
+            let _email = $("#email" + linha).html();
+
+            data.push({
+                usuarioId: _usuarioId,
+                cargo: _cargo,
+                nome: _nome,
+                email: _email
+            });
+
+            linha++;
+        });
+
+        data.splice(linhaRemocao - 1, 1);
+
+        $("#bodyAdicionaContatos").empty();
+        let newContent = "";
+        linha = 1;
+
+        $(data).each(function () {
+            newContent = newContent + "<tr>";
+            newContent = newContent + "<td class='leftText hide'><span id='usuarioId" + linha + "' value='" + this.usuarioId + "'>" + this.empresaId + "</span></td>";
+            newContent = newContent + "<td class='leftText'><span id='nome" + linha + "' value='" + this.nome + "'>" + this.nome + "</span></td>";
+            newContent = newContent + "<td class='leftText'><span id='cargo" + linha + "' value='" + this.cargo + "'>" + this.cargo + "</span></td>";
+            newContent = newContent + "<td class='leftText'><span id='email" + linha + "' value='" + this.email + "'>" + this.email + "</span></td>";
+            newContent = newContent + "<td><button type='button' onclick='RemoverContato(" + linha + ");' class='btn btn-link'  title='Remover Contato' id='incluirContato'><i class='fa fa-user-times'></i></button></td>"
+            newContent = newContent + "</tr>";
+            linha++;
+        });
+
+        $("#bodyAdicionaContatos").append(newContent);
+    }
+
+    function PesquisarContato() {
+        let data = {
+            Cargo: $("#Contato_Cargo").val(),
+            Nome: $("#Contato_Nome").val(),
+            Login: $("#Contato_Login").val(),
+            Email: $("#Contato_Email").val(),
+            EstadoId: $("#Contato_EstadoId").val(),
+            EmpresaId: $("#Contato_EmpresaId").val()
+        }
+
+        $.ajax({
+            type: "POST",
+            url: '/GestaoInteressados/ConsultarUsuario',
+            data: { viewModel: data },
+            cache: false,
+            dataType: "json",
+            success: function (data) {
+                UsuariosCallBack(data);
+            }
+        });
+    }
+
+    function UsuariosCallBack(data) {
+        $("#bodyConsultaContatos").empty();
+        let newContent = "";
+        linha = 1;
+
+        $(data).each(function () {
+            newContent = newContent + "<tr>";
+            newContent = newContent + "<td class='leftText hide'><span id='consusuarioId" + linha + "' value='" + this.UsuarioId + "'>" + this.UsuarioId + "</span></td>";
+            newContent = newContent + "<td class='leftText'><span id='consnome" + linha + "' value='" + this.Nome + "'>" + this.Nome + "</span></td>";
+            newContent = newContent + "<td class='leftText'><span id='conscargo" + linha + "' value='" + this.Cargo + "'>" + this.Cargo + "</span></td>";
+            newContent = newContent + "<td class='leftText'><span id='consemail" + linha + "' value='" + this.Email + "'>" + this.Email + "</span></td>";
+            newContent = newContent + "<td><button type='button' onclick='IncluirContato(" + linha + ");' class='btn btn-link'  title='Adicionar Contato' id='incluirContato'><i class='fa fa-user-plus'></i></button></td>"
+            newContent = newContent + "</tr>";
+            linha++;
+        });
+
+        $("#bodyConsultaContatos").append(newContent);
+    }
+
+    function IncluirContato(linhaAdicionado) {
+        let linha = 1;
+        let contato = {};
+        let dataConsulta = [];
+
+        $('#dtConsultaContatos > tbody > tr').each(function () {
+            let _usuarioId = $("#consusuarioId" + linha).html();
+            let _nome = $("#consnome" + linha).html();
+            let _cargo = $("#conscargo" + linha).html();
+            let _email = $("#consemail" + linha).html();
+
+            if (linhaAdicionado == linha) {
+                contato = {
+                    UsuarioId: _usuarioId,
+                    Cargo: _cargo,
+                    Nome: _nome,
+                    Email: _email,
+                    linha: linha
+                };
+            }
+
+                dataConsulta.push({
+                UsuarioId: _usuarioId,
+                Cargo: _cargo,
+                Nome: _nome,
+                Email: _email,
+                linha: linha
+                });
+
+            linha++;
+        });
+
+        dataConsulta.splice(linhaAdicionado - 1, 1);
+
+        $("#bodyConsultaContatos").empty();
+        let newContent = "";
+        linha = 1;
+
+        $(dataConsulta).each(function () {
+            newContent = newContent + "<tr>";
+            newContent = newContent + "<td class='leftText hide'><span id='consusuarioId" + linha + "' value='" + this.UsuarioId + "'>" + this.UsuarioId + "</span></td>";
+            newContent = newContent + "<td class='leftText'><span id='consnome" + linha + "' value='" + this.Nome + "'>" + this.Nome + "</span></td>";
+            newContent = newContent + "<td class='leftText'><span id='conscargo" + linha + "' value='" + this.Cargo + "'>" + this.Cargo + "</span></td>";
+            newContent = newContent + "<td class='leftText'><span id='consemail" + linha + "' value='" + this.Email + "'>" + this.Email + "</span></td>";
+            newContent = newContent + "<td><button type='button' onclick='IncluirContato(" + linha + ");' class='btn btn-link'  title='Adicionar Contato' id='incluirContato'><i class='fa fa-user-plus'></i></button></td>"
+            newContent = newContent + "</tr>";
+            linha++;
+        });
+
+        $("#bodyConsultaContatos").append(newContent);
+
+
+
+        let data = [];
+        linha = 1;
+
+        $('#dtAdicionaContatos > tbody > tr').each(function () {
+            let _usuarioId = $("#addusuarioId" + linha).html();
+            let _nome = $("#addnome" + linha).html();
+            let _cargo = $("#addcargo" + linha).html();
+            let _email = $("#addemail" + linha).html();
+
+            data.push({
+                UsuarioId: _usuarioId,
+                Cargo: _cargo,
+                Nome: _nome,
+                Email: _email,
+                linha: linha
+            });
+
+            linha++;
+        });
+
+        linha++;
+
+        data.push({
+            UsuarioId: contato.UsuarioId,
+            Cargo: contato.Cargo,
+            Nome: contato.Nome,
+            Email: contato.Email,
+            linha: linha
+        });
+
+        $("#bodyAdicionaContatos").empty();
+
+        let newContentAdd = "";
+        linha = 1;
+        $(data).each(function () {
+            newContentAdd = newContentAdd + "<tr>";
+            newContentAdd = newContentAdd + "<td class='leftText hide'><span id='addusuarioId" + linha + "' value='" + this.UsuarioId + "'>" + this.UsuarioId + "</span></td>";
+            newContentAdd = newContentAdd + "<td class='leftText'><span id='addnome" + linha + "' value='" + this.Nome + "'>" + this.Nome + "</span></td>";
+            newContentAdd = newContentAdd + "<td class='leftText'><span id='addcargo" + linha + "' value='" + this.Cargo + "'>" + this.Cargo + "</span></td>";
+            newContentAdd = newContentAdd + "<td class='leftText'><span id='addemail" + linha + "' value='" + this.Email + "'>" + this.Email + "</span></td>";
+            newContentAdd = newContentAdd + "<td><button type='button' onclick='RemoverContato(" + linha + ");' class='btn btn-link'  title='Remover Contato' id='incluirContato'><i class='fa fa-user-times'></i></button></td>"
+            newContentAdd = newContentAdd + "</tr>";
+            linha++;
+        });
+
+        $("#bodyAdicionaContatos").append(newContentAdd);
+    }
+
+    function SalvarContatos() {
+        let linha = 1;
+        let contatos = [];
+
+        $('#dtContatos > tbody > tr').each(function () {
+            let _usuarioId = $("#usuarioId" + linha).html();
+            let _nome = $("#nome" + linha).html();
+            let _cargo = $("#cargo" + linha).html();
+            let _email = $("#email" + linha).html();
+
+            contatos.push({
+                usuarioId: _usuarioId,
+                cargo: _cargo,
+                nome: _nome,
+                email: _email,
+                linha: linha
+            });
+
+            linha++;
+        });
+
+        linha++;
+
+        linha = 1;
+
+            $('#dtAdicionaContatos > tbody > tr').each(function () {
+            let _usuarioId = $("#addusuarioId" + linha).html();
+            let _nome = $("#addnome" + linha).html();
+            let _cargo = $("#addcargo" + linha).html();
+            let _email = $("#addemail" + linha).html();
+
+            contatos.push({
+                UsuarioId: _usuarioId,
+                Cargo: _cargo,
+                Nome: _nome,
+                Email: _email,
+                linha: linha
+            });
+
+            linha++;
+        });
+
+        this.ConstruirListaContatos(contatos);
+    }
+
+    function ExcluirContato(linhaExclusao) {
+        let linha = 1;
+        let contatos = [];
+
+        $('#dtContatos > tbody > tr').each(function () {
+            let _usuarioId = $("#usuarioId" + linha).html();
+            let _nome = $("#nome" + linha).html();
+            let _cargo = $("#cargo" + linha).html();
+
+            contatos.push({
+                UsuarioId: _usuarioId,
+                Cargo: _cargo,
+                Nome: _nome,
+                linha: linha
+            });
+
+            linha++;
+        });
+
+        contatos.splice(linhaExclusao - 1, 1);
+
+        this.ConstruirListaContatos(contatos);
+    }
+
+    function ConstruirListaContatos(contatos) {
+        $("#bodyContatos").empty();
+        let newContent = "";
+        linha = 1;
+        console.log(contatos);
+        $(contatos).each(function () {
+            newContent = newContent + "<tr>";
+            newContent = newContent + "<td class='leftText hide'><span id='usuarioId" + linha + "' value='" + this.UsuarioId + "'>" + this.UsuarioId + "</span></td>";
+            newContent = newContent + "<td class='leftText'><span id='nome" + linha + "' value='" + this.Nome + "'>" + this.Nome + "</span></td>";
+            newContent = newContent + "<td class='leftText'><span id='cargo" + linha + "' value='" + this.Cargo + "'>" + this.Cargo + "</span></td>";
+            newContent = newContent + "<td class='leftText'><span id='email" + linha + "' value='" + this.Email + "'>" + this.Email + "</span></td>";
+            newContent = newContent + "<td><button type='button' onclick='VisualizarContato(" + this.UsuarioId + ");' class='btn btn-link' id='excluirContato'><i class='fa fa-search' title='Visualizar'></i></button>"
+            newContent = newContent + "<button type='button' onclick='ExcluirContato(" + linha + ");' class='btn btn-link' id='excluirContato'><i class='fa fa-trash' title='Excluir'></i></button></td>"
+            newContent = newContent + "</tr>";
+            linha++;
+        });
+
+        $("#bodyContatos").append(newContent);
+    }
+
+    //Fim Contato
+
+
+
+
+
+    //Endereço
+
+    function VisualizarEndereco(linhavisualizar) {
+        let linha = 1;
+
+        $('#dtEnderecos > tbody > tr').each(function () {
+            if (linha == linhavisualizar) {
+                let unidade = $("#unidade" + linha).html();
+                let logradouro = $("#logradouro" + linha).html();
+                let cep  = $("#cep" + linha).html();
+                let numero = $("#numero" + linha).html();
+                let complemento = $("#complemento" + linha).html();
+                let bairro = $("#bairro" + linha).html();
+                let municipioId = $("#municipioId" + linha).html();
+                let estadoId = $("#estadoId" + linha).html();
+                let nomeContato = $("#nomeContato" + linha).html();
+
+                $("#Endereco_Unidade").val(unidade);
+                $("#Endereco_Logradouro").val(logradouro);
+                $("#Endereco_CEP").val(cep);
+                $("#Endereco_Numero").val(numero);
+                $("#Endereco_Complemento").val(complemento);
+                $("#Endereco_Bairro").val(bairro);
+                $("#Endereco_MunicipioId").val(municipioId);
+                $("#Endereco_EstadoId").val(estadoId);
+                $("#Endereco_NomeContato").val(nomeContato);
+            }
+
+            linha++;
+        });
+
+        this.ModalEndereco(false);
+    }
+
+    function ModalEndereco(habilitarCampos) {
+        if (!habilitarCampos) {
+            $("#Endereco_Unidade").attr('disabled', 'disabled');
+            $("#Endereco_Logradouro").attr('disabled', 'disabled');
+            $("#Endereco_CEP").attr('disabled', 'disabled');
+            $("#Endereco_Numero").attr('disabled', 'disabled');
+            $("#Endereco_Complemento").attr('disabled', 'disabled');
+            $("#Endereco_Bairro").attr('disabled', 'disabled');
+            $("#Endereco_MunicipioId").attr('disabled', 'disabled');
+            $("#Endereco_EstadoId").attr('disabled', 'disabled');
+            $("#Endereco_NomeContato").attr('disabled', 'disabled');
+            $("#btnAdicionarEndereco").attr('disabled', 'disabled');
+
+        } else {
+            $("#Endereco_Unidade").removeAttr('disabled');
+            $("#Endereco_Logradouro").removeAttr('disabled');
+            $("#Endereco_CEP").removeAttr('disabled');
+            $("#Endereco_Numero").removeAttr('disabled');
+            $("#Endereco_Complemento").removeAttr('disabled');
+            $("#Endereco_Bairro").removeAttr('disabled');
+            $("#Endereco_MunicipioId").removeAttr('disabled');
+            $("#Endereco_EstadoId").removeAttr('disabled');
+            $("#Endereco_NomeContato").removeAttr('disabled');
+            $("#btnAdicionarObservacao").removeAttr('disabled');
+            $('#btnAdicionarEndereco').removeAttr("disabled");
+        }
+
+        $("#modalEndereco").modal('show');
+    }
+
+    function AdicionarEndereco() {
+        if(!controller.validarEndereco()) return;
+
+        let linha = 1;
+        let enderecos = [];
+
+        $('#dtEnderecos > tbody > tr').each(function () {
+            let unidade = $("#unidade" + linha).html();
+            let logradouro = $("#logradouro" + linha).html();
+            let cep  = $("#cep" + linha).html();
+            let numero = $("#numero" + linha).html();
+            let complemento = $("#complemento" + linha).html();
+            let bairro = $("#bairro" + linha).html();
+            let municipioId = $("#municipioId" + linha).html();
+            let estadoId = $("#estadoId" + linha).html();
+            let nomeContato = $("#nomeContato" + linha).html();
+
+            enderecos.push({
+                unidade: unidade,
+                logradouro: logradouro,
+                cep : cep ,
+                numero: numero,
+                complemento: complemento,
+                bairro: bairro,
+                municipioId: municipioId,
+                estadoId: estadoId,
+                nomeContato: nomeContato,
+                linha: linha
+            });
+
+            linha++;
+        });
+
+        let unidade = $("#Endereco_Unidade").val();
+        let logradouro = $("#Endereco_Logradouro").val();
+        let cep = $("#Endereco_CEP").val();
+        let numero = $("#Endereco_Numero").val();
+        let complemento = $("#Endereco_Complemento").val();
+        let bairro = $("#Endereco_Bairro").val();
+        let municipioId = $("#Endereco_MunicipioId").val();
+        let estadoId = $("#Endereco_EstadoId").val();
+        let nomeContato = $("#Endereco_NomeContato").val();
+
+        enderecos.push({
+            unidade: unidade,
+            logradouro: logradouro,
+            cep : cep ,
+            numero: numero,
+            complemento: complemento,
+            bairro: bairro,
+            municipioId: municipioId,
+            estadoId: estadoId,
+            nomeContato: nomeContato,
+            linha: linha
+        });
+
+        console.log(enderecos);
+
+        $("#Endereco_Unidade").val('');
+        $("#Endereco_Logradouro").val('');
+        $("#Endereco_CEP").val('');
+        $("#Endereco_Numero").val('');
+        $("#Endereco_Complemento").val('');
+        $("#Endereco_Bairro").val('');
+        $("#Endereco_MunicipioId").val('');
+        $("#Endereco_EstadoId").val('');
+        $("#Endereco_NomeContato").val('');
+
+        this.ConstruirListaEndereco(enderecos);
+
+        $("#modalEndereco").modal("hide");
+    }
+
+    function ExcluirEndereco(linhaExclusao) {
+        let linha = 1;
+        let enderecos = [];
+
+        $('#dtEnderecos > tbody > tr').each(function () {
+            let unidade = $("#unidade" + linha).html();
+            let logradouro = $("#logradouro" + linha).html();
+            let cep  = $("#cep" + linha).html();
+            let numero = $("#numero" + linha).html();
+            let complemento = $("#complemento" + linha).html();
+            let bairro = $("#bairro" + linha).html();
+            let municipioId = $("#municipioId" + linha).html();
+            let estadoId = $("#estadoId" + linha).html();
+            let nomeContato = $("#nomeContato" + linha).html();
+
+            enderecos.push({
+                unidade: unidade,
+                logradouro: logradouro,
+                cep : cep ,
+                numero: numero,
+                complemento: complemento,
+                bairro: bairro,
+                municipioId: municipioId,
+                estadoId: estadoId,
+                nomeContato: nomeContato,
+                linha: linha
+            });
+
+            linha++;
+        });
+
+        enderecos.splice(linhaExclusao - 1, 1);
+
+        this.ConstruirListaEndereco(enderecos);
+    }
+
+    function ConstruirListaEndereco(enderecos) {
+        $("#bodyEnderecos").empty();
+
+        let newContent = "";
+        linha = 1;
+
+        $(enderecos).each(function () {
+            newContent = newContent + "<tr>";
+            newContent = newContent + "<td class='leftText'><span id='unidade" + linha + "' value='" + this.unidade + "'>" + this.unidade + "</span></td>";
+            newContent = newContent + "<td class='leftText'><span id='logradouro" + linha + "' value='" + this.logradouro + "'>" + this.logradouro + "</span></td>";
+            newContent = newContent + "<td class='leftText hide'><span id='cep" + linha + "' value='" + this.cep + "'>" + this.cep + "</span></td>";
+            newContent = newContent + "<td class='leftText hide'><span id='numero" + linha + "' value='" + this.numero + "'>" + this.numero + "</span></td>";
+            newContent = newContent + "<td class='leftText hide'><span id='complemento" + linha + "' value='" + this.complemento + "'>" + this.complemento + "</span></td>";
+            newContent = newContent + "<td class='leftText hide'><span id='bairro" + linha + "' value='" + this.bairro + "'>" + this.bairro + "</span></td>";
+            newContent = newContent + "<td class='leftText hide'><span id='municipioId" + linha + "' value='" + this.municipioId + "'>" + this.municipioId + "</span></td>";
+            newContent = newContent + "<td class='leftText hide'><span id='estadoId" + linha + "' value='" + this.estadoId + "'>" + this.estadoId + "</span></td>";
+            newContent = newContent + "<td class='leftText hide'><span id='nomeContato" + linha + "' value='" + this.nomeContato + "'>" + this.nomeContato + "</span></td>";
+            newContent = newContent + "<td><button type='button' onclick='VisualizarEndereco(" + linha + ");' class='btn btn-link'><i class='fa fa-search' title='Visualizar'></i></button>";
+            newContent = newContent + "<button type='button' onclick='ExcluirEndereco(" + linha + ");' class='btn btn-link' id='excluirEndereco'><i class='fa fa-trash' title='Excluir'></i></button></td>";
+            newContent = newContent + "</tr>";
+            linha++;
+        });
+
+        $("#bodyEnderecos").append(newContent);
+    }
+
+    //Fim endereço
+
+
+
+
+    //Observação
+
+    function VisualizarObservacao(observacao) {
+        $("#Obs_Observacao").val(observacao);
+
+        this.ModalObservacao(false);
+    }
+
+    function ModalObservacao(habilitarCampos) {
+        if (!habilitarCampos) {
+            $("#Obs_Observacao").attr('disabled', 'disabled');
+            $("#btnAdicionarObservacao").attr('disabled', 'disabled');
+
+        } else {
+            $("#Obs_Observacao").removeAttr('disabled');
+            $('#btnAdicionarObservacao').removeAttr("disabled");
+        }
+
+        $("#modalObservacao").modal('show');
+    }
+
+    function AdicionarObservacao() {
+        let linha = 1;
+        let observacoes = [];
+
+        $('#dtObservacoes > tbody > tr').each(function () {
+            let observacao = $("#observacao" + linha).html();
+            let adicionadoPor = $("#adicionadoPor" + linha).html();
+            let dataAdicionado = $("#dataAdicionado" + linha).html();
+
+            observacoes.push({
+                observacao: observacao,
+                adicionadoPor: adicionadoPor,
+                dataAdicionado: dataAdicionado,
+                linha: linha
+            });
+
+            linha++;
+        });
+
+        let obs = $("#Obs_Observacao").val();
+
+        if (obs.trim() == '') {
+            swal({
+                type: 'error',
+                title: 'Formulário Inválido',
+                text: 'O campo observação não foi preenchido, por isso não foi salvo.'
+            })
+        } else {
+            let addPor = "@ViewBag.Usuario";
+            let dataAdd = "@ViewBag.DataAtual";
+
+            observacoes.push({
+                observacao: obs,
+                adicionadoPor: addPor,
+                dataAdicionado: dataAdd,
+                linha: linha
+            });
+
+            $("#Obs_Observacao").val('');
+
+            this.ConstruirListaObservacao(observacoes);
+        }
+    }
+
+    function ExcluirObs(linhaExclusao) {
+        let linha = 1;
+        let observacoes = [];
+
+        $('#dtObservacoes > tbody > tr').each(function () {
+            let observacao = $("#observacao" + linha).html();
+            let adicionadoPor = $("#adicionadoPor" + linha).html();
+            let dataAdicionado = $("#dataAdicionado" + linha).html();
+
+            observacoes.push({
+                observacao: observacao,
+                adicionadoPor: adicionadoPor,
+                dataAdicionado: dataAdicionado,
+                linha: linha
+            });
+
+            linha++;
+        });
+
+        observacoes.splice(linhaExclusao - 1, 1);
+
+        this.ConstruirListaObservacao(observacoes);
+    }
+
+    function ConstruirListaObservacao(observacoes) {
+        $("#bodyObservacoes").empty();
+
+        let newContent = "";
+        linha = 1;
+
+        $(observacoes).each(function () {
+            newContent = newContent + "<tr>";
+            newContent = newContent + "<td class='leftText'><span id='observacao" + linha + "' value='" + this.observacao + "'>" + this.observacao + "</span></td>";
+            newContent = newContent + "<td class='leftText'><span id='adicionadoPor" + linha + "' value='" + this.adicionadoPor + "'>" + this.adicionadoPor + "</span></td>";
+            newContent = newContent + "<td class='leftText'><span id='dataAdicionado" + linha + "' value='" + this.dataAdicionado + "'>" + this.dataAdicionado + "</span></td>";
+            newContent = newContent + "<td><button type='button' onclick='VisualizarObservacao(" + this.observacao + ");' class='btn btn-link' title='Visualizar'><i class='fa fa-search'></i></button>"
+            newContent = newContent + "<button type='button' onclick = 'ExcluirObs(" + linha + ");' class='btn btn-link' id = 'excluirObservacao' > <i class='fa fa-trash' title='Excluir'></i></button ></td > "
+            newContent = newContent + "</tr>";
+            linha++;
+        });
+
+        $("#bodyObservacoes").append(newContent);
+    }
+
+    //Fim Observação
+
+
+    //Salvar
+
+    async function Salvar(e) {
+        
+        var formValido = $('#gestaoInteressado').valid()
+
+        if (formValido) {
+            var data = {
+                Id: $("#Id").val(),
+                NumeroSPDOC: $("#NumeroSPDOC").val(),
+                StatusSPDOC: $("#StatusSPDOC").val(),
+                Nome: $("#Nome").val(),
+                Telefone: $("#Telefone").val(),
+                NaturezaJuridicaId: $("#NaturezaJuridicaId").val(),
+                Documento: $("#Documento").val(),
+                TipoEmpresaId: $("#TipoEmpresaId").val(),
+                Validade: $("#Validade").val(),
+                StatusId: $("#StatusId").val(),
+                NomeFantasia: $("#NomeFantasia").val(),
+                TipoInteressadoId: $("#TipoInteressadoId").val(),
+                UsuarioAtualizacao: "@ViewBag.Usuario",
+                Enderecos: [],
+                Contatos: [],
+                Documentos: controller.documentosComponent.documentos,
+                Observacoes: [],
+                TiposDeConcessoes: []
+            };
+
+            var concessao46 = $("#46").prop('checked')
+            var concessao47 = $("#47").prop('checked')
+            var concessao48 = $("#48").prop('checked')
+            var concessao206 = $("#206").prop('checked')
+            var concessao207 = $("#207").prop('checked')
+            var concessao208 = $("#208").prop('checked')
+            var concessao209 = $("#209").prop('checked')
+            var concessao210 = $("#210").prop('checked')
+            var concessao211 = $("#211").prop('checked')
+            var concessao212 = $("#212").prop('checked')
+
+            data.TiposDeConcessoes.push({ TipoConcessaoId: "46", Marcado: concessao46 });
+            data.TiposDeConcessoes.push({ TipoConcessaoId: "47", Marcado: concessao47 });
+            data.TiposDeConcessoes.push({ TipoConcessaoId: "48", Marcado: concessao48 });
+            data.TiposDeConcessoes.push({ TipoConcessaoId: "206", Marcado: concessao206 });
+            data.TiposDeConcessoes.push({ TipoConcessaoId: "207", Marcado: concessao207 });
+            data.TiposDeConcessoes.push({ TipoConcessaoId: "208", Marcado: concessao208 });
+            data.TiposDeConcessoes.push({ TipoConcessaoId: "209", Marcado: concessao209 });
+            data.TiposDeConcessoes.push({ TipoConcessaoId: "210", Marcado: concessao210 });
+            data.TiposDeConcessoes.push({ TipoConcessaoId: "211", Marcado: concessao211 });
+            data.TiposDeConcessoes.push({ TipoConcessaoId: "212", Marcado: concessao212 });
+
+            let linha = 1;
+
+            $('#dtObservacoes > tbody > tr').each(function () {
+                let observacao = $("#observacao" + linha).html();
+                let adicionadoPor = $("#adicionadoPor" + linha).html();
+                let dataAdicionado = $("#dataAdicionado" + linha).html();
+
+                data.Observacoes.push({
+                    Observacao: observacao,
+                    AdicionadoPor: adicionadoPor,
+                    Data: dataAdicionado,
+                });
+
+                linha++;
+            });
+
+            linha = 1;
+
+            $('#dtEnderecos > tbody > tr').each(function () {
+                let unidade = $("#unidade" + linha).html();
+                let logradouro = $("#logradouro" + linha).html();
+                let cep = $("#cep" + linha).html();
+                let numero = $("#numero" + linha).html();
+                let complemento = $("#complemento" + linha).html();
+                let bairro = $("#bairro" + linha).html();
+                let municipioId = $("#municipioId" + linha).html();
+                let estadoId = $("#estadoId" + linha).html();
+                let nomeContato = $("#nomeContato" + linha).html();
+
+                data.Enderecos.push({
+                    Unidade: unidade,
+                    Logradouro: logradouro,
+                    CEP: cep,
+                    Numero: numero,
+                    Complemento: complemento,
+                    Bairro: bairro,
+                    MunicipioId: municipioId,
+                    EstadoId: estadoId,
+                    NomeContato: nomeContato
+                });
+
+                linha++;
+            });
+
+            linha = 1;
+
+            $('#dtContatos > tbody > tr').each(function () {
+                let _usuarioId = $("#usuarioId" + linha).html();
+                let _nome = $("#nome" + linha).html();
+                let _cargo = $("#cargo" + linha).html();
+                let _email = $("#email" + linha).html();
+
+                data.Contatos.push({
+                    usuarioId: _usuarioId,
+                    cargo: _cargo,
+                    nome: _nome,
+                    email: _email
+                });
+
+                linha++;
+            });
+
+            linha = 1;
+
+            var response = POST('/GestaoInteressados/Salvar', JSON.stringify(data))
+            
+            if (!response.valid) {
+                if (!response.validCNPJ) {
+                    swal({
+                        type: 'error',
+                        title: 'Formulário inválido',
+                        text: 'Por favor, insira um CNPJ válido.'
+                    }).then((result) => {
+                        console.log(response.html);
+                    })
+                } else if (!response.validCPF) {
+                    swal({
+                        type: 'error',
+                        title: 'Formulário invalido',
+                        text: 'Por favor, insira um CPF válido.'
+                    }).then((result) => {
+                        console.log(response.html);
+                    })
+                } else {
+                    messagem = 'Ocorreu um erro, entrar em contato com o suporte.'
+
+                    var validador = "";
+
+                    if (validador != "")
+                        messagem = "Ocorreu um erro interno";
+
+                    swal({
+                        type: (validador != "" ? 'warning' : 'error'),
+                        title: (validador != "" ? 'Atenção' : 'Formulário Inválido'),
+                        text: messagem
+                    })
+                }
+            }
+            else {
+                swal.close();
+                swal({
+                    type: 'success',
+                    title: 'Sucesso',
+                    text: 'Interessado salvo com sucesso!'
+                }).then((result) => {
+                    if (result.value) {
+                        window.location.href = "/GestaoInteressados/List";
+                    }
+                })
+            }
+        }
+        else {
+                swal({
+                type: 'error',
+                title: 'Atenção',
+                text: 'Por favor, preencha os campos obrigatórios!'
+            })
+        }
+    }
+
+    async function salvar(data) {
+        return $.ajax({
+            url: '/GestaoInteressados/Salvar',
+            processData: true,
+            data: data,
+            type: 'POST',
+            dataType: 'json'
+        }).then(response => response);
+    }
+
+    // Fim Salvar
+</script>
+<!-- <script src="~/Scripts/App/Helpers/upload/UploadHelper.js"></script> -->
+
+
+@section importJS {
+    <script>
+
+        var AdicionadoPor = "@ViewBag.Usuario";
+        var DataAdicionado = "@ViewBag.DataAtual";
+        var Model = @Html.Raw(Json.Encode(@Model));
+        var ListaDocumentos = @Html.Raw(Json.Encode(@Model.Documentos));
+        ListaDocumentos = !ListaDocumentos ? [] : ListaDocumentos;
+    </script>
+    <script src="~/ScriptsDist/GestaoInteressadoModule.js?data=@ViewBag.DateTimeNow"></script>
+}

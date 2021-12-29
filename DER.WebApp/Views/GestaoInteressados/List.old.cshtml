@@ -1,0 +1,71 @@
+﻿@model List<DER.WebApp.Domain.Models.DTO.ListaGestaoInteressadoDTO>
+@{
+    ViewBag.Title = "SGFD - Gestão de Interessados";
+    var permissoes = (DER.WebApp.ViewModels.PermissoesViewModel)ViewBag.Permissoes;
+}
+
+<section class="content">
+    <section class="content-header">
+        <h1>Interessados Cadastrados</h1>
+        <button onclick="window.location.href = '/GestaoInteressados/Novo'" class="btn btn-primary">
+            <i class="fa fa-save"></i>
+            <span>Novo</span>
+        </button>
+        <ol class="breadcrumb">
+            <li><i class="fa fa-home"></i><a href="/Home/Index"> Home </a></li>
+            <li class="active"><a> Interessados Cadastrados </a></li>
+        </ol>
+    </section>
+    <section class="jumbotron">
+        <div class="list">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Interessado</th>
+                        <th scope="col">CNPJ/CPF</th>
+                        <th scope="col">Tipo</th>
+                        <th scope="col">Município</th>
+                        <th scope="col">Estado</th>
+                        <th scope="col">Natureza</th>
+                        <th scope="col">Validade de Credenciamento</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Opções</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Count > 0)
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr data-id="Id">
+                                <th scope="row">@item.Interessado</th>
+                                <th>@item.Documento</th>
+                                <th>@item.Tipo</th>
+                                <th>@item.Municipio</th>
+                                <th>@item.Estado</th>
+                                <th>@item.Natureza</th>
+                                <th>@item.Validade</th>
+                                <th>@item.Status</th>
+                                <td>
+                                    <button type="submit" onclick="location.href='/GestaoInteressados/Visualizar/@item.Id'" @(permissoes.Visualizar ? "" : "disabled") class="btn btn-link"><i class="fa fa-search"></i></button>
+                                    <button type="submit" onclick="location.href='/GestaoInteressados/Editar/@item.Id'" @(permissoes.Editar ? "" : "disabled") class="btn btn-link" title="Editar"><i class="fa fa-pencil"></i></button>
+                                    <button type="submit" onclick="location.href='/GestaoInteressados/Excluir/@item.Id'" @(permissoes.Excluir ? "" : "disabled") class="btn btn-link" title="Excluir"><i class="fa fa-trash"></i></button>
+                                    <button onclick="Baixar(Id)" class="btn btn-link"><i class="fa fa-book" title="Baixar Certificado"></i></button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7">
+                                Nenhum dado encontrado.
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </section>
+</section>

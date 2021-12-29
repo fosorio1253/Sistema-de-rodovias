@@ -1,0 +1,115 @@
+﻿@model DER.WebApp.ViewModels.DadosMestresViewModels
+@{
+    ViewBag.Title = "SGFD - Cadastro de item";
+    var permissao = (DER.WebApp.ViewModels.PermissoesViewModel)ViewBag.Permissoes;
+}
+
+<section class="content">
+    <section class="content-header">
+        <div>
+            <h1>@Model.NomeTabela</h1>
+            @if (permissao.Criar)
+            {
+                <button type="button" class="btn btn-primary" onclick="NovaLinha('@Model.CodigoTabela')" id="btnSalvar">
+                    <i class="fa fa-save"></i>
+                    <span>Novo</span>
+                </button>
+            }
+            <a href="/DadosMestres/List" class="btn btn-primary">
+                <i class="fa fa-arrow-left"></i>
+                <span>Voltar</span>
+            </a>
+        </div>
+
+        <ol class="breadcrumb">
+            <li><i class="fa fa-home"></i><a href="/Home/Index"> Home </a></li>
+            <li><a href="/DadosMestres/List">Listar Grupo de Acesso </a></li>
+            <li class="active"><a> Cadastro </a></li>
+        </ol>
+    </section>
+    <section class="jumbotron">
+        @using (Html.BeginForm("Salvar", "DadosMestres", FormMethod.Post, new { id = "dadosMestres" }))
+        {
+            @Html.Hidden("hdnColunas", String.Join(",", Model.Colunas.Select(x => "{\"id\": \"" + x.idColuna + "\", \"nome\": \"" + x.NomeColuna + "\", \"tipodadocoluna\": \"" + x.TipoDadoColuna + "\"}")))
+            @Html.Hidden("hdnTabela", Model.CodigoTabela)
+            <div class="container">
+
+                <div class="list">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                @foreach (var colunas in Model.Colunas.Select((value, i) => new { i, value }))
+                                {
+                                    <th scope="col">@colunas.value.NomeColuna <i class="fa fa-sort"></i></th>
+                                    if (colunas.i + 1 == Model.Colunas.Count())
+                                    {
+                                        <th class="ultimaColuna" scope="col" style="width:20%">Opções</th>
+                                    }
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Tabela)
+                            {
+
+                                <tr class="linhaTables">
+                                    @foreach (var linhas in item.Value.Select((value, i) => new { i, value }))
+                                    {
+                                        <td data-linha="@linhas.value.linha" data-id="@linhas.value.id">@linhas.value.valor</td>
+
+                                        if (linhas.i + 1 == Model.Colunas.Count())
+                                        {
+                                            <td class="ultimaColuna">
+                                                @*<button type="button" onclick="Editar('@Model.CodigoTabela', '@linhas.value.linha')" @(permissao.Editar ? "" : "disabled") class="btn btn-link"><i class="fa fa-pencil"></i></button>
+                                                <button type="button" onclick="Excluir('@linhas.value.id')" @(permissao.Excluir ? "" : "disabled") class="btn btn-link"><i class="fa fa-trash"></i></button>*@
+                                                <button type="button" onclick="Editar('@Model.CodigoTabela', '@linhas.value.linha')" @(permissao.Editar) class="btn btn-link"><i class="fa fa-pencil"></i></button>
+                                                <button type="button" onclick="Excluir('@linhas.value.id')" @(permissao.Excluir) class="btn btn-link"><i class="fa fa-trash"></i></button>
+                                            </td>
+                                        }
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+    </section>
+</section>
+<div class="modal fade" id="modalFormulario" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" style="margin-left:150px; width:550px;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title text-center"><b data-title=""></b></h3>
+            </div>
+            <form>
+                <br />
+                <div class="modal-body form-group form-body">
+                </div>
+                <div class="modal-footer">
+                    <div class="col-md-3 col-md-offset-4">
+                        <button type="button" id="btnSenha" name="btnSenha" onclick="Salvar()" class="btn btn-primary btn-block btn-flat"> Salvar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="~/Content/js/jquery-3.4.1.min.js"></script>
+<script src="~/Content/plugins/jquery.mask.js"></script>
+<script src="~/Scripts/Base.js"></script>
+<script src="~/Scripts/dadosMestresNovo.js"></script>
+
+
+
+
+<script>
+@section Ready{
+    if ($(location).attr("href").toLocaleLowerCase().indexOf('visualizar') > 0) {
+        $('#btnSalvar').addClass("hide");
+        $('.ultimaColuna').remove()
+    }
+}
+</script>
