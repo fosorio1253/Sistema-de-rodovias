@@ -250,6 +250,7 @@
     <Compile Include="Domain\Business\ConfiguracaoSistemaBLL.cs" />
     <Compile Include="Domain\Business\ConsultarRodoviasBLL.cs" />
     <Compile Include="Domain\Business\DispositivoBLL.cs" />
+    <Compile Include="Domain\Business\DispositivosBLL.cs" />
     <Compile Include="Domain\Business\DivisaoRegionalBLL.cs" />
     <Compile Include="Domain\Business\DominioAdministradoresBLL.cs" />
     <Compile Include="Domain\Business\DominioArquivoTiposBLL.cs" />
@@ -299,6 +300,7 @@
     <Compile Include="Domain\Business\IgpBLL.cs" />
     <Compile Include="Domain\Business\InadimplentesBLL.cs" />
     <Compile Include="Domain\Business\InadimplentesViewBLL.cs" />
+    <Compile Include="Domain\Business\MunicipiosBLL.cs" />
     <Compile Include="Domain\Business\OaeLevantamentoBLL.cs" />
     <Compile Include="Domain\Business\PassivosAmbientaisLinLevantamentoBLL.cs" />
     <Compile Include="Domain\Business\PavimentacoesLevantamentoBLL.cs" />
@@ -308,6 +310,7 @@
     <Compile Include="Domain\Business\RemuneracaoBLL.cs" />
     <Compile Include="Domain\Business\ResidenciaConservacaoBLL.cs" />
     <Compile Include="Domain\Business\RocadasLevantamentoBLL.cs" />
+    <Compile Include="Domain\Business\RodoviasBLL.cs" />
     <Compile Include="Domain\Business\SegurancaBordoLevantamentoBLL.cs" />
     <Compile Include="Domain\Business\SegurancaCanteiroLevantamentoBLL.cs" />
     <Compile Include="Domain\Business\SegurancaGuardaCorpoEvantamentoBLL.cs" />
@@ -320,6 +323,7 @@
     <Compile Include="Domain\Business\TipoConcessaoBLL.cs" />
     <Compile Include="Domain\Business\TipoDeDocumentoInteressadoBLL.cs" />
     <Compile Include="Domain\Business\TipoDocumentoInteressadoBLL.cs" />
+    <Compile Include="Domain\Business\TipoInteressadosBLL.cs" />
     <Compile Include="Domain\Business\TipoOcupacaoBLL.cs" />
     <Compile Include="Domain\Business\TiposPistaLevantamentoBLL.cs" />
     <Compile Include="Domain\Business\TrechosBLL.cs" />
@@ -362,6 +366,7 @@
     <Compile Include="Domain\Business\UfespBLL.cs" />
     <Compile Include="Domain\Business\UnidadeBLL.cs" />
     <Compile Include="Domain\Business\UnidadeGestaoOcupacaoBLL.cs" />
+    <Compile Include="Domain\Business\UnidadesBLL.cs" />
     <Compile Include="Domain\Business\UsuarioBLL.cs" />
     <Compile Include="Controllers\DadosMestresController.cs" />
     <Compile Include="Controllers\GestaoInteressadosController.cs" />
