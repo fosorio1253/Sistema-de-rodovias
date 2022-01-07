@@ -247,12 +247,12 @@ namespace DER.WebApp.Controllers
             return tipoOcupacoesBLL.ObtemTipoOcupacoes();
         }
 
-        private List<RodoviaViewModel> ObtemRodovia()
+        private List<ViewModels.ProjetosMelhorias.RodoviaViewModel> ObtemRodovia()
         {
             return rodoviaBLL.ObtemRodovia();
         }
 
-        private List<DispositivoViewModel> ObtemDispositivo()
+        private List<ViewModels.ProjetosMelhorias.DispositivoViewModel> ObtemDispositivo()
         {
             return dispositivoBLL.ObtemDispositivo();
         }
@@ -298,7 +298,7 @@ namespace DER.WebApp.Controllers
             }
             return retorno;
         }
-        private List<TipoInteressadoViewModel> ObtemTipoInteressado()
+        private List<ViewModels.GestaoInteressados.TipoInteressadoViewModel> ObtemTipoInteressado()
         {
             return tipoInteressadoBLL.ObtemTipoInteressado();
         }

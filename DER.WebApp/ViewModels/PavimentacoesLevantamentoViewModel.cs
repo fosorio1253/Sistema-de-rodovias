@@ -12,10 +12,10 @@ namespace DER.WebApp.ViewModels
         public double rpv_km_final { get; set; }
         public int sen_id { get; set; }
         public int reg_id { get; set; }
-        public Datetime rpv_data_levantamento { get; set; }
+        public DateTime? rpv_data_levantamento { get; set; }
         public int rev_id { get; set; }
         public double rpv_extensao { get; set; }
-        public Datetime rpv_data_criacao { get; set; }
+        public DateTime? rpv_data_criacao { get; set; }
         public int rpv_id_segmento { get; set; }
         public string rpv_dispositivo { get; set; }
         public double rpv_ext_geometria { get; set; }

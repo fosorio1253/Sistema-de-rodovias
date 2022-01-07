@@ -1,4 +1,8 @@
-﻿using System;
+﻿using DER.WebApp.Domain.Models;
+using DER.WebApp.Infra.DAL;
+using DER.WebApp.Infra.DAO;
+using DER.WebApp.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,7 +14,7 @@ namespace DER.WebApp.Domain.Business
         private DerContext context;
         private TachaFaixaCentralLevantamentoDAO tachafaixacentrallevantamentoDAO;
 
-        public InadimplentesBLL()
+        public TachaFaixaCentralLevantamentoBLL()
         {
             context = new DerContext();
             tachafaixacentrallevantamentoDAO = new TachaFaixaCentralLevantamentoDAO(context);
@@ -109,10 +113,10 @@ namespace DER.WebApp.Domain.Business
                 retorno.tfc_data_levantamento = model.tfc_data_levantamento;
                 retorno.tfc_extensao = model.tfc_extensao;
                 retorno.sht_id = model.sht_id;
-                retorno.tfc_quantidade = model.tfc_quantidade;
+                retorno.tfc_quantidade = (int)model.tfc_quantidade;
                 retorno.tfc_data_criacao = model.tfc_data_criacao;
-                retorno.tfc_id_segmento = model.tfc_id_segmento;
-                retorno.tfc_dispositivo = model.tfc_dispositivo;
+                retorno.tfc_id_segmento = (int)model.tfc_id_segmento;
+                retorno.tfc_dispositivo = Convert.ToBoolean(model.tfc_dispositivo);
                 retorno.tfc_ext_geometria = model.tfc_ext_geometria;
 
                 return retorno;
@@ -123,7 +127,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private TachaFaixaCentralLevantamentoViewModel ViewModelToModel(TachaFaixaCentralLevantamento model)
+        private TachaFaixaCentralLevantamentoViewModel ModelToViewModel(TachaFaixaCentralLevantamento model)
         {
             try
             {
@@ -139,14 +143,14 @@ namespace DER.WebApp.Domain.Business
                 retorno.tfc_quantidade = model.tfc_quantidade;
                 retorno.tfc_data_criacao = model.tfc_data_criacao;
                 retorno.tfc_id_segmento = model.tfc_id_segmento;
-                retorno.tfc_dispositivo = model.tfc_dispositivo;
+                retorno.tfc_dispositivo = model.tfc_dispositivo.ToString();
                 retorno.tfc_ext_geometria = model.tfc_ext_geometria;
 
                 return retorno;
             }
             catch (Exception e)
             {
-                return new TachaFaixaCentralLevantamento();
+                return new TachaFaixaCentralLevantamentoViewModel();
             }
         }
     }

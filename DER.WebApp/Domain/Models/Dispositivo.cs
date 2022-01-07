@@ -26,5 +26,6 @@ namespace DER.WebApp.Domain.Models
         public string       dis_subtrecho { get; set; }
         public DateTime?    dis_ano_implantacao { get; set; }
         public DateTime?    dis_data_atualizacao { get; set; }
+        public string       nome { get; set; }
     }
 }

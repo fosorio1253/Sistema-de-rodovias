@@ -49,7 +49,7 @@ namespace DER.WebApp.Infra.DAO
                             retorno.tfb_data_levantamento = result["tfb_data_levantamento"] is DBNull ? dtnull : Convert.ToDateTime(result["tfb_data_levantamento"]);
                             retorno.tfb_extensao = result["tfb_extensao"] is DBNull ? 0 : Convert.ToDouble(result["tfb_extensao"]);
                             retorno.sht_id = result["sht_id"] is DBNull ? 0 : Convert.ToInt32(result["sht_id"]);
-                            retorno.tfb_quantidade = result["tfb_quantidade"] is DBNull ? 0 : Convert.ToDouble(result["tfb_quantidade"]);
+                            retorno.tfb_quantidade = result["tfb_quantidade"] is DBNull ? 0 : Convert.ToInt32(result["tfb_quantidade"]);
                             retorno.tfb_data_criacao = result["tfb_data_criacao"] is DBNull ? dtnull : Convert.ToDateTime(result["tfb_data_criacao"]);
                             retorno.tfb_id_segmento = result["tfb_id_segmento"] is DBNull ? 0 : Convert.ToInt32(result["tfb_id_segmento"]);
                             retorno.tfb_dispositivo = result["tfb_dispositivo"] is DBNull ? false : false;//verificar fosorio
@@ -173,7 +173,7 @@ namespace DER.WebApp.Infra.DAO
                             retorno.tfb_data_levantamento = result["tfb_data_levantamento"] is DBNull ? dtnull : Convert.ToDateTime(result["tfb_data_levantamento"]);
                             retorno.tfb_extensao = result["tfb_extensao"] is DBNull ? 0 : Convert.ToDouble(result["tfb_extensao"]);
                             retorno.sht_id = result["sht_id"] is DBNull ? 0 : Convert.ToInt32(result["sht_id"]);
-                            retorno.tfb_quantidade = result["tfb_quantidade"] is DBNull ? 0 : Convert.ToDouble(result["tfb_quantidade"]);
+                            retorno.tfb_quantidade = result["tfb_quantidade"] is DBNull ? 0 : Convert.ToInt32(result["tfb_quantidade"]);
                             retorno.tfb_data_criacao = result["tfb_data_criacao"] is DBNull ? dtnull : Convert.ToDateTime(result["tfb_data_criacao"]);
                             retorno.tfb_id_segmento = result["tfb_id_segmento"] is DBNull ? 0 : Convert.ToInt32(result["tfb_id_segmento"]);
                             retorno.tfb_dispositivo = result["tfb_dispositivo"] is DBNull ? false : false;//verificar fosorio

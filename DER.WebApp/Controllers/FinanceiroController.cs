@@ -367,7 +367,7 @@ namespace DER.WebApp.Controllers
             Response.End();
         }
 
-        private List<RodoviaViewModel> ObtemRodovia()
+        private List<ViewModels.ProjetosMelhorias.RodoviaViewModel> ObtemRodovia()
         {
             return rodoviaBLL.ObterRodovias();
         }

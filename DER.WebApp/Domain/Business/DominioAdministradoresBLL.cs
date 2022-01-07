@@ -1,6 +1,7 @@
 ﻿using DER.WebApp.Domain.Models;
 using DER.WebApp.Infra.DAL;
 using DER.WebApp.Infra.DAO;
+using DER.WebApp.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace DER.WebApp.Domain.Business
         private DerContext context;
         private DominioAdministradoresDAO dominioadministradoresDAO;
 
-        public InadimplentesBLL()
+        public DominioAdministradoresBLL()
         {
             context = new DerContext();
             dominioadministradoresDAO = new DominioAdministradoresDAO(context);
@@ -115,7 +116,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private DominioAdministradoresViewModel ViewModelToModel(DominioAdministradores model)
+        private DominioAdministradoresViewModel ModelToViewModel(DominioAdministradores model)
         {
             try
             {
@@ -127,7 +128,7 @@ namespace DER.WebApp.Domain.Business
             }
             catch (Exception e)
             {
-                return new DominioAdministradores();
+                return new DominioAdministradoresViewModel();
             }
         }
     }

@@ -1,4 +1,5 @@
-﻿using DER.WebApp.Helper;
+﻿using DER.WebApp.Domain.Models;
+using DER.WebApp.Helper;
 using DER.WebApp.Infra.DAL;
 using System;
 using System.Collections.Generic;
@@ -41,10 +42,9 @@ namespace DER.WebApp.Infra.DAO
                         {
                             var retorno = new TipoConcessao();
                             retorno.tipo_concessao_id = result["tipo_concessao_id"] is DBNull ? 0 : Convert.ToInt32(result["tipo_concessao_id"]);
-                            retorno.Descricao = result["Descricao"] is DBNull ? string.Empty : result["Descricao").ToString();
-                            retorno.Documentos = result["Documentos"] is DBNull ? string.Empty : result["Documentos").ToString();
+                            retorno.Descricao = result["Descricao"] is DBNull ? string.Empty : result["Descricao"].ToString();
+                            retorno.Documentos = result["Documentos"] is DBNull ? string.Empty : result["Documentos"].ToString();
                             retorno.profundidade_minima = result["profundidade_minima"] is DBNull ? 0 : Convert.ToDouble(result["profundidade_minima"]);
-                            retorno. = result[""] is DBNull ? 0 : Convert.ToDouble(result[""]);
 
                             lretorno.Add(retorno);
                         }
@@ -75,7 +75,6 @@ namespace DER.WebApp.Infra.DAO
                         command.Parameters.Add(new SqlParameter("@Descricao", domain.Descricao));
                         command.Parameters.Add(new SqlParameter("@Documentos", domain.Documentos));
                         command.Parameters.Add(new SqlParameter("@profundidade_minima", domain.profundidade_minima));
-                        command.Parameters.Add(new SqlParameter("@", domain.));
                         var result = command.ExecuteScalar();
                         command.Parameters.Clear();
                         conn.Close();
@@ -105,7 +104,6 @@ namespace DER.WebApp.Infra.DAO
                         command.Parameters.Add(new SqlParameter("@Descricao", domain.Descricao));
                         command.Parameters.Add(new SqlParameter("@Documentos", domain.Documentos));
                         command.Parameters.Add(new SqlParameter("@profundidade_minima", domain.profundidade_minima));
-                        command.Parameters.Add(new SqlParameter("@", domain.));
                         var result = command.ExecuteNonQuery();
                         conn.Close();
                     }
@@ -141,10 +139,9 @@ namespace DER.WebApp.Infra.DAO
                         while (result.Read())
                         {
                             retorno.tipo_concessao_id = result["tipo_concessao_id"] is DBNull ? 0 : Convert.ToInt32(result["tipo_concessao_id"]);
-                            retorno.Descricao = result["Descricao"] is DBNull ? string.Empty : result["Descricao").ToString();
-                            retorno.Documentos = result["Documentos"] is DBNull ? string.Empty : result["Documentos").ToString();
+                            retorno.Descricao = result["Descricao"] is DBNull ? string.Empty : result["Descricao"].ToString();
+                            retorno.Documentos = result["Documentos"] is DBNull ? string.Empty : result["Documentos"].ToString();
                             retorno.profundidade_minima = result["profundidade_minima"] is DBNull ? 0 : Convert.ToDouble(result["profundidade_minima"]);
-                            retorno. = result[""] is DBNull ? 0 : Convert.ToDouble(result[""]);
                         }
                         conn.Close();
                     }

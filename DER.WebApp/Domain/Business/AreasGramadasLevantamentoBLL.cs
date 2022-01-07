@@ -1,6 +1,7 @@
 ﻿using DER.WebApp.Domain.Models;
 using DER.WebApp.Infra.DAL;
 using DER.WebApp.Infra.DAO;
+using DER.WebApp.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace DER.WebApp.Domain.Business
         private DerContext context;
         private AreasGramadasLevantamentoDAO areasgramadaslevantamentoDAO;
 
-        public InadimplentesBLL()
+        public AreasGramadasLevantamentoBLL()
         {
             context = new DerContext();
             areasgramadaslevantamentoDAO = new AreasGramadasLevantamentoDAO(context);
@@ -105,7 +106,6 @@ namespace DER.WebApp.Domain.Business
             {
                 var retorno = new AreasGramadasLevantamento();
                 retorno.rod_id = model.rod_id;
-                retorno.1 = model.1;
                 retorno.agr_km_inicial = model.agr_km_inicial;
                 retorno.agr_km_final = model.agr_km_final;
                 retorno.sen_id = model.sen_id;
@@ -114,7 +114,7 @@ namespace DER.WebApp.Domain.Business
                 retorno.agr_extensao = model.agr_extensao;
                 retorno.agr_largura = model.agr_largura;
                 retorno.agr_id_segmento = model.agr_id_segmento;
-                retorno.agr_dispositivo = model.agr_dispositivo;
+                retorno.agr_dispositivo = Convert.ToBoolean(model.agr_dispositivo);
                 retorno.agr_ext_geometria = model.agr_ext_geometria;
                 retorno.agr_data_criacao = model.agr_data_criacao;
 
@@ -126,13 +126,12 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private AreasGramadasLevantamentoViewModel ViewModelToModel(AreasGramadasLevantamento model)
+        private AreasGramadasLevantamentoViewModel ModelToViewModel(AreasGramadasLevantamento model)
         {
             try
             {
                 var retorno = new AreasGramadasLevantamentoViewModel();
                 retorno.rod_id = model.rod_id;
-                retorno.1 = model.1;
                 retorno.agr_km_inicial = model.agr_km_inicial;
                 retorno.agr_km_final = model.agr_km_final;
                 retorno.sen_id = model.sen_id;
@@ -141,7 +140,7 @@ namespace DER.WebApp.Domain.Business
                 retorno.agr_extensao = model.agr_extensao;
                 retorno.agr_largura = model.agr_largura;
                 retorno.agr_id_segmento = model.agr_id_segmento;
-                retorno.agr_dispositivo = model.agr_dispositivo;
+                retorno.agr_dispositivo = model.agr_dispositivo.ToString();
                 retorno.agr_ext_geometria = model.agr_ext_geometria;
                 retorno.agr_data_criacao = model.agr_data_criacao;
 
@@ -149,7 +148,7 @@ namespace DER.WebApp.Domain.Business
             }
             catch (Exception e)
             {
-                return new AreasGramadasLevantamento();
+                return new AreasGramadasLevantamentoViewModel();
             }
         }
     }

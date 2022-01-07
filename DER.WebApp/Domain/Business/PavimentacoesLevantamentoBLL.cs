@@ -1,4 +1,8 @@
-﻿using System;
+﻿using DER.WebApp.Domain.Models;
+using DER.WebApp.Infra.DAL;
+using DER.WebApp.Infra.DAO;
+using DER.WebApp.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,7 +14,7 @@ namespace DER.WebApp.Domain.Business
         private DerContext context;
         private PavimentacoesLevantamentoDAO pavimentacoeslevantamentoDAO;
 
-        public InadimplentesBLL()
+        public PavimentacoesLevantamentoBLL()
         {
             context = new DerContext();
             pavimentacoeslevantamentoDAO = new PavimentacoesLevantamentoDAO(context);
@@ -111,7 +115,7 @@ namespace DER.WebApp.Domain.Business
                 retorno.rpv_extensao = model.rpv_extensao;
                 retorno.rpv_data_criacao = model.rpv_data_criacao;
                 retorno.rpv_id_segmento = model.rpv_id_segmento;
-                retorno.rpv_dispositivo = model.rpv_dispositivo;
+                retorno.rpv_dispositivo = Convert.ToBoolean(model.rpv_dispositivo);
                 retorno.rpv_ext_geometria = model.rpv_ext_geometria;
 
                 return retorno;
@@ -122,7 +126,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private PavimentacoesLevantamentoViewModel ViewModelToModel(PavimentacoesLevantamento model)
+        private PavimentacoesLevantamentoViewModel ModelToViewModel(PavimentacoesLevantamento model)
         {
             try
             {
@@ -137,14 +141,14 @@ namespace DER.WebApp.Domain.Business
                 retorno.rpv_extensao = model.rpv_extensao;
                 retorno.rpv_data_criacao = model.rpv_data_criacao;
                 retorno.rpv_id_segmento = model.rpv_id_segmento;
-                retorno.rpv_dispositivo = model.rpv_dispositivo;
+                retorno.rpv_dispositivo = model.rpv_dispositivo.ToString();
                 retorno.rpv_ext_geometria = model.rpv_ext_geometria;
 
                 return retorno;
             }
             catch (Exception e)
             {
-                return new PavimentacoesLevantamento();
+                return new PavimentacoesLevantamentoViewModel();
             }
         }
     }

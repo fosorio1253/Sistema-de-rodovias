@@ -1,4 +1,8 @@
-﻿using System;
+﻿using DER.WebApp.Domain.Models;
+using DER.WebApp.Infra.DAL;
+using DER.WebApp.Infra.DAO;
+using DER.WebApp.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,7 +14,7 @@ namespace DER.WebApp.Domain.Business
         private DerContext context;
         private IgpDAO igpDAO;
 
-        public InadimplentesBLL()
+        public IgpBLL()
         {
             context = new DerContext();
             igpDAO = new IgpDAO(context);
@@ -113,7 +117,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private IgpViewModel ViewModelToModel(Igp model)
+        private IgpViewModel ModelToViewModel(Igp model)
         {
             try
             {
@@ -126,7 +130,7 @@ namespace DER.WebApp.Domain.Business
             }
             catch (Exception e)
             {
-                return new Igp();
+                return new IgpViewModel();
             }
         }
     }

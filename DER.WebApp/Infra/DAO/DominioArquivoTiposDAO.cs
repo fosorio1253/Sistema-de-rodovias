@@ -71,7 +71,6 @@ namespace DER.WebApp.Infra.DAO
                         command.CommandType = CommandType.StoredProcedure;
                         conn.Open();
                         command.Parameters.Add(new SqlParameter("@arq_id", domain.arq_id));
-                        command.Parameters.Add(new SqlParameter("@1", domain.1));// verifixar fosorio
                         command.Parameters.Add(new SqlParameter("@arq_codigo", domain.arq_codigo));
                         command.Parameters.Add(new SqlParameter("@arq_descricao", domain.arq_descricao));
                         var result = command.ExecuteScalar();
@@ -100,7 +99,6 @@ namespace DER.WebApp.Infra.DAO
                         command.CommandType = CommandType.StoredProcedure;
                         conn.Open();
                         command.Parameters.Add(new SqlParameter("@arq_id", domain.arq_id));
-                        command.Parameters.Add(new SqlParameter("@1", domain.1));// verifixar fosorio
                         command.Parameters.Add(new SqlParameter("@arq_codigo", domain.arq_codigo));
                         command.Parameters.Add(new SqlParameter("@arq_descricao", domain.arq_descricao));
                         var result = command.ExecuteNonQuery();

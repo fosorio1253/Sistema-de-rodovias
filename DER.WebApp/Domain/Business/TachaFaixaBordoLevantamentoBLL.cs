@@ -1,4 +1,8 @@
-﻿using System;
+﻿using DER.WebApp.Domain.Models;
+using DER.WebApp.Infra.DAL;
+using DER.WebApp.Infra.DAO;
+using DER.WebApp.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,7 +14,7 @@ namespace DER.WebApp.Domain.Business
         private DerContext context;
         private TachaFaixaBordoLevantamentoDAO tachafaixabordolevantamentoDAO;
 
-        public InadimplentesBLL()
+        public TachaFaixaBordoLevantamentoBLL()
         {
             context = new DerContext();
             tachafaixabordolevantamentoDAO = new TachaFaixaBordoLevantamentoDAO(context);
@@ -109,10 +113,10 @@ namespace DER.WebApp.Domain.Business
                 retorno.tfb_data_levantamento = model.tfb_data_levantamento;
                 retorno.tfb_extensao = model.tfb_extensao;
                 retorno.sht_id = model.sht_id;
-                retorno.tfb_quantidade = model.tfb_quantidade;
+                retorno.tfb_quantidade = (int)model.tfb_quantidade;
                 retorno.tfb_data_criacao = model.tfb_data_criacao;
                 retorno.tfb_id_segmento = model.tfb_id_segmento;
-                retorno.tfb_dispositivo = model.tfb_dispositivo;
+                retorno.tfb_dispositivo = Convert.ToBoolean(model.tfb_dispositivo);
                 retorno.tfb_ext_geometria = model.tfb_ext_geometria;
 
                 return retorno;
@@ -123,7 +127,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private TachaFaixaBordoLevantamentoViewModel ViewModelToModel(TachaFaixaBordoLevantamento model)
+        private TachaFaixaBordoLevantamentoViewModel ModelToViewModel(TachaFaixaBordoLevantamento model)
         {
             try
             {
@@ -139,14 +143,14 @@ namespace DER.WebApp.Domain.Business
                 retorno.tfb_quantidade = model.tfb_quantidade;
                 retorno.tfb_data_criacao = model.tfb_data_criacao;
                 retorno.tfb_id_segmento = model.tfb_id_segmento;
-                retorno.tfb_dispositivo = model.tfb_dispositivo;
+                retorno.tfb_dispositivo = model.tfb_dispositivo.ToString();
                 retorno.tfb_ext_geometria = model.tfb_ext_geometria;
 
                 return retorno;
             }
             catch (Exception e)
             {
-                return new TachaFaixaBordoLevantamento();
+                return new TachaFaixaBordoLevantamentoViewModel();
             }
         }
     }

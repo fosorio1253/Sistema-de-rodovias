@@ -1,6 +1,7 @@
 ﻿using DER.WebApp.Domain.Models;
 using DER.WebApp.Infra.DAL;
 using DER.WebApp.Infra.DAO;
+using DER.WebApp.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace DER.WebApp.Domain.Business
         private DerContext context;
         private DominioDrenagensTiposDAO dominiodrenagenstiposDAO;
 
-        public InadimplentesBLL()
+        public DominioDrenagensTiposBLL()
         {
             context = new DerContext();
             dominiodrenagenstiposDAO = new DominioDrenagensTiposDAO(context);
@@ -115,7 +116,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private DominioDrenagensTiposViewModel ViewModelToModel(DominioDrenagensTipos model)
+        private DominioDrenagensTiposViewModel ModelToViewModel(DominioDrenagensTipos model)
         {
             try
             {
@@ -127,7 +128,7 @@ namespace DER.WebApp.Domain.Business
             }
             catch (Exception e)
             {
-                return new DominioDrenagensTipos();
+                return new DominioDrenagensTiposViewModel();
             }
         }
     }

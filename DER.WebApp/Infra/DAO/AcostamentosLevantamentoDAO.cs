@@ -1,5 +1,11 @@
-﻿using System;
+﻿using DER.WebApp.Domain.Models;
+using DER.WebApp.Helper;
+using DER.WebApp.Infra.DAL;
+using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 
@@ -46,7 +52,7 @@ namespace DER.WebApp.Infra.DAO
                             retorno.aco_largura = result["aco_largura"] is DBNull ? 0 : Convert.ToDouble(result["aco_largura"]);
                             retorno.aco_data_criacao = result["aco_data_criacao"] is DBNull ? dtnull : Convert.ToDateTime(result["aco_data_criacao"]);
                             retorno.aco_id_segmento = result["aco_id_segmento"] is DBNull ? 0 : Convert.ToInt32(result["aco_id_segmento"]);
-                            retorno.aco_dispositivo = result["aco_dispositivo"] is DBNull ? string.Empty : result["aco_dispositivo").ToString();
+                            retorno.aco_dispositivo = result["aco_dispositivo"] is DBNull ? false : Convert.ToBoolean(result["aco_dispositivo"]);
                             retorno.aco_ext_geometria = result["aco_ext_geometria"] is DBNull ? 0 : Convert.ToDouble(result["aco_ext_geometria"]);
 
                             lretorno.Add(retorno);
@@ -170,7 +176,7 @@ namespace DER.WebApp.Infra.DAO
                             retorno.aco_largura = result["aco_largura"] is DBNull ? 0 : Convert.ToDouble(result["aco_largura"]);
                             retorno.aco_data_criacao = result["aco_data_criacao"] is DBNull ? dtnull : Convert.ToDateTime(result["aco_data_criacao"]);
                             retorno.aco_id_segmento = result["aco_id_segmento"] is DBNull ? 0 : Convert.ToInt32(result["aco_id_segmento"]);
-                            retorno.aco_dispositivo = result["aco_dispositivo"] is DBNull ? string.Empty : result["aco_dispositivo").ToString();
+                            retorno.aco_dispositivo = result["aco_dispositivo"] is DBNull ? false : Convert.ToBoolean(result["aco_dispositivo"]);
                             retorno.aco_ext_geometria = result["aco_ext_geometria"] is DBNull ? 0 : Convert.ToDouble(result["aco_ext_geometria"]);
                         }
                         conn.Close();

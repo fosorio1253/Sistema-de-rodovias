@@ -1,16 +1,20 @@
-﻿using System;
+﻿using DER.WebApp.Domain.Models;
+using DER.WebApp.Infra.DAL;
+using DER.WebApp.Infra.DAO;
+using DER.WebApp.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
 namespace DER.WebApp.Domain.Business
 {
-    public class MunicipioBLL
+    public class MunicipiosBLL
     {
         private DerContext context;
         private MunicipioDAO municipioDAO;
 
-        public InadimplentesBLL()
+        public MunicipiosBLL()
         {
             context = new DerContext();
             municipioDAO = new MunicipioDAO(context);
@@ -114,7 +118,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private MunicipioViewModel ViewModelToModel(Municipio model)
+        private MunicipioViewModel ModelToViewModel(Municipio model)
         {
             try
             {
@@ -128,7 +132,7 @@ namespace DER.WebApp.Domain.Business
             }
             catch (Exception e)
             {
-                return new Municipio();
+                return new MunicipioViewModel();
             }
         }
     }

@@ -1,6 +1,7 @@
 ﻿using DER.WebApp.Domain.Models;
 using DER.WebApp.Infra.DAL;
 using DER.WebApp.Infra.DAO;
+using DER.WebApp.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace DER.WebApp.Domain.Business
         private DerContext context;
         private DominioBueirosTiposDAO dominiobueirostiposDAO;
 
-        public InadimplentesBLL()
+        public DominioBueirosTiposBLL()
         {
             context = new DerContext();
             dominiobueirostiposDAO = new DominioBueirosTiposDAO(context);
@@ -115,7 +116,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private DominioBueirosTiposViewModel ViewModelToModel(DominioBueirosTipos model)
+        private DominioBueirosTiposViewModel ModelToViewModel(DominioBueirosTipos model)
         {
             try
             {
@@ -127,7 +128,7 @@ namespace DER.WebApp.Domain.Business
             }
             catch (Exception e)
             {
-                return new DominioBueirosTipos();
+                return new DominioBueirosTiposViewModel();
             }
         }
     }

@@ -1,4 +1,8 @@
-﻿using System;
+﻿using DER.WebApp.Domain.Models;
+using DER.WebApp.Infra.DAL;
+using DER.WebApp.Infra.DAO;
+using DER.WebApp.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,7 +14,7 @@ namespace DER.WebApp.Domain.Business
         private DerContext context;
         private DominioFlagsDAO dominioflagsDAO;
 
-        public InadimplentesBLL()
+        public DominioFlagsBLL()
         {
             context = new DerContext();
             dominioflagsDAO = new DominioFlagsDAO(context);
@@ -112,7 +116,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private DominioFlagsViewModel ViewModelToModel(DominioFlags model)
+        private DominioFlagsViewModel ModelToViewModel(DominioFlags model)
         {
             try
             {
@@ -124,7 +128,7 @@ namespace DER.WebApp.Domain.Business
             }
             catch (Exception e)
             {
-                return new DominioFlags();
+                return new DominioFlagsViewModel();
             }
         }
     }

@@ -1,16 +1,20 @@
-﻿using System;
+﻿using DER.WebApp.Domain.Models;
+using DER.WebApp.Infra.DAL;
+using DER.WebApp.Infra.DAO;
+using DER.WebApp.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
 namespace DER.WebApp.Domain.Business
 {
-    public class DispositivoBLL
+    public class DispositivosBLL
     {
         private DerContext context;
         private DispositivoDAO dispositivoDAO;
 
-        public InadimplentesBLL()
+        public DispositivosBLL()
         {
             context = new DerContext();
             dispositivoDAO = new DispositivoDAO(context);
@@ -133,7 +137,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private DispositivoViewModel ViewModelToModel(Dispositivo model)
+        private DispositivoViewModel ModelToViewModel(Dispositivo model)
         {
             try
             {
@@ -166,7 +170,7 @@ namespace DER.WebApp.Domain.Business
             }
             catch (Exception e)
             {
-                return new Dispositivo();
+                return new DispositivoViewModel();
             }
         }
     }

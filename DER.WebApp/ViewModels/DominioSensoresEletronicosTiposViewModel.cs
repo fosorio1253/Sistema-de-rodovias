@@ -8,6 +8,6 @@ namespace DER.WebApp.ViewModels
     public class DominioSensoresEletronicosTiposViewModel
     {
         public int set_id { get; set; }
-        public datetime set_descricao { get; set; }
+        public DateTime? set_descricao { get; set; }
     }
 }

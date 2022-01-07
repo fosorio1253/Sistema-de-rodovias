@@ -2,7 +2,7 @@
 {
     public class DominioConservadores
     {
-        public int con_id { get; set; }
-        public string con_descricao { get; set; }
+        public int res_id { get; set; }
+        public string res_codigo { get; set; }
     }
 }

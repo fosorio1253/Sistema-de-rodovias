@@ -1,4 +1,8 @@
-﻿using System;
+﻿using DER.WebApp.Domain.Models;
+using DER.WebApp.Infra.DAL;
+using DER.WebApp.Infra.DAO;
+using DER.WebApp.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,7 +14,7 @@ namespace DER.WebApp.Domain.Business
         private DerContext context;
         private DrenagensLinearesLevantamentoDAO drenagenslineareslevantamentoDAO;
 
-        public InadimplentesBLL()
+        public DrenagensLinearesLevantamentoBLL()
         {
             context = new DerContext();
             drenagenslineareslevantamentoDAO = new DrenagensLinearesLevantamentoDAO(context);
@@ -110,8 +114,8 @@ namespace DER.WebApp.Domain.Business
                 retorno.drl_extensao = model.drl_extensao;
                 retorno.drt_id = model.drt_id;
                 retorno.drl_data_criacao = model.drl_data_criacao;
-                retorno.drl_id_segmento = model.drl_id_segmento;
-                retorno.drl_dispositivo = model.drl_dispositivo;
+                retorno.drl_id_segmento = Convert.ToInt32(model.drl_id_segmento);
+                retorno.drl_dispositivo = Convert.ToBoolean(model.drl_dispositivo);
                 retorno.drl_ext_geometria = model.drl_ext_geometria;
 
                 return retorno;
@@ -122,7 +126,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private DrenagensLinearesLevantamentoViewModel ViewModelToModel(DrenagensLinearesLevantamento model)
+        private DrenagensLinearesLevantamentoViewModel ModelToViewModel(DrenagensLinearesLevantamento model)
         {
             try
             {
@@ -137,14 +141,14 @@ namespace DER.WebApp.Domain.Business
                 retorno.drt_id = model.drt_id;
                 retorno.drl_data_criacao = model.drl_data_criacao;
                 retorno.drl_id_segmento = model.drl_id_segmento;
-                retorno.drl_dispositivo = model.drl_dispositivo;
+                retorno.drl_dispositivo = model.drl_dispositivo.ToString();
                 retorno.drl_ext_geometria = model.drl_ext_geometria;
 
                 return retorno;
             }
             catch (Exception e)
             {
-                return new DrenagensLinearesLevantamento();
+                return new DrenagensLinearesLevantamentoViewModel();
             }
         }
     }

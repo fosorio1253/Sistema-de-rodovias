@@ -1,4 +1,8 @@
-﻿using System;
+﻿using DER.WebApp.Domain.Models;
+using DER.WebApp.Infra.DAL;
+using DER.WebApp.Infra.DAO;
+using DER.WebApp.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,7 +14,7 @@ namespace DER.WebApp.Domain.Business
         private DerContext context;
         private TipoOcupacaoDAO tipoocupacaoDAO;
 
-        public InadimplentesBLL()
+        public TipoOcupacaoBLL()
         {
             context = new DerContext();
             tipoocupacaoDAO = new TipoOcupacaoDAO(context);
@@ -114,7 +118,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private TipoOcupacaoViewModel ViewModelToModel(TipoOcupacao model)
+        private TipoOcupacaoViewModel ModelToViewModel(TipoOcupacao model)
         {
             try
             {
@@ -128,7 +132,7 @@ namespace DER.WebApp.Domain.Business
             }
             catch (Exception e)
             {
-                return new TipoOcupacao();
+                return new TipoOcupacaoViewModel();
             }
         }
     }

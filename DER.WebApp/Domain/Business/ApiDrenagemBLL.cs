@@ -1,6 +1,7 @@
 ﻿using DER.WebApp.Domain.Models;
 using DER.WebApp.Infra.DAL;
 using DER.WebApp.Infra.DAO;
+using DER.WebApp.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace DER.WebApp.Domain.Business
         private DerContext context;
         private ApiDrenagemDAO apidrenagemDAO;
 
-        public InadimplentesBLL()
+        public ApiDrenagemBLL()
         {
             context = new DerContext();
             apidrenagemDAO = new ApiDrenagemDAO(context);
@@ -125,7 +126,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private ApiDrenagemViewModel ViewModelToModel(ApiDrenagem model)
+        private ApiDrenagemViewModel ModelToViewModel(ApiDrenagem model)
         {
             try
             {
@@ -147,7 +148,7 @@ namespace DER.WebApp.Domain.Business
             }
             catch (Exception e)
             {
-                return new ApiDrenagem();
+                return new ApiDrenagemViewModel();
             }
         }
     }

@@ -1,4 +1,5 @@
-﻿using DER.WebApp.Helper;
+﻿using DER.WebApp.Domain.Models;
+using DER.WebApp.Helper;
 using DER.WebApp.Infra.DAL;
 using System;
 using System.Collections.Generic;
@@ -135,8 +136,8 @@ namespace DER.WebApp.Infra.DAO
                         while (result.Read())
                         {
                             retorno.concessionaria_id = result["concessionaria_id"] is DBNull ? 0 : Convert.ToInt32(result["concessionaria_id"]);
-                            retorno.sigla = result["sigla"] is DBNull ? string.Empty : result["sigla").ToString();
-                            retorno.nome = result["nome"] is DBNull ? string.Empty : result["nome").ToString();
+                            retorno.sigla = result["sigla"] is DBNull ? string.Empty : result["sigla"].ToString();
+                            retorno.nome = result["nome"] is DBNull ? string.Empty : result["nome"].ToString();
                         }
                         conn.Close();
                     }

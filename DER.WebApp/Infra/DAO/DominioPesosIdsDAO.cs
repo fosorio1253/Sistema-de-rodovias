@@ -42,8 +42,8 @@ namespace DER.WebApp.Infra.DAO
                         {
                             var retorno = new DominioPesosIds();
                             retorno.dominio_pesos_id = result["dominio_pesos_id"] is DBNull ? 0 : Convert.ToInt32(result["dominio_pesos_id"]);
-                            retorno.pes_anomalia = result["pes_anomalia"] is DBNull ? string.Empty : result["pes_anomalia").ToString();
-                            retorno.pes_severidade = result["pes_severidade"] is DBNull ? string.Empty : result["pes_severidade").ToString();
+                            retorno.pes_anomalia = result["pes_anomalia"] is DBNull ? string.Empty : result["pes_anomalia"].ToString();
+                            retorno.pes_severidade = result["pes_severidade"] is DBNull ? string.Empty : result["pes_severidade"].ToString();
                             retorno.pes_nota = result["pes_nota"] is DBNull ? 0 : Convert.ToDouble(result["pes_nota"]);
 
                             lretorno.Add(retorno);

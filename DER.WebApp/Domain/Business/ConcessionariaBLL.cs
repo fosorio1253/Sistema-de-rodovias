@@ -1,6 +1,7 @@
 ﻿using DER.WebApp.Domain.Models;
 using DER.WebApp.Infra.DAL;
 using DER.WebApp.Infra.DAO;
+using DER.WebApp.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace DER.WebApp.Domain.Business
         private DerContext context;
         private ConcessionariaDAO concessionariaDAO;
 
-        public InadimplentesBLL()
+        public ConcessionariaBLL()
         {
             context = new DerContext();
             concessionariaDAO = new ConcessionariaDAO(context);
@@ -116,7 +117,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private ConcessionariaViewModel ViewModelToModel(Concessionaria model)
+        private ConcessionariaViewModel ModelToViewModel(Concessionaria model)
         {
             try
             {
@@ -129,7 +130,7 @@ namespace DER.WebApp.Domain.Business
             }
             catch (Exception e)
             {
-                return new Concessionaria();
+                return new ConcessionariaViewModel();
             }
         }
     }

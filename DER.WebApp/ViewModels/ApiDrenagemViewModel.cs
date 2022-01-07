@@ -16,8 +16,8 @@ namespace DER.WebApp.ViewModels
         public double drp_latitude { get; set; }
         public double drp_longitude { get; set; }
         public string drp_foto { get; set; }
-        public datetime drp_data_levantamento { get; set; }
+        public DateTime? drp_data_levantamento { get; set; }
         public int drt_id { get; set; }
-        public datetime drp_data_criacao { get; set; }
+        public DateTime? drp_data_criacao { get; set; }
     }
 }

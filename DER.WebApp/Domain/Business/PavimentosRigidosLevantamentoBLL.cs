@@ -1,4 +1,8 @@
-﻿using System;
+﻿using DER.WebApp.Domain.Models;
+using DER.WebApp.Infra.DAL;
+using DER.WebApp.Infra.DAO;
+using DER.WebApp.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,7 +14,7 @@ namespace DER.WebApp.Domain.Business
         private DerContext context;
         private PavimentosRigidosLevantamentoDAO pavimentosrigidoslevantamentoDAO;
 
-        public InadimplentesBLL()
+        public PavimentosRigidosLevantamentoBLL()
         {
             context = new DerContext();
             pavimentosrigidoslevantamentoDAO = new PavimentosRigidosLevantamentoDAO(context);
@@ -119,7 +123,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private PavimentosRigidosLevantamentoViewModel ViewModelToModel(PavimentosRigidosLevantamento model)
+        private PavimentosRigidosLevantamentoViewModel ModelToViewModel(PavimentosRigidosLevantamento model)
         {
             try
             {
@@ -138,7 +142,7 @@ namespace DER.WebApp.Domain.Business
             }
             catch (Exception e)
             {
-                return new PavimentosRigidosLevantamento();
+                return new PavimentosRigidosLevantamentoViewModel();
             }
         }
     }

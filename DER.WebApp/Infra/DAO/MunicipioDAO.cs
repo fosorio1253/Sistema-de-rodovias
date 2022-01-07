@@ -1,4 +1,5 @@
-﻿using DER.WebApp.Helper;
+﻿using DER.WebApp.Domain.Models;
+using DER.WebApp.Helper;
 using DER.WebApp.Infra.DAL;
 using System;
 using System.Collections.Generic;
@@ -41,9 +42,9 @@ namespace DER.WebApp.Infra.DAO
                         {
                             var retorno = new Municipio();
                             retorno.municipio_id = result["municipio_id"] is DBNull ? 0 : Convert.ToInt32(result["municipio_id"]);
-                            retorno.codigo = result["codigo"] is DBNull ? string.Empty : result["codigo").ToString();
-                            retorno.municipio = result["municipio"] is DBNull ? string.Empty : result["municipio").ToString();
-                            retorno.regional = result["regional"] is DBNull ? string.Empty : result["regional").ToString();
+                            retorno.codigo = result["codigo"] is DBNull ? string.Empty : result["codigo"].ToString();
+                            retorno.municipio = result["municipio"] is DBNull ? string.Empty : result["municipio"].ToString();
+                            retorno.regional = result["regional"] is DBNull ? string.Empty : result["regional"].ToString();
 
                             lretorno.Add(retorno);
                         }

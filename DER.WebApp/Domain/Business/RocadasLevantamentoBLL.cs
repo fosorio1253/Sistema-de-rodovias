@@ -1,4 +1,8 @@
-﻿using System;
+﻿using DER.WebApp.Domain.Models;
+using DER.WebApp.Infra.DAL;
+using DER.WebApp.Infra.DAO;
+using DER.WebApp.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,7 +14,7 @@ namespace DER.WebApp.Domain.Business
         private DerContext context;
         private RocadasLevantamentoDAO rocadaslevantamentoDAO;
 
-        public InadimplentesBLL()
+        public RocadasLevantamentoBLL()
         {
             context = new DerContext();
             rocadaslevantamentoDAO = new RocadasLevantamentoDAO(context);
@@ -110,7 +114,7 @@ namespace DER.WebApp.Domain.Business
                 retorno.rcd_extensao = model.rcd_extensao;
                 retorno.rcd_data_criacao = model.rcd_data_criacao;
                 retorno.rcd_id_segmento = model.rcd_id_segmento;
-                retorno.rcd_dispositivo = model.rcd_dispositivo;
+                retorno.rcd_dispositivo = Convert.ToBoolean(model.rcd_dispositivo);
                 retorno.rcd_ext_geometria = model.rcd_ext_geometria;
 
                 return retorno;
@@ -121,7 +125,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private RocadasLevantamentoViewModel ViewModelToModel(RocadasLevantamento model)
+        private RocadasLevantamentoViewModel ModelToViewModel(RocadasLevantamento model)
         {
             try
             {
@@ -135,14 +139,14 @@ namespace DER.WebApp.Domain.Business
                 retorno.rcd_extensao = model.rcd_extensao;
                 retorno.rcd_data_criacao = model.rcd_data_criacao;
                 retorno.rcd_id_segmento = model.rcd_id_segmento;
-                retorno.rcd_dispositivo = model.rcd_dispositivo;
+                retorno.rcd_dispositivo = model.rcd_dispositivo.ToString();
                 retorno.rcd_ext_geometria = model.rcd_ext_geometria;
 
                 return retorno;
             }
             catch (Exception e)
             {
-                return new RocadasLevantamento();
+                return new RocadasLevantamentoViewModel();
             }
         }
     }

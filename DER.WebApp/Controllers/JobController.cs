@@ -125,7 +125,7 @@ namespace DER.WebApp.Controllers
                     else if (ret.id == 107) { dadosMestresBLL.Salvar(dadosMestresBLL.EntToDadosMestres<DominioTravessiasTipos>(ret.retorno.Mensagem, "trt_id")); }
                     else if (ret.id == 108) { dadosMestresBLL.Salvar(dadosMestresBLL.EntToDadosMestres<DominioMateriais>(ret.retorno.Mensagem, "mat_id")); }
                     else if (ret.id == 109) { dadosMestresBLL.Salvar(dadosMestresBLL.EntToDadosMestres<DominioAdministradores>(ret.retorno.Mensagem, "adm_id")); }
-                    else if (ret.id == 110) { dadosMestresBLL.Salvar(dadosMestresBLL.EntToDadosMestres<DominioJurisdições>(ret.retorno.Mensagem, "jur_id")); }
+                    else if (ret.id == 110) { dadosMestresBLL.Salvar(dadosMestresBLL.EntToDadosMestres<DominioJurisdicoes>(ret.retorno.Mensagem, "jur_id")); }
                     else if (ret.id == 111) { dadosMestresBLL.Salvar(dadosMestresBLL.EntToDadosMestres<DominioConservadores>(ret.retorno.Mensagem, "con_id")); }
                     else if (ret.id == 112) { dadosMestresBLL.Salvar(dadosMestresBLL.EntToDadosMestres<DominioCircunscricao>(ret.retorno.Mensagem, "res_id")); }
 

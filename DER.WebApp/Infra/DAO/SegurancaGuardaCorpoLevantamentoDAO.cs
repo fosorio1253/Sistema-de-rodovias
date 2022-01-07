@@ -1,4 +1,5 @@
-﻿using DER.WebApp.Helper;
+﻿using DER.WebApp.Domain.Models;
+using DER.WebApp.Helper;
 using DER.WebApp.Infra.DAL;
 using System;
 using System.Collections.Generic;
@@ -10,25 +11,25 @@ using System.Web;
 
 namespace DER.WebApp.Infra.DAO
 {
-    public class SegurancaGuardaCorpoEvantamentoDAO : BaseDAO<SegurancaGuardaCorpoEvantamento>
+    public class SegurancaGuardaCorpoLevantamentoDAO : BaseDAO<SegurancaGuardaCorpoLevantamento>
     {
         Logger logger;
 
-        public SegurancaGuardaCorpoEvantamentoDAO(DerContext context) : base(context)
+        public SegurancaGuardaCorpoLevantamentoDAO(DerContext context) : base(context)
         {
-            logger = new Logger("SegurancaGuardaCorpoEvantamento", context);
+            logger = new Logger("SegurancaGuardaCorpoLevantamento", context);
         }
 
-        public List<SegurancaGuardaCorpoEvantamento> ObtemTodos()
+        public List<SegurancaGuardaCorpoLevantamento> ObtemTodos()
         {
             var connectionString = ConfigurationManager.ConnectionStrings["DerContext"].ConnectionString;
-            var lretorno = new List<SegurancaGuardaCorpoEvantamento>();
+            var lretorno = new List<SegurancaGuardaCorpoLevantamento>();
 
             try
             {
                 using (var conn = new SqlConnection(connectionString))
                 {
-                    using (var command = new SqlCommand("STP_SEL_SEGURANCAGUARDACORPOEVANTAMENTO", conn))
+                    using (var command = new SqlCommand("STP_SEL_SegurancaGuardaCorpoLevantamento", conn))
                     {
                         command.CommandType = CommandType.StoredProcedure;
                         conn.Open();
@@ -39,7 +40,7 @@ namespace DER.WebApp.Infra.DAO
 
                         while (result.Read())
                         {
-                            var retorno = new SegurancaGuardaCorpoEvantamento();
+                            var retorno = new SegurancaGuardaCorpoLevantamento();
                             retorno.rod_id = result["rod_id"] is DBNull ? 0 : Convert.ToInt32(result["rod_id"]);
                             retorno.sgc_km_inicial = result["sgc_km_inicial"] is DBNull ? 0 : Convert.ToDouble(result["sgc_km_inicial"]);
                             retorno.sgc_km_final = result["sgc_km_final"] is DBNull ? 0 : Convert.ToDouble(result["sgc_km_final"]);
@@ -50,7 +51,7 @@ namespace DER.WebApp.Infra.DAO
                             retorno.mat_id = result["mat_id"] is DBNull ? 0 : Convert.ToInt32(result["mat_id"]);
                             retorno.sgc_data_criacao = result["sgc_data_criacao"] is DBNull ? dtnull : Convert.ToDateTime(result["sgc_data_criacao"]);
                             retorno.sgc_id_segmento = result["sgc_id_segmento"] is DBNull ? 0 : Convert.ToInt32(result["sgc_id_segmento"]);
-                            retorno.sgc_dispositivo = result["sgc_dispositivo"] is DBNull ? string.Empty : result["sgc_dispositivo"].ToString();
+                            retorno.sgc_dispositivo = result["sgc_dispositivo"] is DBNull ? false : Convert.ToBoolean(result["sgc_dispositivo"]);
                             retorno.sgc_ext_geometria = result["sgc_ext_geometria"] is DBNull ? 0 : Convert.ToDouble(result["sgc_ext_geometria"]);
 
                             lretorno.Add(retorno);
@@ -66,7 +67,7 @@ namespace DER.WebApp.Infra.DAO
             }
         }
 
-        public bool Inserir(SegurancaGuardaCorpoEvantamento domain)
+        public bool Inserir(SegurancaGuardaCorpoLevantamento domain)
         {
             var connectionString = ConfigurationManager.ConnectionStrings["DerContext"].ConnectionString;
 
@@ -74,7 +75,7 @@ namespace DER.WebApp.Infra.DAO
             {
                 using (var conn = new SqlConnection(connectionString))
                 {
-                    using (var command = new SqlCommand("STP_INS_SEGURANCAGUARDACORPOEVANTAMENTO", conn))
+                    using (var command = new SqlCommand("STP_INS_SegurancaGuardaCorpoLevantamento", conn))
                     {
                         command.CommandType = CommandType.StoredProcedure;
                         conn.Open();
@@ -103,7 +104,7 @@ namespace DER.WebApp.Infra.DAO
             }
         }
 
-        public bool Update(SegurancaGuardaCorpoEvantamento domain)
+        public bool Update(SegurancaGuardaCorpoLevantamento domain)
         {
             var connectionString = ConfigurationManager.ConnectionStrings["DerContext"].ConnectionString;
             var oldValue = GetById(domain.rod_id);
@@ -111,7 +112,7 @@ namespace DER.WebApp.Infra.DAO
             {
                 using (var conn = new SqlConnection(connectionString))
                 {
-                    using (var command = new SqlCommand("STP_UPD_SEGURANCAGUARDACORPOEVANTAMENTO", conn))
+                    using (var command = new SqlCommand("STP_UPD_SegurancaGuardaCorpoLevantamento", conn))
                     {
                         command.CommandType = CommandType.StoredProcedure;
                         conn.Open();
@@ -143,15 +144,15 @@ namespace DER.WebApp.Infra.DAO
             }
         }
 
-        public SegurancaGuardaCorpoEvantamento GetById(int id)
+        public SegurancaGuardaCorpoLevantamento GetById(int id)
         {
             var connectionString = ConfigurationManager.ConnectionStrings["DerContext"].ConnectionString;
-            var retorno = new SegurancaGuardaCorpoEvantamento();
+            var retorno = new SegurancaGuardaCorpoLevantamento();
             try
             {
                 using (var conn = new SqlConnection(connectionString))
                 {
-                    using (var command = new SqlCommand("STP_SEL_SEGURANCAGUARDACORPOEVANTAMENTO_ID", conn))
+                    using (var command = new SqlCommand("STP_SEL_SegurancaGuardaCorpoLevantamento_ID", conn))
                     {
                         command.CommandType = CommandType.StoredProcedure;
                         conn.Open();
@@ -171,7 +172,7 @@ namespace DER.WebApp.Infra.DAO
                             retorno.mat_id = result["mat_id"] is DBNull ? 0 : Convert.ToInt32(result["mat_id"]);
                             retorno.sgc_data_criacao = result["sgc_data_criacao"] is DBNull ? dtnull : Convert.ToDateTime(result["sgc_data_criacao"]);
                             retorno.sgc_id_segmento = result["sgc_id_segmento"] is DBNull ? 0 : Convert.ToInt32(result["sgc_id_segmento"]);
-                            retorno.sgc_dispositivo = result["sgc_dispositivo"] is DBNull ? string.Empty : result["sgc_dispositivo"].ToString();
+                            retorno.sgc_dispositivo = result["sgc_dispositivo"] is DBNull ? false : Convert.ToBoolean(result["sgc_dispositivo"]);
                             retorno.sgc_ext_geometria = result["sgc_ext_geometria"] is DBNull ? 0 : Convert.ToDouble(result["sgc_ext_geometria"]);
                         }
                         conn.Close();
@@ -185,14 +186,14 @@ namespace DER.WebApp.Infra.DAO
             }
         }
 
-        public bool Delete(SegurancaGuardaCorpoEvantamento model)
+        public bool Delete(SegurancaGuardaCorpoLevantamento model)
         {
             var oldValue = GetById(model.rod_id);
             var connectionString = ConfigurationManager.ConnectionStrings["DerContext"].ConnectionString;
 
             using (var conn = new SqlConnection(connectionString))
             {
-                using (var command = new SqlCommand("STP_DEL_SEGURANCAGUARDACORPOEVANTAMENTO", conn))
+                using (var command = new SqlCommand("STP_DEL_SegurancaGuardaCorpoLevantamento", conn))
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Add(new SqlParameter("@rod_id", model.rod_id));
@@ -206,6 +207,4 @@ namespace DER.WebApp.Infra.DAO
             return true;
         }
     }
-
-
 }

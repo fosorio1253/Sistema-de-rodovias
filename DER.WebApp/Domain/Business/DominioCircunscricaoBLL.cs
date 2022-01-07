@@ -1,6 +1,7 @@
 ﻿using DER.WebApp.Domain.Models;
 using DER.WebApp.Infra.DAL;
 using DER.WebApp.Infra.DAO;
+using DER.WebApp.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace DER.WebApp.Domain.Business
         private DerContext context;
         private DominioCircunscricaoDAO dominiocircunscricaoDAO;
 
-        public InadimplentesBLL()
+        public DominioCircunscricaoBLL()
         {
             context = new DerContext();
             dominiocircunscricaoDAO = new DominioCircunscricaoDAO(context);
@@ -124,7 +125,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private DominioCircunscricaoViewModel ViewModelToModel(DominioCircunscricao model)
+        private DominioCircunscricaoViewModel ModelToViewModel(DominioCircunscricao model)
         {
             try
             {
@@ -145,7 +146,7 @@ namespace DER.WebApp.Domain.Business
             }
             catch (Exception e)
             {
-                return new DominioCircunscricao();
+                return new DominioCircunscricaoViewModel();
             }
         }
     }

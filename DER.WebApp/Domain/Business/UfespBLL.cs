@@ -1,4 +1,8 @@
-﻿using System;
+﻿using DER.WebApp.Domain.Models;
+using DER.WebApp.Infra.DAL;
+using DER.WebApp.Infra.DAO;
+using DER.WebApp.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,7 +14,7 @@ namespace DER.WebApp.Domain.Business
         private DerContext context;
         private UfespDAO ufespDAO;
 
-        public InadimplentesBLL()
+        public UfespBLL()
         {
             context = new DerContext();
             ufespDAO = new UfespDAO(context);
@@ -114,7 +118,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private UfespViewModel ViewModelToModel(Ufesp model)
+        private UfespViewModel ModelToViewModel(Ufesp model)
         {
             try
             {
@@ -128,7 +132,7 @@ namespace DER.WebApp.Domain.Business
             }
             catch (Exception e)
             {
-                return new Ufesp();
+                return new UfespViewModel();
             }
         }
     }

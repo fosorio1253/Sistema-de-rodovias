@@ -1,4 +1,8 @@
-﻿using System;
+﻿using DER.WebApp.Domain.Models;
+using DER.WebApp.Infra.DAL;
+using DER.WebApp.Infra.DAO;
+using DER.WebApp.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,7 +14,7 @@ namespace DER.WebApp.Domain.Business
         private DerContext context;
         private ResidenciaConservacaoDAO residenciaconservacaoDAO;
 
-        public InadimplentesBLL()
+        public ResidenciaConservacaoBLL()
         {
             context = new DerContext();
             residenciaconservacaoDAO = new ResidenciaConservacaoDAO(context);
@@ -113,7 +117,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private ResidenciaConservacaoViewModel ViewModelToModel(ResidenciaConservacao model)
+        private ResidenciaConservacaoViewModel ModelToViewModel(ResidenciaConservacao model)
         {
             try
             {
@@ -126,7 +130,7 @@ namespace DER.WebApp.Domain.Business
             }
             catch (Exception e)
             {
-                return new ResidenciaConservacao();
+                return new ResidenciaConservacaoViewModel();
             }
         }
     }

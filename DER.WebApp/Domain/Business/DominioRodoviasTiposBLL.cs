@@ -1,4 +1,8 @@
-﻿using System;
+﻿using DER.WebApp.Domain.Models;
+using DER.WebApp.Infra.DAL;
+using DER.WebApp.Infra.DAO;
+using DER.WebApp.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,7 +14,7 @@ namespace DER.WebApp.Domain.Business
         private DerContext context;
         private DominioRodoviasTiposDAO dominiorodoviastiposDAO;
 
-        public InadimplentesBLL()
+        public DominioRodoviasTiposBLL()
         {
             context = new DerContext();
             dominiorodoviastiposDAO = new DominioRodoviasTiposDAO(context);
@@ -112,7 +116,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private DominioRodoviasTiposViewModel ViewModelToModel(DominioRodoviasTipos model)
+        private DominioRodoviasTiposViewModel ModelToViewModel(DominioRodoviasTipos model)
         {
             try
             {
@@ -124,7 +128,7 @@ namespace DER.WebApp.Domain.Business
             }
             catch (Exception e)
             {
-                return new DominioRodoviasTipos();
+                return new DominioRodoviasTiposViewModel();
             }
         }
     }

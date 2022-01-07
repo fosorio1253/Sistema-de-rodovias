@@ -8,7 +8,7 @@ namespace DER.WebApp.ViewModels
     public class IgpViewModel
     {
         public int IGP_id { get; set; }
-        public datetime mes_ano { get; set; }
+        public DateTime? mes_ano { get; set; }
         public double valor { get; set; }
     }
 }

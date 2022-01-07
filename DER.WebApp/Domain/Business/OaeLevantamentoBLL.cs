@@ -1,7 +1,10 @@
-﻿using System;
+﻿using DER.WebApp.Domain.Models;
+using DER.WebApp.Infra.DAL;
+using DER.WebApp.Infra.DAO;
+using DER.WebApp.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 
 namespace DER.WebApp.Domain.Business
 {
@@ -10,7 +13,7 @@ namespace DER.WebApp.Domain.Business
         private DerContext context;
         private OaeLevantamentoDAO oaelevantamentoDAO;
 
-        public InadimplentesBLL()
+        public OaeLevantamentoBLL()
         {
             context = new DerContext();
             oaelevantamentoDAO = new OaeLevantamentoDAO(context);
@@ -111,7 +114,6 @@ namespace DER.WebApp.Domain.Business
                 retorno.oat_id = model.oat_id;
                 retorno.oae_data_criacao = model.oae_data_criacao;
                 retorno.oae_id_segmento = model.oae_id_segmento;
-                retorno. = model.;
                 retorno.oae_ext_geometria = model.oae_ext_geometria;
 
                 return retorno;
@@ -122,7 +124,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private OaeLevantamentoViewModel ViewModelToModel(OaeLevantamento model)
+        private OaeLevantamentoViewModel ModelToViewModel(OaeLevantamento model)
         {
             try
             {
@@ -137,14 +139,13 @@ namespace DER.WebApp.Domain.Business
                 retorno.oat_id = model.oat_id;
                 retorno.oae_data_criacao = model.oae_data_criacao;
                 retorno.oae_id_segmento = model.oae_id_segmento;
-                retorno. = model.;
                 retorno.oae_ext_geometria = model.oae_ext_geometria;
 
                 return retorno;
             }
             catch (Exception e)
             {
-                return new OaeLevantamento();
+                return new OaeLevantamentoViewModel();
             }
         }
     }

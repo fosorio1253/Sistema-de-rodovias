@@ -1,19 +1,23 @@
-﻿using System;
+﻿using DER.WebApp.Domain.Models;
+using DER.WebApp.Infra.DAL;
+using DER.WebApp.Infra.DAO;
+using DER.WebApp.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
 namespace DER.WebApp.Domain.Business
 {
-    public class RodoviaBLL
+    public class RodoviasBLL
     {
         private DerContext context;
-        private RodoviaDAO rodoviaDAO;
+        private RodoviasDAO rodoviaDAO;
 
-        public InadimplentesBLL()
+        public RodoviasBLL()
         {
             context = new DerContext();
-            rodoviaDAO = new RodoviaDAO(context);
+            rodoviaDAO = new RodoviasDAO(context);
         }
 
         public bool Save(RodoviaViewModel viewModel)
@@ -120,7 +124,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private RodoviaViewModel ViewModelToModel(Rodovia model)
+        private RodoviaViewModel ModelToViewModel(Rodovia model)
         {
             try
             {
@@ -140,7 +144,7 @@ namespace DER.WebApp.Domain.Business
             }
             catch (Exception e)
             {
-                return new Rodovia();
+                return new RodoviaViewModel();
             }
         }
     }

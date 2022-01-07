@@ -42,7 +42,7 @@ namespace DER.WebApp.Infra.DAO
                         {
                             var retorno = new TipoInteressado();
                             retorno.tipo_interessado_id = result["tipo_interessado_id"] is DBNull ? 0 : Convert.ToInt32(result["tipo_interessado_id"]);
-                            retorno.descricao = result["descricao"] is DBNull ? string.Empty : result["descricao").ToString();
+                            retorno.descricao = result["descricao"] is DBNull ? string.Empty : result["descricao"].ToString();
                             retorno.fator_interessado = result["fator_interessado"] is DBNull ? 0 : Convert.ToInt32(result["fator_interessado"]);
 
                             lretorno.Add(retorno);
@@ -136,7 +136,7 @@ namespace DER.WebApp.Infra.DAO
                         while (result.Read())
                         {
                             retorno.tipo_interessado_id = result["tipo_interessado_id"] is DBNull ? 0 : Convert.ToInt32(result["tipo_interessado_id"]);
-                            retorno.descricao = result["descricao"] is DBNull ? string.Empty : result["descricao").ToString();
+                            retorno.descricao = result["descricao"] is DBNull ? string.Empty : result["descricao"].ToString();
                             retorno.fator_interessado = result["fator_interessado"] is DBNull ? 0 : Convert.ToInt32(result["fator_interessado"]);
                         }
                         conn.Close();

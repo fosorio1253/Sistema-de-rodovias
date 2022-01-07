@@ -1,4 +1,8 @@
-﻿using System;
+﻿using DER.WebApp.Domain.Models;
+using DER.WebApp.Infra.DAL;
+using DER.WebApp.Infra.DAO;
+using DER.WebApp.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,7 +14,7 @@ namespace DER.WebApp.Domain.Business
         private DerContext context;
         private SegurancaBordoLevantamentoDAO segurancabordolevantamentoDAO;
 
-        public InadimplentesBLL()
+        public SegurancaBordoLevantamentoBLL()
         {
             context = new DerContext();
             segurancabordolevantamentoDAO = new SegurancaBordoLevantamentoDAO(context);
@@ -111,7 +115,7 @@ namespace DER.WebApp.Domain.Business
                 retorno.est_id = model.est_id;
                 retorno.sbd_data_criacao = model.sbd_data_criacao;
                 retorno.sbd_id_segmento = model.sbd_id_segmento;
-                retorno.sbd_dispositivo = model.sbd_dispositivo;
+                retorno.sbd_dispositivo = Convert.ToBoolean(model.sbd_dispositivo);
                 retorno.sbd_ext_geometria = model.sbd_ext_geometria;
 
                 return retorno;
@@ -122,7 +126,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private SegurancaBordoLevantamentoViewModel ViewModelToModel(SegurancaBordoLevantamento model)
+        private SegurancaBordoLevantamentoViewModel ModelToViewModel(SegurancaBordoLevantamento model)
         {
             try
             {
@@ -137,14 +141,14 @@ namespace DER.WebApp.Domain.Business
                 retorno.est_id = model.est_id;
                 retorno.sbd_data_criacao = model.sbd_data_criacao;
                 retorno.sbd_id_segmento = model.sbd_id_segmento;
-                retorno.sbd_dispositivo = model.sbd_dispositivo;
+                retorno.sbd_dispositivo = model.sbd_dispositivo.ToString();
                 retorno.sbd_ext_geometria = model.sbd_ext_geometria;
 
                 return retorno;
             }
             catch (Exception e)
             {
-                return new SegurancaBordoLevantamento();
+                return new SegurancaBordoLevantamentoViewModel();
             }
         }
     }

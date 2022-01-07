@@ -8,6 +8,6 @@ namespace DER.WebApp.ViewModels
     public class DominioBueirosTiposViewModel
     {
         public int btp_id { get; set; }
-        public datetime btp_descricao { get; set; }
+        public DateTime? btp_descricao { get; set; }
     }
 }

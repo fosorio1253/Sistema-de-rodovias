@@ -1,16 +1,20 @@
-﻿using System;
+﻿using DER.WebApp.Domain.Models;
+using DER.WebApp.Infra.DAL;
+using DER.WebApp.Infra.DAO;
+using DER.WebApp.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
 namespace DER.WebApp.Domain.Business
 {
-    public class UnidadeBLL
+    public class UnidadesBLL
     {
         private DerContext context;
         private UnidadeDAO unidadeDAO;
 
-        public InadimplentesBLL()
+        public UnidadesBLL()
         {
             context = new DerContext();
             unidadeDAO = new UnidadeDAO(context);
@@ -113,7 +117,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private UnidadeViewModel ViewModelToModel(Unidade model)
+        private UnidadeViewModel ModelToViewModel(Unidade model)
         {
             try
             {
@@ -126,7 +130,7 @@ namespace DER.WebApp.Domain.Business
             }
             catch (Exception e)
             {
-                return new Unidade();
+                return new UnidadeViewModel();
             }
         }
     }

@@ -1,4 +1,8 @@
-﻿using System;
+﻿using DER.WebApp.Domain.Models;
+using DER.WebApp.Infra.DAL;
+using DER.WebApp.Infra.DAO;
+using DER.WebApp.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,7 +14,7 @@ namespace DER.WebApp.Domain.Business
         private DerContext context;
         private TiposPistaLevantamentoDAO tipospistalevantamentoDAO;
 
-        public InadimplentesBLL()
+        public TiposPistaLevantamentoBLL()
         {
             context = new DerContext();
             tipospistalevantamentoDAO = new TiposPistaLevantamentoDAO(context);
@@ -111,7 +115,7 @@ namespace DER.WebApp.Domain.Business
                 retorno.ptp_id = model.ptp_id;
                 retorno.rpt_data_criacao = model.rpt_data_criacao;
                 retorno.rpt_id_segmento = model.rpt_id_segmento;
-                retorno.rpt_dispositivo = model.rpt_dispositivo;
+                retorno.rpt_dispositivo = Convert.ToBoolean(model.rpt_dispositivo);
                 retorno.rpt_ext_geometria = model.rpt_ext_geometria;
 
                 return retorno;
@@ -122,7 +126,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private TiposPistaLevantamentoViewModel ViewModelToModel(TiposPistaLevantamento model)
+        private TiposPistaLevantamentoViewModel ModelToViewModel(TiposPistaLevantamento model)
         {
             try
             {
@@ -137,14 +141,14 @@ namespace DER.WebApp.Domain.Business
                 retorno.ptp_id = model.ptp_id;
                 retorno.rpt_data_criacao = model.rpt_data_criacao;
                 retorno.rpt_id_segmento = model.rpt_id_segmento;
-                retorno.rpt_dispositivo = model.rpt_dispositivo;
+                retorno.rpt_dispositivo = model.rpt_dispositivo.ToString();
                 retorno.rpt_ext_geometria = model.rpt_ext_geometria;
 
                 return retorno;
             }
             catch (Exception e)
             {
-                return new TiposPistaLevantamento();
+                return new TiposPistaLevantamentoViewModel();
             }
         }
     }

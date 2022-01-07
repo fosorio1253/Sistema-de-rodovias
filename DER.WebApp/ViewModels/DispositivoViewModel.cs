@@ -27,8 +27,8 @@ namespace DER.WebApp.ViewModels
         public string dis_transf_mun { get; set; }
         public string dis_observacao { get; set; }
         public string dis_subtrecho { get; set; }
-        public datetime dis_ano_implantacao { get; set; }
-        public datetime dis_data_atualizacao { get; set; }
+        public DateTime? dis_ano_implantacao { get; set; }
+        public DateTime? dis_data_atualizacao { get; set; }
         public string nome { get; set; }
     }
 }

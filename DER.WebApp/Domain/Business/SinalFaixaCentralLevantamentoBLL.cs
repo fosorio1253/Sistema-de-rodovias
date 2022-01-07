@@ -1,4 +1,8 @@
-﻿using System;
+﻿using DER.WebApp.Domain.Models;
+using DER.WebApp.Infra.DAL;
+using DER.WebApp.Infra.DAO;
+using DER.WebApp.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,7 +14,7 @@ namespace DER.WebApp.Domain.Business
         private DerContext context;
         private SinalFaixaCentralLevantamentoDAO sinalfaixacentrallevantamentoDAO;
 
-        public InadimplentesBLL()
+        public SinalFaixaCentralLevantamentoBLL()
         {
             context = new DerContext();
             sinalfaixacentrallevantamentoDAO = new SinalFaixaCentralLevantamentoDAO(context);
@@ -112,7 +116,7 @@ namespace DER.WebApp.Domain.Business
                 retorno.sfc_largura_faixa = model.sfc_largura_faixa;
                 retorno.sfc_data_criacao = model.sfc_data_criacao;
                 retorno.sfc_id_segmento = model.sfc_id_segmento;
-                retorno.sfc_dispositivo = model.sfc_dispositivo;
+                retorno.sfc_dispositivo = Convert.ToBoolean(model.sfc_dispositivo);
                 retorno.sfc_ext_geometria = model.sfc_ext_geometria;
 
                 return retorno;
@@ -123,7 +127,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private SinalFaixaCentralLevantamentoViewModel ViewModelToModel(SinalFaixaCentralLevantamento model)
+        private SinalFaixaCentralLevantamentoViewModel ModelToViewModel(SinalFaixaCentralLevantamento model)
         {
             try
             {
@@ -139,14 +143,14 @@ namespace DER.WebApp.Domain.Business
                 retorno.sfc_largura_faixa = model.sfc_largura_faixa;
                 retorno.sfc_data_criacao = model.sfc_data_criacao;
                 retorno.sfc_id_segmento = model.sfc_id_segmento;
-                retorno.sfc_dispositivo = model.sfc_dispositivo;
+                retorno.sfc_dispositivo = model.sfc_dispositivo.ToString();
                 retorno.sfc_ext_geometria = model.sfc_ext_geometria;
 
                 return retorno;
             }
             catch (Exception e)
             {
-                return new SinalFaixaCentralLevantamento();
+                return new SinalFaixaCentralLevantamentoViewModel();
             }
         }
     }

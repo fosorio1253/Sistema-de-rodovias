@@ -16,9 +16,9 @@ namespace DER.WebApp.ViewModels
         public double ace_latitude { get; set; }
         public double ace_longitude { get; set; }
         public string ace_foto { get; set; }
-        public datetime ace_data_levantamento { get; set; }
+        public DateTime? ace_data_levantamento { get; set; }
         public int stp_id { get; set; }
         public double ace_largura { get; set; }
-        public datetime ace_data_criacao { get; set; }
+        public DateTime? ace_data_criacao { get; set; }
     }
 }

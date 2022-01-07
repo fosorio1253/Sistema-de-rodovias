@@ -79,7 +79,6 @@ namespace DER.WebApp.Infra.DAO
                         command.CommandType = CommandType.StoredProcedure;
                         conn.Open();
                         command.Parameters.Add(new SqlParameter("@terceira_faixa_levantamento_id", domain.terceira_faixa_levantamento_id));
-                        command.Parameters.Add(new SqlParameter("@1", domain.1));
                         command.Parameters.Add(new SqlParameter("@tfx_km_inicial", domain.tfx_km_inicial));
                         command.Parameters.Add(new SqlParameter("@tfx_km_final", domain.tfx_km_final));
                         command.Parameters.Add(new SqlParameter("@sen_id", domain.sen_id));
@@ -116,7 +115,6 @@ namespace DER.WebApp.Infra.DAO
                         command.CommandType = CommandType.StoredProcedure;
                         conn.Open();
                         command.Parameters.Add(new SqlParameter("@terceira_faixa_levantamento_id", domain.terceira_faixa_levantamento_id));
-                        command.Parameters.Add(new SqlParameter("@1", domain.1));
                         command.Parameters.Add(new SqlParameter("@tfx_km_inicial", domain.tfx_km_inicial));
                         command.Parameters.Add(new SqlParameter("@tfx_km_final", domain.tfx_km_final));
                         command.Parameters.Add(new SqlParameter("@sen_id", domain.sen_id));

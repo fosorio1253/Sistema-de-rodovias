@@ -1,16 +1,20 @@
-﻿using System;
+﻿using DER.WebApp.Domain.Models;
+using DER.WebApp.Infra.DAL;
+using DER.WebApp.Infra.DAO;
+using DER.WebApp.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
 namespace DER.WebApp.Domain.Business
 {
-    public class TipoInteressadoBLL
+    public class TipoInteressadosBLL
     {
         private DerContext context;
         private TipoInteressadoDAO tipointeressadoDAO;
 
-        public InadimplentesBLL()
+        public TipoInteressadosBLL()
         {
             context = new DerContext();
             tipointeressadoDAO = new TipoInteressadoDAO(context);
@@ -113,7 +117,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private TipoInteressadoViewModel ViewModelToModel(TipoInteressado model)
+        private TipoInteressadoViewModel ModelToViewModel(TipoInteressado model)
         {
             try
             {
@@ -126,7 +130,7 @@ namespace DER.WebApp.Domain.Business
             }
             catch (Exception e)
             {
-                return new TipoInteressado();
+                return new TipoInteressadoViewModel();
             }
         }
     }

@@ -410,7 +410,7 @@
     <Compile Include="Domain\Models\DominioGradacoes.cs" />
     <Compile Include="Domain\Models\DominioHidraulicaPosicoes.cs" />
     <Compile Include="Domain\Models\DominioInstalacoesOperacionaisTipos.cs" />
-    <Compile Include="Domain\Models\DominioJurisdições.cs" />
+    <Compile Include="Domain\Models\DominioJurisdicoes.cs" />
     <Compile Include="Domain\Models\DominioMateriais.cs" />
     <Compile Include="Domain\Models\DominioOaeTipos.cs" />
     <Compile Include="Domain\Models\DominioPassivosAmbientaisTipos.cs" />
@@ -497,6 +497,7 @@
     <Compile Include="Domain\Models\Enum\TipoArquivoEnum.cs" />
     <Compile Include="Domain\Models\Enum\TipoInteressadoEnum.cs" />
     <Compile Include="Domain\Models\TipoDocumento.cs" />
+    <Compile Include="Domain\Models\TipoOcupacao.cs" />
     <Compile Include="Domain\Models\TiposPistaLevantamento.cs" />
     <Compile Include="Domain\Models\TuneisLevantamento.cs" />
     <Compile Include="Domain\Models\Ua.cs" />
@@ -633,9 +634,10 @@
     <Compile Include="Infra\DAO\ResidenciaConservacaoDAO.cs" />
     <Compile Include="Infra\DAO\RocadasLevantamentoDAO.cs" />
     <Compile Include="Infra\DAO\RodoviaDAO.cs" />
+    <Compile Include="Infra\DAO\RodoviasDAO.cs" />
     <Compile Include="Infra\DAO\SegurancaBordoLevantamentoDAO.cs" />
     <Compile Include="Infra\DAO\SegurancaCanteiroLevantamentoDAO.cs" />
-    <Compile Include="Infra\DAO\SegurancaGuardaCorpoEvantamentoDAO.cs" />
+    <Compile Include="Infra\DAO\SegurancaGuardaCorpoLevantamentoDAO.cs" />
     <Compile Include="Infra\DAO\SinalFaixaBordoLevantamentoDAO.cs" />
     <Compile Include="Infra\DAO\SinalFaixaCentralLevantamentoDAO.cs" />
     <Compile Include="Infra\DAO\StatusAprovacaoDAO.cs" />
@@ -803,7 +805,7 @@
     <Compile Include="ViewModels\RodoviaViewModel.cs" />
     <Compile Include="ViewModels\SegurancaBordoLevantamentoViewModel.cs" />
     <Compile Include="ViewModels\SegurancaCanteiroLevantamentoViewModel.cs" />
-    <Compile Include="ViewModels\SegurancaGuardaCorpoEvantamentoViewModel.cs" />
+    <Compile Include="ViewModels\SegurancaGuardaCorpoLevantamentoViewModel.cs" />
     <Compile Include="ViewModels\SinalFaixaBordoLevantamentoViewModel.cs" />
     <Compile Include="ViewModels\SinalFaixaCentralLevantamentoViewModel.cs" />
     <Compile Include="ViewModels\StatusOcorrenciaViewModel.cs" />
@@ -1180,6 +1182,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Arquivos\" />
+    <Folder Include="Migrations\" />
     <Folder Include="Views\Job\" />
   </ItemGroup>
   <ItemGroup>
@@ -1191,9 +1194,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Infra\Migrations\202012111941497_LogUsuario_DadosMestres.resx">
       <DependentUpon>202012111941497_LogUsuario_DadosMestres.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202101121852310_202101121552_LogTeste.resx">
-      <DependentUpon>202101121852310_202101121552_LogTeste.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

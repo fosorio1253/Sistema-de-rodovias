@@ -1,4 +1,8 @@
-﻿using System;
+﻿using DER.WebApp.Domain.Models;
+using DER.WebApp.Infra.DAL;
+using DER.WebApp.Infra.DAO;
+using DER.WebApp.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,7 +14,7 @@ namespace DER.WebApp.Domain.Business
         private DerContext context;
         private SegurancaCanteiroLevantamentoDAO segurancacanteirolevantamentoDAO;
 
-        public InadimplentesBLL()
+        public SegurancaCanteiroLevantamentoBLL()
         {
             context = new DerContext();
             segurancacanteirolevantamentoDAO = new SegurancaCanteiroLevantamentoDAO(context);
@@ -111,7 +115,7 @@ namespace DER.WebApp.Domain.Business
                 retorno.est_id = model.est_id;
                 retorno.scc_data_criacao = model.scc_data_criacao;
                 retorno.scc_id_segmento = model.scc_id_segmento;
-                retorno.scc_dispositivo = model.scc_dispositivo;
+                retorno.scc_dispositivo = Convert.ToBoolean(model.scc_dispositivo);
                 retorno.scc_ext_geometria = model.scc_ext_geometria;
 
                 return retorno;
@@ -122,7 +126,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private SegurancaCanteiroLevantamentoViewModel ViewModelToModel(SegurancaCanteiroLevantamento model)
+        private SegurancaCanteiroLevantamentoViewModel ModelToViewModel(SegurancaCanteiroLevantamento model)
         {
             try
             {
@@ -137,14 +141,14 @@ namespace DER.WebApp.Domain.Business
                 retorno.est_id = model.est_id;
                 retorno.scc_data_criacao = model.scc_data_criacao;
                 retorno.scc_id_segmento = model.scc_id_segmento;
-                retorno.scc_dispositivo = model.scc_dispositivo;
+                retorno.scc_dispositivo = model.scc_dispositivo.ToString();
                 retorno.scc_ext_geometria = model.scc_ext_geometria;
 
                 return retorno;
             }
             catch (Exception e)
             {
-                return new SegurancaCanteiroLevantamento();
+                return new SegurancaCanteiroLevantamentoViewModel();
             }
         }
     }

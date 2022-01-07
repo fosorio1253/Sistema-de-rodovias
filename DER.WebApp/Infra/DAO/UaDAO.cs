@@ -1,4 +1,5 @@
-﻿using DER.WebApp.Helper;
+﻿using DER.WebApp.Domain.Models;
+using DER.WebApp.Helper;
 using DER.WebApp.Infra.DAL;
 using System;
 using System.Collections.Generic;

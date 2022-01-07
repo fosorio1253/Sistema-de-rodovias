@@ -1,4 +1,8 @@
-﻿using System;
+﻿using DER.WebApp.Domain.Models;
+using DER.WebApp.Infra.DAL;
+using DER.WebApp.Infra.DAO;
+using DER.WebApp.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,7 +14,7 @@ namespace DER.WebApp.Domain.Business
         private DerContext context;
         private DominioResidenciasDAO dominioresidenciasDAO;
 
-        public InadimplentesBLL()
+        public DominioResidenciasBLL()
         {
             context = new DerContext();
             dominioresidenciasDAO = new DominioResidenciasDAO(context);
@@ -127,7 +131,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private DominioResidenciasViewModel ViewModelToModel(DominioResidencias model)
+        private DominioResidenciasViewModel ModelToViewModel(DominioResidencias model)
         {
             try
             {
@@ -154,7 +158,7 @@ namespace DER.WebApp.Domain.Business
             }
             catch (Exception e)
             {
-                return new DominioResidencias();
+                return new DominioResidenciasViewModel();
             }
         }
     }

@@ -1,15 +1,21 @@
-﻿using System;
+﻿using DER.WebApp.Domain.Models;
+using DER.WebApp.Helper;
+using DER.WebApp.Infra.DAL;
+using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 
 namespace DER.WebApp.Infra.DAO
 {
-    public class RodoviaDAO : BaseDAO<Rodovia>
+    public class RodoviasDAO : BaseDAO<Rodovia>
     {
         Logger logger;
 
-        public RodoviaDAO(DerContext context) : base(context)
+        public RodoviasDAO(DerContext context) : base(context)
         {
             logger = new Logger("Rodovia", context);
         }
@@ -36,8 +42,8 @@ namespace DER.WebApp.Infra.DAO
                         {
                             var retorno = new Rodovia();
                             retorno.rodovia_id = result["rodovia_id"] is DBNull ? 0 : Convert.ToInt32(result["rodovia_id"]);
-                            retorno.rod_codigo = result["rod_codigo"] is DBNull ? string.Empty : result["rod_codigo").ToString();
-                            retorno.Nome = result["Nome"] is DBNull ? string.Empty : result["Nome").ToString();
+                            retorno.rod_codigo = result["rod_codigo"] is DBNull ? string.Empty : result["rod_codigo"].ToString();
+                            retorno.Nome = result["Nome"] is DBNull ? string.Empty : result["Nome"].ToString();
                             retorno.rod_id = result["rod_id"] is DBNull ? 0 : Convert.ToInt32(result["rod_id"]);
                             retorno.jur_id_origem = result["jur_id_origem"] is DBNull ? 0 : Convert.ToInt32(result["jur_id_origem"]);
                             retorno.rte_id = result["rte_id"] is DBNull ? 0 : Convert.ToInt32(result["rte_id"]);
@@ -151,8 +157,8 @@ namespace DER.WebApp.Infra.DAO
                         while (result.Read())
                         {
                             retorno.rodovia_id = result["rodovia_id"] is DBNull ? 0 : Convert.ToInt32(result["rodovia_id"]);
-                            retorno.rod_codigo = result["rod_codigo"] is DBNull ? string.Empty : result["rod_codigo").ToString();
-                            retorno.Nome = result["Nome"] is DBNull ? string.Empty : result["Nome").ToString();
+                            retorno.rod_codigo = result["rod_codigo"] is DBNull ? string.Empty : result["rod_codigo"].ToString();
+                            retorno.Nome = result["Nome"] is DBNull ? string.Empty : result["Nome"].ToString();
                             retorno.rod_id = result["rod_id"] is DBNull ? 0 : Convert.ToInt32(result["rod_id"]);
                             retorno.jur_id_origem = result["jur_id_origem"] is DBNull ? 0 : Convert.ToInt32(result["jur_id_origem"]);
                             retorno.rte_id = result["rte_id"] is DBNull ? 0 : Convert.ToInt32(result["rte_id"]);

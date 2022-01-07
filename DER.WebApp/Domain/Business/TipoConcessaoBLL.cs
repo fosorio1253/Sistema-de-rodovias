@@ -1,7 +1,10 @@
-﻿using System;
+﻿using DER.WebApp.Domain.Models;
+using DER.WebApp.Infra.DAL;
+using DER.WebApp.Infra.DAO;
+using DER.WebApp.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 
 namespace DER.WebApp.Domain.Business
 {
@@ -10,7 +13,7 @@ namespace DER.WebApp.Domain.Business
         private DerContext context;
         private TipoConcessaoDAO tipoconcessaoDAO;
 
-        public InadimplentesBLL()
+        public TipoConcessaoBLL()
         {
             context = new DerContext();
             tipoconcessaoDAO = new TipoConcessaoDAO(context);
@@ -105,7 +108,6 @@ namespace DER.WebApp.Domain.Business
                 retorno.Descricao = model.Descricao;
                 retorno.Documentos = model.Documentos;
                 retorno.profundidade_minima = model.profundidade_minima;
-                retorno. = model.;
 
                 return retorno;
             }
@@ -115,7 +117,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private TipoConcessaoViewModel ViewModelToModel(TipoConcessao model)
+        private TipoConcessaoViewModel ModelToViewModel(TipoConcessao model)
         {
             try
             {
@@ -124,13 +126,12 @@ namespace DER.WebApp.Domain.Business
                 retorno.Descricao = model.Descricao;
                 retorno.Documentos = model.Documentos;
                 retorno.profundidade_minima = model.profundidade_minima;
-                retorno. = model.;
 
                 return retorno;
             }
             catch (Exception e)
             {
-                return new TipoConcessao();
+                return new TipoConcessaoViewModel();
             }
         }
     }

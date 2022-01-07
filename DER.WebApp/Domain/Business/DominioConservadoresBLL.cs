@@ -1,6 +1,7 @@
 ﻿using DER.WebApp.Domain.Models;
 using DER.WebApp.Infra.DAL;
 using DER.WebApp.Infra.DAO;
+using DER.WebApp.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace DER.WebApp.Domain.Business
         private DerContext context;
         private DominioConservadoresDAO dominioconservadoresDAO;
 
-        public InadimplentesBLL()
+        public DominioConservadoresBLL()
         {
             context = new DerContext();
             dominioconservadoresDAO = new DominioConservadoresDAO(context);
@@ -115,7 +116,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private DominioConservadoresViewModel ViewModelToModel(DominioConservadores model)
+        private DominioConservadoresViewModel ModelToViewModel(DominioConservadores model)
         {
             try
             {
@@ -127,7 +128,7 @@ namespace DER.WebApp.Domain.Business
             }
             catch (Exception e)
             {
-                return new DominioConservadores();
+                return new DominioConservadoresViewModel();
             }
         }
     }

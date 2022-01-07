@@ -49,9 +49,9 @@ namespace DER.WebApp.Infra.DAO
                             retorno.tfc_data_levantamento = result["tfc_data_levantamento"] is DBNull ? dtnull : Convert.ToDateTime(result["tfc_data_levantamento"]);
                             retorno.tfc_extensao = result["tfc_extensao"] is DBNull ? 0 : Convert.ToDouble(result["tfc_extensao"]);
                             retorno.sht_id = result["sht_id"] is DBNull ? 0 : Convert.ToInt32(result["sht_id"]);
-                            retorno.tfc_quantidade = result["tfc_quantidade"] is DBNull ? 0 : Convert.ToDouble(result["tfc_quantidade"]);
+                            retorno.tfc_quantidade = result["tfc_quantidade"] is DBNull ? 0 : Convert.ToInt32(result["tfc_quantidade"]);
                             retorno.tfc_data_criacao = result["tfc_data_criacao"] is DBNull ? dtnull : Convert.ToDateTime(result["tfc_data_criacao"]);
-                            retorno.tfc_id_segmento = result["tfc_id_segmento"] is DBNull ? 0 : Convert.ToDouble(result["tfc_id_segmento"]);
+                            retorno.tfc_id_segmento = result["tfc_id_segmento"] is DBNull ? 0 : Convert.ToInt32(result["tfc_id_segmento"]);
                             retorno.tfc_dispositivo = result["tfc_dispositivo"] is DBNull ? false : false;// verificar fosorio
                             retorno.tfc_ext_geometria = result["tfc_ext_geometria"] is DBNull ? 0 : Convert.ToDouble(result["tfc_ext_geometria"]);
 
@@ -173,9 +173,9 @@ namespace DER.WebApp.Infra.DAO
                             retorno.tfc_data_levantamento = result["tfc_data_levantamento"] is DBNull ? dtnull : Convert.ToDateTime(result["tfc_data_levantamento"]);
                             retorno.tfc_extensao = result["tfc_extensao"] is DBNull ? 0 : Convert.ToDouble(result["tfc_extensao"]);
                             retorno.sht_id = result["sht_id"] is DBNull ? 0 : Convert.ToInt32(result["sht_id"]);
-                            retorno.tfc_quantidade = result["tfc_quantidade"] is DBNull ? 0 : Convert.ToDouble(result["tfc_quantidade"]);
+                            retorno.tfc_quantidade = result["tfc_quantidade"] is DBNull ? 0 : Convert.ToInt32(result["tfc_quantidade"]);
                             retorno.tfc_data_criacao = result["tfc_data_criacao"] is DBNull ? dtnull : Convert.ToDateTime(result["tfc_data_criacao"]);
-                            retorno.tfc_id_segmento = result["tfc_id_segmento"] is DBNull ? 0 : Convert.ToDouble(result["tfc_id_segmento"]);
+                            retorno.tfc_id_segmento = result["tfc_id_segmento"] is DBNull ? 0 : Convert.ToInt32(result["tfc_id_segmento"]);
                             retorno.tfc_dispositivo = result["tfc_dispositivo"] is DBNull ? false : false;// verificar fosorio
                             retorno.tfc_ext_geometria = result["tfc_ext_geometria"] is DBNull ? 0 : Convert.ToDouble(result["tfc_ext_geometria"]);
                         }

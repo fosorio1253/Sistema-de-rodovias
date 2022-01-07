@@ -1,4 +1,8 @@
-﻿using System;
+﻿using DER.WebApp.Domain.Models;
+using DER.WebApp.Infra.DAL;
+using DER.WebApp.Infra.DAO;
+using DER.WebApp.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,7 +14,7 @@ namespace DER.WebApp.Domain.Business
         private DerContext context;
         private DominioGradacoesDAO dominiogradacoesDAO;
 
-        public InadimplentesBLL()
+        public DominioGradacoesBLL()
         {
             context = new DerContext();
             dominiogradacoesDAO = new DominioGradacoesDAO(context);
@@ -113,7 +117,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private DominioGradacoesViewModel ViewModelToModel(DominioGradacoes model)
+        private DominioGradacoesViewModel ModelToViewModel(DominioGradacoes model)
         {
             try
             {
@@ -126,7 +130,7 @@ namespace DER.WebApp.Domain.Business
             }
             catch (Exception e)
             {
-                return new DominioGradacoes();
+                return new DominioGradacoesViewModel();
             }
         }
     }

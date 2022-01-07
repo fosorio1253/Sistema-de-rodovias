@@ -1,7 +1,10 @@
-﻿using System;
+﻿using DER.WebApp.Domain.Models;
+using DER.WebApp.Infra.DAL;
+using DER.WebApp.Infra.DAO;
+using DER.WebApp.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 
 namespace DER.WebApp.Domain.Business
 {
@@ -10,7 +13,7 @@ namespace DER.WebApp.Domain.Business
         private DerContext context;
         private TerceiraFaixaLevantamentoDAO terceirafaixalevantamentoDAO;
 
-        public InadimplentesBLL()
+        public TerceiraFaixaLevantamentoBLL()
         {
             context = new DerContext();
             terceirafaixalevantamentoDAO = new TerceiraFaixaLevantamentoDAO(context);
@@ -102,7 +105,6 @@ namespace DER.WebApp.Domain.Business
             {
                 var retorno = new TerceiraFaixaLevantamento();
                 retorno.terceira_faixa_levantamento_id = model.terceira_faixa_levantamento_id;
-                retorno.1 = model.1;
                 retorno.tfx_km_inicial = model.tfx_km_inicial;
                 retorno.tfx_km_final = model.tfx_km_final;
                 retorno.sen_id = model.sen_id;
@@ -111,7 +113,7 @@ namespace DER.WebApp.Domain.Business
                 retorno.tfx_extensao = model.tfx_extensao;
                 retorno.tfx_data_criacao = model.tfx_data_criacao;
                 retorno.tfx_id_segmento = model.tfx_id_segmento;
-                retorno.tfx_dispositivo = model.tfx_dispositivo;
+                retorno.tfx_dispositivo = model.tfx_dispositivo.Equals("true")? true : false;
                 retorno.tfx_ext_geometria = model.tfx_ext_geometria;
 
                 return retorno;
@@ -122,13 +124,12 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private TerceiraFaixaLevantamentoViewModel ViewModelToModel(TerceiraFaixaLevantamento model)
+        private TerceiraFaixaLevantamentoViewModel ModelToViewModel(TerceiraFaixaLevantamento model)
         {
             try
             {
                 var retorno = new TerceiraFaixaLevantamentoViewModel();
                 retorno.terceira_faixa_levantamento_id = model.terceira_faixa_levantamento_id;
-                retorno.1 = model.1;
                 retorno.tfx_km_inicial = model.tfx_km_inicial;
                 retorno.tfx_km_final = model.tfx_km_final;
                 retorno.sen_id = model.sen_id;
@@ -137,14 +138,14 @@ namespace DER.WebApp.Domain.Business
                 retorno.tfx_extensao = model.tfx_extensao;
                 retorno.tfx_data_criacao = model.tfx_data_criacao;
                 retorno.tfx_id_segmento = model.tfx_id_segmento;
-                retorno.tfx_dispositivo = model.tfx_dispositivo;
+                retorno.tfx_dispositivo = model.tfx_dispositivo.ToString();
                 retorno.tfx_ext_geometria = model.tfx_ext_geometria;
 
                 return retorno;
             }
             catch (Exception e)
             {
-                return new TerceiraFaixaLevantamento();
+                return new TerceiraFaixaLevantamentoViewModel();
             }
         }
     }

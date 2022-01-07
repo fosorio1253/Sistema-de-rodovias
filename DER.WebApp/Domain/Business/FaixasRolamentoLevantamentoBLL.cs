@@ -1,4 +1,8 @@
-﻿using System;
+﻿using DER.WebApp.Domain.Models;
+using DER.WebApp.Infra.DAL;
+using DER.WebApp.Infra.DAO;
+using DER.WebApp.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,7 +14,7 @@ namespace DER.WebApp.Domain.Business
         private DerContext context;
         private FaixasRolamentoLevantamentoDAO faixasrolamentolevantamentoDAO;
 
-        public InadimplentesBLL()
+        public FaixasRolamentoLevantamentoBLL()
         {
             context = new DerContext();
             faixasrolamentolevantamentoDAO = new FaixasRolamentoLevantamentoDAO(context);
@@ -108,10 +112,10 @@ namespace DER.WebApp.Domain.Business
                 retorno.reg_id = model.reg_id;
                 retorno.frl_data_levantamento = model.frl_data_levantamento;
                 retorno.frl_extensao = model.frl_extensao;
-                retorno.frl_num_faixas = model.frl_num_faixas;
+                retorno.frl_num_faixas = Convert.ToInt32(model.frl_num_faixas);
                 retorno.frl_data_criacao = model.frl_data_criacao;
                 retorno.frl_id_segmento = model.frl_id_segmento;
-                retorno.frl_dispositivo = model.frl_dispositivo;
+                retorno.frl_dispositivo = Convert.ToBoolean(model.frl_dispositivo);
                 retorno.frl_ext_geometria = model.frl_ext_geometria;
 
                 return retorno;
@@ -122,7 +126,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private FaixasRolamentoLevantamentoViewModel ViewModelToModel(FaixasRolamentoLevantamento model)
+        private FaixasRolamentoLevantamentoViewModel ModelToViewModel(FaixasRolamentoLevantamento model)
         {
             try
             {
@@ -137,14 +141,14 @@ namespace DER.WebApp.Domain.Business
                 retorno.frl_num_faixas = model.frl_num_faixas;
                 retorno.frl_data_criacao = model.frl_data_criacao;
                 retorno.frl_id_segmento = model.frl_id_segmento;
-                retorno.frl_dispositivo = model.frl_dispositivo;
+                retorno.frl_dispositivo = model.frl_dispositivo.ToString();
                 retorno.frl_ext_geometria = model.frl_ext_geometria;
 
                 return retorno;
             }
             catch (Exception e)
             {
-                return new FaixasRolamentoLevantamento();
+                return new FaixasRolamentoLevantamentoViewModel();
             }
         }
     }

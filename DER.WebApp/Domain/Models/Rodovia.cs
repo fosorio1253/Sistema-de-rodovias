@@ -2,6 +2,9 @@
 {
     public class Rodovia
     {
+        public int rodovia_id { get; set; }
+        public string Nome { get; set; }
+
         public int rod_id { get; set; }
         public string rod_codigo { get; set; }
         public int jur_id_origem { get; set; }

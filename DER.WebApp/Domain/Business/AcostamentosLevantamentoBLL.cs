@@ -1,6 +1,7 @@
 ﻿using DER.WebApp.Domain.Models;
 using DER.WebApp.Infra.DAL;
 using DER.WebApp.Infra.DAO;
+using DER.WebApp.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace DER.WebApp.Domain.Business
         private DerContext context;
         private AcostamentosLevantamentoDAO acostamentoslevantamentoDAO;
 
-        public InadimplentesBLL()
+        public AcostamentosLevantamentoBLL()
         {
             context = new DerContext();
             acostamentoslevantamentoDAO = new AcostamentosLevantamentoDAO(context);
@@ -115,7 +116,7 @@ namespace DER.WebApp.Domain.Business
                 retorno.aco_largura = model.aco_largura;
                 retorno.aco_data_criacao = model.aco_data_criacao;
                 retorno.aco_id_segmento = model.aco_id_segmento;
-                retorno.aco_dispositivo = model.aco_dispositivo;
+                retorno.aco_dispositivo = Convert.ToBoolean(model.aco_dispositivo);
                 retorno.aco_ext_geometria = model.aco_ext_geometria;
 
                 return retorno;
@@ -126,7 +127,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private AcostamentosLevantamentoViewModel ViewModelToModel(AcostamentosLevantamento model)
+        private AcostamentosLevantamentoViewModel ModelToViewModel(AcostamentosLevantamento model)
         {
             try
             {
@@ -142,14 +143,14 @@ namespace DER.WebApp.Domain.Business
                 retorno.aco_largura = model.aco_largura;
                 retorno.aco_data_criacao = model.aco_data_criacao;
                 retorno.aco_id_segmento = model.aco_id_segmento;
-                retorno.aco_dispositivo = model.aco_dispositivo;
+                retorno.aco_dispositivo = model.aco_dispositivo.ToString();
                 retorno.aco_ext_geometria = model.aco_ext_geometria;
 
                 return retorno;
             }
             catch (Exception e)
             {
-                return new AcostamentosLevantamento();
+                return new AcostamentosLevantamentoViewModel();
             }
         }
     }

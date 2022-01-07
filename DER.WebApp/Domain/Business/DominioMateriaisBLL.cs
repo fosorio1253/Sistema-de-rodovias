@@ -1,4 +1,8 @@
-﻿using System;
+﻿using DER.WebApp.Domain.Models;
+using DER.WebApp.Infra.DAL;
+using DER.WebApp.Infra.DAO;
+using DER.WebApp.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,7 +14,7 @@ namespace DER.WebApp.Domain.Business
         private DerContext context;
         private DominioMateriaisDAO dominiomateriaisDAO;
 
-        public InadimplentesBLL()
+        public DominioMateriaisBLL()
         {
             context = new DerContext();
             dominiomateriaisDAO = new DominioMateriaisDAO(context);
@@ -112,7 +116,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private DominioMateriaisViewModel ViewModelToModel(DominioMateriais model)
+        private DominioMateriaisViewModel ModelToViewModel(DominioMateriais model)
         {
             try
             {
@@ -124,7 +128,7 @@ namespace DER.WebApp.Domain.Business
             }
             catch (Exception e)
             {
-                return new DominioMateriais();
+                return new DominioMateriaisViewModel();
             }
         }
     }

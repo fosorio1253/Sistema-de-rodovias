@@ -1,10 +1,10 @@
 ﻿using DER.WebApp.Domain.Models;
 using DER.WebApp.Infra.DAL;
 using DER.WebApp.Infra.DAO;
+using DER.WebApp.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 
 namespace DER.WebApp.Domain.Business
 {
@@ -13,7 +13,7 @@ namespace DER.WebApp.Domain.Business
         private DerContext context;
         private DominioArquivoTiposDAO dominioarquivotiposDAO;
 
-        public InadimplentesBLL()
+        public DominioArquivoTiposBLL()
         {
             context = new DerContext();
             dominioarquivotiposDAO = new DominioArquivoTiposDAO(context);
@@ -105,7 +105,6 @@ namespace DER.WebApp.Domain.Business
             {
                 var retorno = new DominioArquivoTipos();
                 retorno.arq_id = model.arq_id;
-                retorno.1 = model.1;
                 retorno.arq_codigo = model.arq_codigo;
                 retorno.arq_descricao = model.arq_descricao;
 
@@ -117,13 +116,12 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private DominioArquivoTiposViewModel ViewModelToModel(DominioArquivoTipos model)
+        private DominioArquivoTiposViewModel ModelToViewModel(DominioArquivoTipos model)
         {
             try
             {
                 var retorno = new DominioArquivoTiposViewModel();
                 retorno.arq_id = model.arq_id;
-                retorno.1 = model.1;
                 retorno.arq_codigo = model.arq_codigo;
                 retorno.arq_descricao = model.arq_descricao;
 
@@ -131,7 +129,7 @@ namespace DER.WebApp.Domain.Business
             }
             catch (Exception e)
             {
-                return new DominioArquivoTipos();
+                return new DominioArquivoTiposViewModel();
             }
         }
     }

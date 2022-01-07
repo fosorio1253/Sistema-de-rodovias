@@ -42,7 +42,7 @@ namespace DER.WebApp.Infra.DAO
                         {
                             var retorno = new DominioConservadores();
                             retorno.res_id = result["res_id"] is DBNull ? 0 : Convert.ToInt32(result["res_id"]);
-                            retorno.res_codigo = result["res_codigo"] is DBNull ? string.Empty : result["res_codigo").ToString();
+                            retorno.res_codigo = result["res_codigo"] is DBNull ? string.Empty : result["res_codigo"].ToString();
 
                             lretorno.Add(retorno);
                         }

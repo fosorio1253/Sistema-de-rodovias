@@ -1,7 +1,10 @@
-﻿using System;
+﻿using DER.WebApp.Domain.Models;
+using DER.WebApp.Infra.DAL;
+using DER.WebApp.Infra.DAO;
+using DER.WebApp.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 
 namespace DER.WebApp.Domain.Business
 {
@@ -10,7 +13,7 @@ namespace DER.WebApp.Domain.Business
         private DerContext context;
         private TipoDocumentoInteressadoDAO tipodocumentointeressadoDAO;
 
-        public InadimplentesBLL()
+        public TipoDocumentoInteressadoBLL()
         {
             context = new DerContext();
             tipodocumentointeressadoDAO = new TipoDocumentoInteressadoDAO(context);
@@ -102,7 +105,7 @@ namespace DER.WebApp.Domain.Business
             {
                 var retorno = new TipoDocumentoInteressado();
                 retorno.tipo_documento_interessado_id = model.tipo_documento_interessado_id;
-                retorno.descri��o = model.descri��o;
+                retorno.descricao = model.descricao;
                 retorno.tipo_interessado = model.tipo_interessado;
 
                 return retorno;
@@ -113,20 +116,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private TipoDocumentoInteressadoViewModel ViewModelToModel(TipoDocumentoInteressado model)
+        private TipoDocumentoInteressadoViewModel ModelToViewModel(TipoDocumentoInteressado model)
         {
             try
             {
                 var retorno = new TipoDocumentoInteressadoViewModel();
                 retorno.tipo_documento_interessado_id = model.tipo_documento_interessado_id;
-                retorno.descri��o = model.descri��o;
+                retorno.descricao = model.descricao;
                 retorno.tipo_interessado = model.tipo_interessado;
 
                 return retorno;
             }
             catch (Exception e)
             {
-                return new TipoDocumentoInteressado();
+                return new TipoDocumentoInteressadoViewModel();
             }
         }
     }

@@ -35,7 +35,7 @@ namespace DER.WebApp.Controllers
         List<GestaoOcupacoesOrigemSolicitacaoViewModel> _ObtemOrigemSolicitacoes = new List<GestaoOcupacoesOrigemSolicitacaoViewModel>();
         List<GestaoOcupacoesSituacaoSolicitacaoViewModel> _ObtemSituacaoSolicitacoes = new List<GestaoOcupacoesSituacaoSolicitacaoViewModel>();
         List<GestaoOcupacoesSituacaoOcupacaoViewModel> _ObtemSituacaoOcupacoes = new List<GestaoOcupacoesSituacaoOcupacaoViewModel>();
-        List<RodoviaViewModel> _ObtemRodovias = new List<RodoviaViewModel>();
+        List<ViewModels.ProjetosMelhorias.RodoviaViewModel> _ObtemRodovias = new List<ViewModels.ProjetosMelhorias.RodoviaViewModel>();
         List<GestaoOcupacoesTipoImplantacaoViewModel> _ObtemTipoImplantacoes = new List<GestaoOcupacoesTipoImplantacaoViewModel>();
         List<GestaoOcupacoesTipoPassagemViewModel> _ObtemTipoPassagens = new List<GestaoOcupacoesTipoPassagemViewModel>();
         List<TipoOcupacaoViewModel> _ObtemTipoOcupacoes = new List<TipoOcupacaoViewModel>();
@@ -43,7 +43,7 @@ namespace DER.WebApp.Controllers
         List<TipoDeInterferenciaViewModel> _ObtemTipoDeInterferencias = new List<TipoDeInterferenciaViewModel>();
         List<GestaoOcupacoesMunicipioViewModel> _ObtemMunicipio = new List<GestaoOcupacoesMunicipioViewModel>();
         List<EstadoViewModel> _ObtemEstado = new List<EstadoViewModel>();
-        List<TipoInteressadoViewModel> _ObtemTipoInteressado = new List<TipoInteressadoViewModel>();
+        List<ViewModels.GestaoInteressados.TipoInteressadoViewModel> _ObtemTipoInteressado = new List<ViewModels.GestaoInteressados.TipoInteressadoViewModel>();
         List<NaturezaJuridicaViewModel> _ObtemNaturezaJuridica = new List<NaturezaJuridicaViewModel>();
         List<AreaViewModel> _ObtemAreas = new List<AreaViewModel>();
         string _DisponibilizarArquivoRegulamento = "";
@@ -780,12 +780,12 @@ namespace DER.WebApp.Controllers
             }
         }
 
-        private List<RodoviaViewModel> ObtemRodovia()
+        private List<ViewModels.ProjetosMelhorias.RodoviaViewModel> ObtemRodovia()
         {
             return rodoviaBLL.ObtemRodovia();
         }
 
-        private List<DispositivoViewModel> ObtemDispositivo()
+        private List<ViewModels.ProjetosMelhorias.DispositivoViewModel> ObtemDispositivo()
         {
             return dispositivoBLL.ObtemDispositivo();
         }
@@ -795,7 +795,7 @@ namespace DER.WebApp.Controllers
             return regionalBLL.ObtemRegionais();
         }
 
-        private List<TipoInteressadoViewModel> ObtemTipoInteressado()
+        private List<ViewModels.GestaoInteressados.TipoInteressadoViewModel> ObtemTipoInteressado()
         {
             return tipoInteressadoBLL.ObtemTipoInteressado();
         }
@@ -852,12 +852,12 @@ namespace DER.WebApp.Controllers
             return retorno;
         }
 
-        private List<RodoviaViewModel> ObtemRodovias()
+        private List<ViewModels.ProjetosMelhorias.RodoviaViewModel> ObtemRodovias()
         {
             return rodoviaBLL.ObtemRodovia();
         }
 
-        private List<DispositivoViewModel> ObtemDispositivos()
+        private List<ViewModels.ProjetosMelhorias.DispositivoViewModel> ObtemDispositivos()
         {
             return dispositivoBLL.ObtemDispositivo();
         }

@@ -1,10 +1,10 @@
 ﻿using DER.WebApp.Domain.Models;
 using DER.WebApp.Infra.DAL;
 using DER.WebApp.Infra.DAO;
+using DER.WebApp.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 
 namespace DER.WebApp.Domain.Business
 {
@@ -13,7 +13,7 @@ namespace DER.WebApp.Domain.Business
         private DerContext context;
         private ApiEdificacoesDAO apiedificacoesDAO;
 
-        public InadimplentesBLL()
+        public ApiEdificacoesBLL()
         {
             context = new DerContext();
             apiedificacoesDAO = new ApiEdificacoesDAO(context);
@@ -109,7 +109,6 @@ namespace DER.WebApp.Domain.Business
                 retorno.rtr_id = model.rtr_id;
                 retorno.edi_km = model.edi_km;
                 retorno.sen_id = model.sen_id;
-                retorno. = model.;
                 retorno.edi_latitude = model.edi_latitude;
                 retorno.edi_longitude = model.edi_longitude;
                 retorno.edi_foto = model.edi_foto;
@@ -125,7 +124,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private ApiEdificacoesViewModel ViewModelToModel(ApiEdificacoes model)
+        private ApiEdificacoesViewModel ModelToViewModel(ApiEdificacoes model)
         {
             try
             {
@@ -135,7 +134,6 @@ namespace DER.WebApp.Domain.Business
                 retorno.rtr_id = model.rtr_id;
                 retorno.edi_km = model.edi_km;
                 retorno.sen_id = model.sen_id;
-                retorno. = model.;
                 retorno.edi_latitude = model.edi_latitude;
                 retorno.edi_longitude = model.edi_longitude;
                 retorno.edi_foto = model.edi_foto;
@@ -147,7 +145,7 @@ namespace DER.WebApp.Domain.Business
             }
             catch (Exception e)
             {
-                return new ApiEdificacoes();
+                return new ApiEdificacoesViewModel();
             }
         }
     }

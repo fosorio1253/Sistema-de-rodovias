@@ -1,4 +1,8 @@
-﻿using System;
+﻿using DER.WebApp.Domain.Models;
+using DER.WebApp.Infra.DAL;
+using DER.WebApp.Infra.DAO;
+using DER.WebApp.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,7 +14,7 @@ namespace DER.WebApp.Domain.Business
         private DerContext context;
         private TuneisLevantamentoDAO tuneislevantamentoDAO;
 
-        public InadimplentesBLL()
+        public TuneisLevantamentoBLL()
         {
             context = new DerContext();
             tuneislevantamentoDAO = new TuneisLevantamentoDAO(context);
@@ -110,7 +114,7 @@ namespace DER.WebApp.Domain.Business
                 retorno.tun_extensao = model.tun_extensao;
                 retorno.tun_data_criacao = model.tun_data_criacao;
                 retorno.tun_id_segmento = model.tun_id_segmento;
-                retorno.tun_dispositivo = model.tun_dispositivo;
+                retorno.tun_dispositivo = Convert.ToBoolean(model.tun_dispositivo);
                 retorno.tun_ext_geometria = model.tun_ext_geometria;
 
                 return retorno;
@@ -121,7 +125,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private TuneisLevantamentoViewModel ViewModelToModel(TuneisLevantamento model)
+        private TuneisLevantamentoViewModel ModelToViewModel(TuneisLevantamento model)
         {
             try
             {
@@ -135,14 +139,14 @@ namespace DER.WebApp.Domain.Business
                 retorno.tun_extensao = model.tun_extensao;
                 retorno.tun_data_criacao = model.tun_data_criacao;
                 retorno.tun_id_segmento = model.tun_id_segmento;
-                retorno.tun_dispositivo = model.tun_dispositivo;
+                retorno.tun_dispositivo = model.tun_dispositivo.ToString();
                 retorno.tun_ext_geometria = model.tun_ext_geometria;
 
                 return retorno;
             }
             catch (Exception e)
             {
-                return new TuneisLevantamento();
+                return new TuneisLevantamentoViewModel();
             }
         }
     }

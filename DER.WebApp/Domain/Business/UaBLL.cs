@@ -1,4 +1,8 @@
-﻿using System;
+﻿using DER.WebApp.Domain.Models;
+using DER.WebApp.Infra.DAL;
+using DER.WebApp.Infra.DAO;
+using DER.WebApp.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,7 +14,7 @@ namespace DER.WebApp.Domain.Business
         private DerContext context;
         private UaDAO uaDAO;
 
-        public InadimplentesBLL()
+        public UaBLL()
         {
             context = new DerContext();
             uaDAO = new UaDAO(context);
@@ -115,7 +119,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private UaViewModel ViewModelToModel(Ua model)
+        private UaViewModel ModelToViewModel(Ua model)
         {
             try
             {
@@ -130,7 +134,7 @@ namespace DER.WebApp.Domain.Business
             }
             catch (Exception e)
             {
-                return new Ua();
+                return new UaViewModel();
             }
         }
     }

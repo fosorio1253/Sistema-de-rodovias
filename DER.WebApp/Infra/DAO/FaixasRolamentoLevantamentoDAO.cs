@@ -48,7 +48,7 @@ namespace DER.WebApp.Infra.DAO
                             retorno.reg_id = result["reg_id"] is DBNull ? 0 : Convert.ToInt32(result["reg_id"]);
                             retorno.frl_data_levantamento = result["frl_data_levantamento"] is DBNull ? dtnull : Convert.ToDateTime(result["frl_data_levantamento"]);
                             retorno.frl_extensao = result["frl_extensao"] is DBNull ? 0 : Convert.ToDouble(result["frl_extensao"]);
-                            retorno.frl_num_faixas = result["frl_num_faixas"] is DBNull ? 0 : Convert.ToDouble(result["frl_num_faixas"]);
+                            retorno.frl_num_faixas = result["frl_num_faixas"] is DBNull ? 0 : Convert.ToInt32(result["frl_num_faixas"]);
                             retorno.frl_data_criacao = result["frl_data_criacao"] is DBNull ? dtnull : Convert.ToDateTime(result["frl_data_criacao"]);
                             retorno.frl_id_segmento = result["frl_id_segmento"] is DBNull ? 0 : Convert.ToInt32(result["frl_id_segmento"]);
                             retorno.frl_dispositivo = result["frl_dispositivo"] is DBNull ? false : false;//verificar fosorio
@@ -169,7 +169,7 @@ namespace DER.WebApp.Infra.DAO
                             retorno.reg_id = result["reg_id"] is DBNull ? 0 : Convert.ToInt32(result["reg_id"]);
                             retorno.frl_data_levantamento = result["frl_data_levantamento"] is DBNull ? dtnull : Convert.ToDateTime(result["frl_data_levantamento"]);
                             retorno.frl_extensao = result["frl_extensao"] is DBNull ? 0 : Convert.ToDouble(result["frl_extensao"]);
-                            retorno.frl_num_faixas = result["frl_num_faixas"] is DBNull ? 0 : Convert.ToDouble(result["frl_num_faixas"]);
+                            retorno.frl_num_faixas = result["frl_num_faixas"] is DBNull ? 0 : Convert.ToInt32(result["frl_num_faixas"]);
                             retorno.frl_data_criacao = result["frl_data_criacao"] is DBNull ? dtnull : Convert.ToDateTime(result["frl_data_criacao"]);
                             retorno.frl_id_segmento = result["frl_id_segmento"] is DBNull ? 0 : Convert.ToInt32(result["frl_id_segmento"]);
                             retorno.frl_dispositivo = result["frl_dispositivo"] is DBNull ? false : false;//verificar fosorio

@@ -143,12 +143,12 @@ namespace DER.WebApp.Controllers
             return municipioBLL.ObtemMunicipio();
         }
 
-        private List<RodoviaViewModel> ObtemRodovia()
+        private List<ViewModels.ProjetosMelhorias.RodoviaViewModel> ObtemRodovia()
         {
             return rodoviaBLL.ObtemRodovia();
         }
 
-        private List<DispositivoViewModel> ObtemDispositivo()
+        private List<ViewModels.ProjetosMelhorias.DispositivoViewModel> ObtemDispositivo()
         {
             return dispositivoBLL.ObtemDispositivo();
         }

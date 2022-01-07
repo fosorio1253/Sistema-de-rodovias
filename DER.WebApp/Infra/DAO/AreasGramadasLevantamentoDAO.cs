@@ -80,7 +80,6 @@ namespace DER.WebApp.Infra.DAO
                         command.CommandType = CommandType.StoredProcedure;
                         conn.Open();
                         command.Parameters.Add(new SqlParameter("@rod_id", domain.rod_id));
-                        command.Parameters.Add(new SqlParameter("@1", domain.1));
                         command.Parameters.Add(new SqlParameter("@agr_km_inicial", domain.agr_km_inicial));
                         command.Parameters.Add(new SqlParameter("@agr_km_final", domain.agr_km_final));
                         command.Parameters.Add(new SqlParameter("@sen_id", domain.sen_id));
@@ -118,7 +117,6 @@ namespace DER.WebApp.Infra.DAO
                         command.CommandType = CommandType.StoredProcedure;
                         conn.Open();
                         command.Parameters.Add(new SqlParameter("@rod_id", domain.rod_id));
-                        command.Parameters.Add(new SqlParameter("@1", domain.1));
                         command.Parameters.Add(new SqlParameter("@agr_km_inicial", domain.agr_km_inicial));
                         command.Parameters.Add(new SqlParameter("@agr_km_final", domain.agr_km_final));
                         command.Parameters.Add(new SqlParameter("@sen_id", domain.sen_id));

@@ -1,6 +1,7 @@
 ﻿using DER.WebApp.Domain.Models;
 using DER.WebApp.Infra.DAL;
 using DER.WebApp.Infra.DAO;
+using DER.WebApp.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace DER.WebApp.Domain.Business
         private DerContext context;
         private CercasLevantamentoDAO cercaslevantamentoDAO;
 
-        public InadimplentesBLL()
+        public CercasLevantamentoBLL()
         {
             context = new DerContext();
             cercaslevantamentoDAO = new CercasLevantamentoDAO(context);
@@ -114,7 +115,7 @@ namespace DER.WebApp.Domain.Business
                 retorno.cer_distancia_eixo = model.cer_distancia_eixo;
                 retorno.cer_data_criacao = model.cer_data_criacao;
                 retorno.cer_id_segmento = model.cer_id_segmento;
-                retorno.cer_dispositivo = model.cer_dispositivo;
+                retorno.cer_dispositivo = Convert.ToBoolean(model.cer_dispositivo);
                 retorno.cer_ext_geometria = model.cer_ext_geometria;
 
                 return retorno;
@@ -125,7 +126,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private CercasLevantamentoViewModel ViewModelToModel(CercasLevantamento model)
+        private CercasLevantamentoViewModel ModelToViewModel(CercasLevantamento model)
         {
             try
             {
@@ -140,14 +141,14 @@ namespace DER.WebApp.Domain.Business
                 retorno.cer_distancia_eixo = model.cer_distancia_eixo;
                 retorno.cer_data_criacao = model.cer_data_criacao;
                 retorno.cer_id_segmento = model.cer_id_segmento;
-                retorno.cer_dispositivo = model.cer_dispositivo;
+                retorno.cer_dispositivo = model.cer_dispositivo.ToString();
                 retorno.cer_ext_geometria = model.cer_ext_geometria;
 
                 return retorno;
             }
             catch (Exception e)
             {
-                return new CercasLevantamento();
+                return new CercasLevantamentoViewModel();
             }
         }
     }

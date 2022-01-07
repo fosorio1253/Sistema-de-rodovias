@@ -1,4 +1,5 @@
-﻿using DER.WebApp.Helper;
+﻿using DER.WebApp.Domain.Models;
+using DER.WebApp.Helper;
 using DER.WebApp.Infra.DAL;
 using System;
 using System.Collections.Generic;
@@ -41,7 +42,7 @@ namespace DER.WebApp.Infra.DAO
                         {
                             var retorno = new DominioJurisdicoes();
                             retorno.jur_id = result["jur_id"] is DBNull ? 0 : Convert.ToInt32(result["jur_id"]);
-                            retorno.jur_descricao = result["jur_descricao"] is DBNull ? string.Empty : result["jur_descricao").ToString();
+                            retorno.jur_descricao = result["jur_descricao"] is DBNull ? string.Empty : result["jur_descricao"].ToString();
 
                             lretorno.Add(retorno);
                         }

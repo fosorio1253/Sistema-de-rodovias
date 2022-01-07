@@ -50,7 +50,7 @@ namespace DER.WebApp.Infra.DAO
                             retorno.drl_extensao = result["drl_extensao"] is DBNull ? 0 : Convert.ToDouble(result["drl_extensao"]);
                             retorno.drt_id = result["drt_id"] is DBNull ? 0 : Convert.ToInt32(result["drt_id"]);
                             retorno.drl_data_criacao = result["drl_data_criacao"] is DBNull ? dtnull : Convert.ToDateTime(result["drl_data_criacao"]);
-                            retorno.drl_id_segmento = result["drl_id_segmento"] is DBNull ? 0 : Convert.ToDouble(result["drl_id_segmento"]);
+                            retorno.drl_id_segmento = result["drl_id_segmento"] is DBNull ? 0 : Convert.ToInt32(result["drl_id_segmento"]);
                             retorno.drl_dispositivo = result["drl_dispositivo"] is DBNull ? false : false; // verificar fabio
                             retorno.drl_ext_geometria = result["drl_ext_geometria"] is DBNull ? 0 : Convert.ToDouble(result["drl_ext_geometria"]);
 
@@ -171,7 +171,7 @@ namespace DER.WebApp.Infra.DAO
                             retorno.drl_extensao = result["drl_extensao"] is DBNull ? 0 : Convert.ToDouble(result["drl_extensao"]);
                             retorno.drt_id = result["drt_id"] is DBNull ? 0 : Convert.ToInt32(result["drt_id"]);
                             retorno.drl_data_criacao = result["drl_data_criacao"] is DBNull ? dtnull : Convert.ToDateTime(result["drl_data_criacao"]);
-                            retorno.drl_id_segmento = result["drl_id_segmento"] is DBNull ? 0 : Convert.ToDouble(result["drl_id_segmento"]);
+                            retorno.drl_id_segmento = result["drl_id_segmento"] is DBNull ? 0 : Convert.ToInt32(result["drl_id_segmento"]);
                             retorno.drl_dispositivo = result["drl_dispositivo"] is DBNull ? false : false; // verificar fabio
                             retorno.drl_ext_geometria = result["drl_ext_geometria"] is DBNull ? 0 : Convert.ToDouble(result["drl_ext_geometria"]);
                         }

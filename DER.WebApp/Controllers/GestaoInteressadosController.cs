@@ -238,7 +238,7 @@ namespace DER.WebApp.Controllers
             return statusBLL.ObtemStatus();
         }
 
-        private List<TipoInteressadoViewModel> ObtemTipoInteressado()
+        private List<ViewModels.GestaoInteressados.TipoInteressadoViewModel> ObtemTipoInteressado()
         {
             return tipoInteressadoBLL.ObtemTipoInteressado();
         }

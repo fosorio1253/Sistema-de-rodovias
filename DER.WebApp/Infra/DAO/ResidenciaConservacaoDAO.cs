@@ -1,4 +1,5 @@
-﻿using DER.WebApp.Helper;
+﻿using DER.WebApp.Domain.Models;
+using DER.WebApp.Helper;
 using DER.WebApp.Infra.DAL;
 using System;
 using System.Collections.Generic;
@@ -41,8 +42,8 @@ namespace DER.WebApp.Infra.DAO
                         {
                             var retorno = new ResidenciaConservacao();
                             retorno.residencia_conservacao_id = result["residencia_conservacao_id"] is DBNull ? 0 : Convert.ToInt32(result["residencia_conservacao_id"]);
-                            retorno.Nome = result["Nome"] is DBNull ? string.Empty : result["Nome").ToString();
-                            retorno.Sigla = result["Sigla"] is DBNull ? string.Empty : result["Sigla").ToString();
+                            retorno.Nome = result["Nome"] is DBNull ? string.Empty : result["Nome"].ToString();
+                            retorno.Sigla = result["Sigla"] is DBNull ? string.Empty : result["Sigla"].ToString();
 
                             lretorno.Add(retorno);
                         }

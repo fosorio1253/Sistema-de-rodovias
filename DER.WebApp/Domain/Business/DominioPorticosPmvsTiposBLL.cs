@@ -1,4 +1,8 @@
-﻿using System;
+﻿using DER.WebApp.Domain.Models;
+using DER.WebApp.Infra.DAL;
+using DER.WebApp.Infra.DAO;
+using DER.WebApp.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,7 +14,7 @@ namespace DER.WebApp.Domain.Business
         private DerContext context;
         private DominioPorticosPmvsTiposDAO dominioporticospmvstiposDAO;
 
-        public InadimplentesBLL()
+        public DominioPorticosPmvsTiposBLL()
         {
             context = new DerContext();
             dominioporticospmvstiposDAO = new DominioPorticosPmvsTiposDAO(context);
@@ -112,7 +116,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private DominioPorticosPmvsTiposViewModel ViewModelToModel(DominioPorticosPmvsTipos model)
+        private DominioPorticosPmvsTiposViewModel ModelToViewModel(DominioPorticosPmvsTipos model)
         {
             try
             {
@@ -124,7 +128,7 @@ namespace DER.WebApp.Domain.Business
             }
             catch (Exception e)
             {
-                return new DominioPorticosPmvsTipos();
+                return new DominioPorticosPmvsTiposViewModel();
             }
         }
     }

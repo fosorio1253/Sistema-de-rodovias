@@ -15,8 +15,8 @@ namespace DER.WebApp.ViewModels
         public double edi_latitude { get; set; }
         public double edi_longitude { get; set; }
         public string edi_foto { get; set; }
-        public datetime edi_data_levantamento { get; set; }
+        public DateTime? edi_data_levantamento { get; set; }
         public int edt_id { get; set; }
-        public datetime edi_data_criacao { get; set; }
+        public DateTime? edi_data_criacao { get; set; }
     }
 }

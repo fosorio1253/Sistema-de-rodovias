@@ -1,4 +1,8 @@
-﻿using System;
+﻿using DER.WebApp.Domain.Models;
+using DER.WebApp.Infra.DAL;
+using DER.WebApp.Infra.DAO;
+using DER.WebApp.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,7 +14,7 @@ namespace DER.WebApp.Domain.Business
         private DerContext context;
         private PassivosAmbientaisLinLevantamentoDAO passivosambientaislinlevantamentoDAO;
 
-        public InadimplentesBLL()
+        public PassivosAmbientaisLinLevantamentoBLL()
         {
             context = new DerContext();
             passivosambientaislinlevantamentoDAO = new PassivosAmbientaisLinLevantamentoDAO(context);
@@ -111,7 +115,7 @@ namespace DER.WebApp.Domain.Business
                 retorno.pat_id = model.pat_id;
                 retorno.pal_data_criacao = model.pal_data_criacao;
                 retorno.pal_id_segmento = model.pal_id_segmento;
-                retorno.pal_dispositivo = model.pal_dispositivo;
+                retorno.pal_dispositivo = Convert.ToBoolean(model.pal_dispositivo);
                 retorno.pal_ext_geometria = model.pal_ext_geometria;
 
                 return retorno;
@@ -122,7 +126,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private PassivosAmbientaisLinLevantamentoViewModel ViewModelToModel(PassivosAmbientaisLinLevantamento model)
+        private PassivosAmbientaisLinLevantamentoViewModel ModelToViewModel(PassivosAmbientaisLinLevantamento model)
         {
             try
             {
@@ -137,14 +141,14 @@ namespace DER.WebApp.Domain.Business
                 retorno.pat_id = model.pat_id;
                 retorno.pal_data_criacao = model.pal_data_criacao;
                 retorno.pal_id_segmento = model.pal_id_segmento;
-                retorno.pal_dispositivo = model.pal_dispositivo;
+                retorno.pal_dispositivo = model.pal_dispositivo.ToString();
                 retorno.pal_ext_geometria = model.pal_ext_geometria;
 
                 return retorno;
             }
             catch (Exception e)
             {
-                return new PassivosAmbientaisLinLevantamento();
+                return new PassivosAmbientaisLinLevantamentoViewModel();
             }
         }
     }

@@ -1,4 +1,8 @@
-﻿using System;
+﻿using DER.WebApp.Domain.Models;
+using DER.WebApp.Infra.DAL;
+using DER.WebApp.Infra.DAO;
+using DER.WebApp.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,7 +14,7 @@ namespace DER.WebApp.Domain.Business
         private DerContext context;
         private SinalFaixaBordoLevantamentoDAO sinalfaixabordolevantamentoDAO;
 
-        public InadimplentesBLL()
+        public SinalFaixaBordoLevantamentoBLL()
         {
             context = new DerContext();
             sinalfaixabordolevantamentoDAO = new SinalFaixaBordoLevantamentoDAO(context);
@@ -112,7 +116,7 @@ namespace DER.WebApp.Domain.Business
                 retorno.sfb_largura_faixa = model.sfb_largura_faixa;
                 retorno.sfb_data_criacao = model.sfb_data_criacao;
                 retorno.sfb_id_segmento = model.sfb_id_segmento;
-                retorno.sfb_dispositivo = model.sfb_dispositivo;
+                retorno.sfb_dispositivo = Convert.ToBoolean(model.sfb_dispositivo);
                 retorno.sfb_ext_geometria = model.sfb_ext_geometria;
 
                 return retorno;
@@ -123,7 +127,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private SinalFaixaBordoLevantamentoViewModel ViewModelToModel(SinalFaixaBordoLevantamento model)
+        private SinalFaixaBordoLevantamentoViewModel ModelToViewModel(SinalFaixaBordoLevantamento model)
         {
             try
             {
@@ -134,19 +138,19 @@ namespace DER.WebApp.Domain.Business
                 retorno.sen_id = model.sen_id;
                 retorno.reg_id = model.reg_id;
                 retorno.sfb_data_levantamento = model.sfb_data_levantamento;
-                retorno.sfb_extensao = model.sfb_extensao;
+                retorno.sfb_extensao = (int)model.sfb_extensao;
                 retorno.sht_id = model.sht_id;
-                retorno.sfb_largura_faixa = model.sfb_largura_faixa;
+                retorno.sfb_largura_faixa = (int)model.sfb_largura_faixa;
                 retorno.sfb_data_criacao = model.sfb_data_criacao;
                 retorno.sfb_id_segmento = model.sfb_id_segmento;
-                retorno.sfb_dispositivo = model.sfb_dispositivo;
+                retorno.sfb_dispositivo = model.sfb_dispositivo.ToString();
                 retorno.sfb_ext_geometria = model.sfb_ext_geometria;
 
                 return retorno;
             }
             catch (Exception e)
             {
-                return new SinalFaixaBordoLevantamento();
+                return new SinalFaixaBordoLevantamentoViewModel();
             }
         }
     }
