@@ -207,7 +207,7 @@ namespace DER.WebApp.Infra.DAO
 
         public bool Delete(Inadimplentes model)
         {
-            var oldValue = GetById(model.ina_interessadoid);
+            var oldValue = GetById(model.ina_id);
             var connectionString = ConfigurationManager.ConnectionStrings["DerContext"].ConnectionString;
 
             using (var conn = new SqlConnection(connectionString))
@@ -215,12 +215,12 @@ namespace DER.WebApp.Infra.DAO
                 using (var command = new SqlCommand("STP_DEL_INADIMPLENTES", conn))
                 {
                     command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.Add(new SqlParameter("@ina_id", model.ina_interessadoid));
+                    command.Parameters.Add(new SqlParameter("@ina_id", model.ina_id));
                     conn.Open();
                     command.ExecuteNonQuery();
                     command.Parameters.Clear();
                     conn.Close();
-                    logger.salvarLog(TipoAlteracao.Exclusao, model.ina_interessadoid.ToString(), logger.serializer.Serialize(oldValue), "");
+                    logger.salvarLog(TipoAlteracao.Exclusao, model.ina_id.ToString(), logger.serializer.Serialize(oldValue), "");
                 }
             }
             return true;

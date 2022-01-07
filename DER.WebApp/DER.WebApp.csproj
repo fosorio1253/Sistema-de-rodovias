@@ -302,6 +302,7 @@
     <Compile Include="Domain\Business\InadimplentesViewBLL.cs" />
     <Compile Include="Domain\Business\MunicipiosBLL.cs" />
     <Compile Include="Domain\Business\OaeLevantamentoBLL.cs" />
+    <Compile Include="Domain\Business\ParametrosSistemaBLL.cs" />
     <Compile Include="Domain\Business\PassivosAmbientaisLinLevantamentoBLL.cs" />
     <Compile Include="Domain\Business\PavimentacoesLevantamentoBLL.cs" />
     <Compile Include="Domain\Business\PavimentosRigidosLevantamentoBLL.cs" />
@@ -467,6 +468,7 @@
     <Compile Include="Domain\Models\Inadimplentes.cs" />
     <Compile Include="Domain\Models\Municipio.cs" />
     <Compile Include="Domain\Models\OaeLevantamento.cs" />
+    <Compile Include="Domain\Models\ParametrosSistema.cs" />
     <Compile Include="Domain\Models\PassivosAmbientaisLinLevantamento.cs" />
     <Compile Include="Domain\Models\PavimentacoesLevantamento.cs" />
     <Compile Include="Domain\Models\PavimentosRigidosLevantamento.cs" />
@@ -619,6 +621,7 @@
     <Compile Include="Infra\DAO\LogAlteracaoDAO.cs" />
     <Compile Include="Infra\DAO\MunicipioDAO.cs" />
     <Compile Include="Infra\DAO\OaeLevantamentoDAO.cs" />
+    <Compile Include="Infra\DAO\ParametrosSistemaDAO.cs" />
     <Compile Include="Infra\DAO\PassivosAmbientaisLinLevantamentoDAO.cs" />
     <Compile Include="Infra\DAO\PavimentacoesLevantamentoDAO.cs" />
     <Compile Include="Infra\DAO\PavimentosRigidosLevantamentoDAO.cs" />
@@ -789,6 +792,7 @@
     <Compile Include="ViewModels\IgpViewModel.cs" />
     <Compile Include="ViewModels\InadimplentesViewModel.cs" />
     <Compile Include="ViewModels\OaeLevantamentoViewModel.cs" />
+    <Compile Include="ViewModels\ParametrosSistemaViewModel.cs" />
     <Compile Include="ViewModels\PassivosAmbientaisLinLevantamentoViewModel.cs" />
     <Compile Include="ViewModels\PavimentacoesLevantamentoViewModel.cs" />
     <Compile Include="ViewModels\PavimentosRigidosLevantamentoViewModel.cs" />
