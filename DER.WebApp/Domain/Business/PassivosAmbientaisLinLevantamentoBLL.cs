@@ -36,6 +36,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(PassivosAmbientaisLinLevantamento model)
+        {
+            try
+            {
+                return ExistsById(model.rod_id) ?
+                    passivosambientaislinlevantamentoDAO.Update(model) :
+                    passivosambientaislinlevantamentoDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<PassivosAmbientaisLinLevantamentoViewModel> LoadView()
         {
             try

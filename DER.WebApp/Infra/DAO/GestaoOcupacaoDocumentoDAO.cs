@@ -14,11 +14,9 @@ namespace DER.WebApp.Infra.DAO
 {
     public class GestaoOcupacaoDocumentoDAO : BaseDAO<GestaoOcupacaoDocumento>
     {
-        private Logger _logger;
 
         public GestaoOcupacaoDocumentoDAO(DerContext context) : base(context)
         {
-            _logger = new Logger("Gestão Ocupação Documento", context);
         }
 
         public void ExcluirPorIdOcupacao(int idOcupacao)
@@ -198,7 +196,6 @@ namespace DER.WebApp.Infra.DAO
                         command.Parameters.Add(new SqlParameter("@tipoDocumentoId", domain.TipoDocumentoId));
 
                         var result = command.ExecuteNonQuery();
-                        _logger.salvarLog(TipoAlteracao.Criacao, result.ToString(), "", _logger.serializer.Serialize(domain));
                         conn.Close();
                     }
                 }

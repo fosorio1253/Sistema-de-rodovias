@@ -7,6 +7,7 @@ namespace DER.WebApp.ViewModels.Validadores
 {
     public class UsuarioValidatorViewModel
     {
+        public int id { get; set; }
         public bool CNPJExists { get; set; }
         public bool validCNPJ { get; set; }
         public bool validCPF { get; set; }

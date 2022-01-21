@@ -36,6 +36,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(DominioGradacoes model)
+        {
+            try
+            {
+                return ExistsById(model.gra_id) ?
+                    dominiogradacoesDAO.Update(model) :
+                    dominiogradacoesDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<DominioGradacoesViewModel> LoadView()
         {
             try

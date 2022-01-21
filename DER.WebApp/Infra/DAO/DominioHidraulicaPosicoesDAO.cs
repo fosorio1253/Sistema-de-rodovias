@@ -17,7 +17,7 @@ namespace DER.WebApp.Infra.DAO
 
         public DominioHidraulicaPosicoesDAO(DerContext context) : base(context)
         {
-            logger = new Logger("DominioHidraulicaPosicoes", context);
+            logger = new Logger("DominioHidraulicaPosicoes");
         }
 
         public List<DominioHidraulicaPosicoes> ObtemTodos()
@@ -104,8 +104,6 @@ namespace DER.WebApp.Infra.DAO
                 }
 
                 var value = GetById(domain.hps_id);
-                if (!value.Equals(oldValue))
-                    logger.salvarLog(TipoAlteracao.Edicao, domain.hps_id.ToString(), logger.serializer.Serialize(oldValue), logger.serializer.Serialize(value));
                 return true;
             }
             catch (Exception ex)
@@ -161,7 +159,6 @@ namespace DER.WebApp.Infra.DAO
                     command.ExecuteNonQuery();
                     command.Parameters.Clear();
                     conn.Close();
-                    logger.salvarLog(TipoAlteracao.Exclusao, model.hps_id.ToString(), logger.serializer.Serialize(oldValue), "");
                 }
             }
             return true;

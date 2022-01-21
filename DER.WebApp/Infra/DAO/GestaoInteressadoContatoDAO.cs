@@ -14,10 +14,10 @@ namespace DER.WebApp.Infra.DAO
 {
     public class GestaoInteressadoContatoDAO : BaseDAO<GestaoInteressadoContato>
     {
-        private Logger _logger;
+       
         public GestaoInteressadoContatoDAO(DerContext context) : base(context)
         {
-            _logger = new Logger("Gestão Interessado Contato", context);
+         
         }
 
         public void ExcluirPorIdGestao(int idGestao)
@@ -34,7 +34,7 @@ namespace DER.WebApp.Infra.DAO
                 conexao.Open();
 
                 conexao.Query(sql, new { idGestao = idGestao }, commandType: CommandType.Text).ToList();
-                _logger.salvarLog(TipoAlteracao.Exclusao, "", _logger.serializer.Serialize(oldValue), "");
+                
             }
         }
         public List<UsuarioContatoConsultaViewModel> GetByParans(GestaoContatoViewModel viewModel)
@@ -175,7 +175,6 @@ namespace DER.WebApp.Infra.DAO
 
             //            var id = Convert.ToInt32(result);
             //            var value = GetById(id);
-            //            _logger.salvarLog(TipoAlteracao.Criacao, id.ToString(), "", _logger.serializer.Serialize(value));
             //            return Convert.ToInt32(result);
             //        }
             //    }
@@ -201,7 +200,7 @@ namespace DER.WebApp.Infra.DAO
                     usuarioId = domain.UsuarioId
                 }, commandType: CommandType.Text);
             }
-            _logger.salvarLog(TipoAlteracao.Criacao, "", "", _logger.serializer.Serialize(domain));
+            
         }
     }
 }

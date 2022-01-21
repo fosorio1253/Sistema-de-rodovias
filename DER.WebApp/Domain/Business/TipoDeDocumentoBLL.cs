@@ -10,12 +10,10 @@ namespace DER.WebApp.Domain.Business
     public class TipoDeDocumentoBLL
     {
         private DerContext _context;
-        private DadosMestresDAO dadosMestresDAO;
 
         public TipoDeDocumentoBLL()
         {
             _context = new DerContext();
-            dadosMestresDAO = new DadosMestresDAO(_context);
         }
 
         public List<TipoDeDocumentoViewModel> ObtemTipoDeDocumento(int? id = null)

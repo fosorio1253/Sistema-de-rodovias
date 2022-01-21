@@ -14,10 +14,10 @@ namespace DER.WebApp.Infra.DAO
 {
     public class GestaoInteressadoDocumentoDAO : BaseDAO<GestaoInteressadoDocumento>
     {
-        private Logger _logger;
+        
         public GestaoInteressadoDocumentoDAO(DerContext context) : base(context)
         {
-            _logger = new Logger("Gestão Interessado Documento", context);
+        
         }
 
         public List<GestaoDocumentoViewModel> GetByGestaoId(int idGestao)
@@ -134,7 +134,7 @@ namespace DER.WebApp.Infra.DAO
                         command.Parameters.Add(new SqlParameter("@dataCadastro", DateTime.Now));
 
                         var result = command.ExecuteNonQuery();
-                        _logger.salvarLog(TipoAlteracao.Criacao, result.ToString(), "", _logger.serializer.Serialize(domain));
+                       
                         conn.Close();
                     }
                 }

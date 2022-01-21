@@ -36,6 +36,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(DominioJurisdicoes model)
+        {
+            try
+            {
+                return ExistsById(model.jur_id) ?
+                    dominiojurisdicoesDAO.Update(model) :
+                    dominiojurisdicoesDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<DominioJurisdicoesViewModel> LoadView()
         {
             try

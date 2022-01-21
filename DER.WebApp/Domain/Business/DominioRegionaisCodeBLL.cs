@@ -36,6 +36,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(DominioRegionaisCode model)
+        {
+            try
+            {
+                return ExistsById(model.reg_id) ?
+                    dominioregionaiscodeDAO.Update(model) :
+                    dominioregionaiscodeDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<DominioRegionaisCodeViewModel> LoadView()
         {
             try

@@ -10,6 +10,7 @@ using Microsoft.Ajax.Utilities;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using DER.WebApp.Helper;
 
 namespace WebApp.Controllers
 {
@@ -19,12 +20,15 @@ namespace WebApp.Controllers
         private UsuarioBLL usuarioBLL;
         private GrupoBLL grupoBLL;
         private RegionalBLL regionalBLL;
+        private Logger logger;
+
 
         public UsuarioInternoController()
         {
             usuarioBLL = new UsuarioBLL();
             grupoBLL = new GrupoBLL();
             regionalBLL = new RegionalBLL();
+            logger = new Logger("Usuario Interno");
         }
 
         [AuthorizeCustomAttribute(Roles = Permissoes.UsuarioInternoCodigo)]
@@ -77,15 +81,26 @@ namespace WebApp.Controllers
         [HttpPost]
         public ActionResult Salvar(UsuarioInternoViewModel Usuario)
          {
+            if(Usuario.Id != 0)
+            {
+                logger.salvarLog(TipoAlteracao.Edicao, Usuario.Id.ToString(), Usuario, usuarioBLL.ObtemId(Usuario.Id));
+            }
+
              if(ModelState.IsValid)
             {
                 if (!CPF.Validar(Usuario.CPF))
                 {
                     return Json(new UsuarioValidatorViewModel { validCPF = false, valid = false });
                 }
-
+                
                 var usuario = Mapper.Map<UsuarioInternoViewModel, Usuario>(Usuario);
                 var valid = usuarioBLL.Salvar(usuario);
+
+                if (Usuario.Id == 0)
+                {
+                    logger.salvarLog(TipoAlteracao.Edicao, valid.id.ToString(), Usuario, usuarioBLL.ObtemId(valid.id));
+                }
+
                 valid.validCPF = true;
                 return Json(valid);
             }

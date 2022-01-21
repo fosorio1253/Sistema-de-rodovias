@@ -36,6 +36,22 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(DominioPistaTipos model)
+        {
+            try
+            {
+                return ExistsById(model.ptp_id) ?
+                    dominiopistatiposDAO.Update(model) :
+                    dominiopistatiposDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+
+
         public List<DominioPistaTiposViewModel> LoadView()
         {
             try

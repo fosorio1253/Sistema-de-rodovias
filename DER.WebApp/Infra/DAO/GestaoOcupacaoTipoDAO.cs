@@ -14,10 +14,10 @@ namespace DER.WebApp.Infra.DAO
 {
     public class GestaoOcupacaoTipoDAO : BaseDAO<TipoDeOcupacao>
     {
-        private Logger _logger;
+        
         public GestaoOcupacaoTipoDAO(DerContext context) : base(context)
         {
-            _logger = new Logger("Gestão Ocupação Tipo", context);
+            
         }
 
         public List<GestaoOcupacoesTipoOcupacaoViewModel> GetByIdInteressado(int idInteressado)

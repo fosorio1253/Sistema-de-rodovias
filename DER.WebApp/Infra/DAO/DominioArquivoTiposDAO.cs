@@ -17,7 +17,7 @@ namespace DER.WebApp.Infra.DAO
 
         public DominioArquivoTiposDAO(DerContext context) : base(context)
         {
-            logger = new Logger("DominioArquivoTipos", context);
+            logger = new Logger("DominioArquivoTipos");
         }
 
         public List<DominioArquivoTipos> ObtemTodos()
@@ -107,8 +107,6 @@ namespace DER.WebApp.Infra.DAO
                 }
 
                 var value = GetById(domain.arq_id);
-                if (!value.Equals(oldValue))
-                    logger.salvarLog(TipoAlteracao.Edicao, domain.arq_id.ToString(), logger.serializer.Serialize(oldValue), logger.serializer.Serialize(value));
                 return true;
             }
             catch (Exception ex)
@@ -165,7 +163,6 @@ namespace DER.WebApp.Infra.DAO
                     command.ExecuteNonQuery();
                     command.Parameters.Clear();
                     conn.Close();
-                    logger.salvarLog(TipoAlteracao.Exclusao, model.arq_id.ToString(), logger.serializer.Serialize(oldValue), "");
                 }
             }
             return true;

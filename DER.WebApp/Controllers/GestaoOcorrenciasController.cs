@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using System.Web.Helpers;
 using System.Web.Mvc;
 using DER.WebApp.ViewModels.GestaoInteressados;
+using DER.WebApp.Helper;
 
 namespace DER.WebApp.Controllers
 {
@@ -41,6 +42,7 @@ namespace DER.WebApp.Controllers
         private TipoInteressadoBLL tipoInteressadoBLL;
         private NaturezaJuridicaBLL naturezaJuridicaBLL;
         private UnidadeGestaoOcupacaoBLL unidadeBLL;
+        private Logger logger;
 
         public GestaoOcorrenciasController()
         {
@@ -60,6 +62,7 @@ namespace DER.WebApp.Controllers
             tipoInteressadoBLL = new TipoInteressadoBLL();
             naturezaJuridicaBLL = new NaturezaJuridicaBLL();
             unidadeBLL = new UnidadeGestaoOcupacaoBLL();
+            logger = new Logger("Gestão Ocorrencias");
 
         }
 
@@ -109,6 +112,18 @@ namespace DER.WebApp.Controllers
         {
             obtemPermissoes(Permissoes.GestaoOcorrenciasCodigo);
             var gestaoOcorrencias = gestaoOcorrenciaBLL.InserirApi(model);
+
+            if (gestaoOcorrencias.valid)
+            {
+                if (model.Id == 0)
+                {
+                    logger.salvarLog(TipoAlteracao.Criacao, gestaoOcorrencias.id.ToString(), gestaoOcorrenciaBLL.ObtemId(gestaoOcorrencias.id));
+                }
+                else
+                {
+                    logger.salvarLog(TipoAlteracao.Edicao, gestaoOcorrencias.id.ToString(), gestaoOcorrenciaBLL.ObtemId(gestaoOcorrencias.id));
+                }
+            }
             return Json(new { Status = gestaoOcorrencias.valid, Message = gestaoOcorrencias.mensagem });
         }
 
@@ -137,6 +152,7 @@ namespace DER.WebApp.Controllers
         [AuthorizeCustomAttribute(Roles = Permissoes.GestaoOcorrenciasCodigo + Permissoes.ExcluirCodigo)]
         public ActionResult Excluir(int id)
         {
+            logger.salvarLog(TipoAlteracao.Edicao, null, gestaoOcorrenciaBLL.ObtemId(id));
             try
             {
                 gestaoOcorrenciaBLL.Excluir(id);
@@ -157,6 +173,18 @@ namespace DER.WebApp.Controllers
                 if (ModelState.IsValid)
                 {
                     var valid = gestaoOcorrenciaBLL.Inserir(viewModel);
+
+                    if (valid.valid)
+                    {
+                        if (viewModel.Id == 0)
+                        {
+                            logger.salvarLog(TipoAlteracao.Criacao, valid.id.ToString(), gestaoOcorrenciaBLL.ObtemId(valid.id));
+                        }
+                        else
+                        {
+                            logger.salvarLog(TipoAlteracao.Edicao, valid.id.ToString(), gestaoOcorrenciaBLL.ObtemId(valid.id));
+                        }
+                    }
 
                     return Json(valid);
                 }
@@ -185,6 +213,7 @@ namespace DER.WebApp.Controllers
         public JsonResult SalvarArquivo(GestaoOcorrenciaDocumentoViewModel viewModel)
         {
             gestaoOcorrenciaBLL.SalvarArquivo(viewModel);
+            logger.salvarLog(TipoAlteracao.Criacao, "Documento", viewModel);
             return null;
         }
 
@@ -252,7 +281,7 @@ namespace DER.WebApp.Controllers
             return rodoviaBLL.ObtemRodovia();
         }
 
-        private List<ViewModels.ProjetosMelhorias.DispositivoViewModel> ObtemDispositivo()
+        private List<ViewModels.DispositivoViewModel> ObtemDispositivo()
         {
             return dispositivoBLL.ObtemDispositivo();
         }

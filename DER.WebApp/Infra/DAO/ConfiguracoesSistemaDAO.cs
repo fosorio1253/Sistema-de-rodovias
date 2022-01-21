@@ -11,11 +11,11 @@ namespace DER.WebApp.Infra.DAO
 {
     public class ConfiguracoesSistemaDAO : BaseDAO<ConfiguracoesSistema>
     {
-        Logger logger;
+
 
         public ConfiguracoesSistemaDAO(DerContext context) : base(context)
         {
-            logger = new Logger("ConfiguracoesSistema", context);
+            
         }
 
         public List<ConfiguracoesSistema> ObtemTodos()
@@ -87,7 +87,6 @@ namespace DER.WebApp.Infra.DAO
         public void Update(ConfiguracoesSistema domain)
         {
             var connectionString = ConfigurationManager.ConnectionStrings["DerContext"].ConnectionString;
-            var oldValue = GetById(domain.Configuracoes_Sistema_Id);
             try
             {
                 using (var conn = new SqlConnection(connectionString))
@@ -105,9 +104,6 @@ namespace DER.WebApp.Infra.DAO
                         conn.Close();
                     }
                 }
-                var value = GetById(domain.Configuracoes_Sistema_Id);
-                if (!value.Equals(oldValue))
-                    logger.salvarLog(TipoAlteracao.Edicao, domain.Configuracoes_Sistema_Id.ToString(), logger.serializer.Serialize(oldValue), logger.serializer.Serialize(value));
 
             }
             catch (Exception ex)

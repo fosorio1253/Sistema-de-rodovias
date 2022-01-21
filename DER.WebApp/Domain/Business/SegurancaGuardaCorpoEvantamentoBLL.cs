@@ -36,6 +36,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(SegurancaGuardaCorpoLevantamento model)
+        {
+            try
+            {
+                return ExistsById(model.rod_id) ?
+                    SegurancaGuardaCorpoLevantamentoDAO.Update(model) :
+                    SegurancaGuardaCorpoLevantamentoDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<SegurancaGuardaCorpoLevantamentoViewModel> LoadView()
         {
             try

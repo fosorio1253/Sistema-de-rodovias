@@ -35,6 +35,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(ApiEdificacoes model)
+        {
+            try
+            {
+                return ExistsById(model.rod_id) ?
+                    apiedificacoesDAO.Update(model) :
+                    apiedificacoesDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<ApiEdificacoesViewModel> LoadView()
         {
             try

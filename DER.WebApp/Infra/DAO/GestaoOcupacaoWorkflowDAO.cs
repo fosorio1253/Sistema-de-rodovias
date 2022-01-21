@@ -13,10 +13,10 @@ namespace DER.WebApp.Infra.DAO
 {
     public class GestaoOcupacaoWorkflowDAO : BaseDAO<GestaoOcupacaoWorkflow>
     {
-        private Logger _logger;
+        
         public GestaoOcupacaoWorkflowDAO(DerContext context) : base(context)
         {
-            _logger = new Logger("Gestão Ocupação Workflow", context);
+            
         }
 
         public GestaoOcupacaoWorkflow Inserir(GestaoOcupacaoWorkflow domain)
@@ -42,7 +42,7 @@ namespace DER.WebApp.Infra.DAO
                     ocu_wor_dataCadastro = domain.DataCadastro
                 }, commandType: CommandType.Text).FirstOrDefault();
 
-                _logger.salvarLog(TipoAlteracao.Criacao, "", "", _logger.serializer.Serialize(domain));
+                
                 conexao.Close();
             }
 

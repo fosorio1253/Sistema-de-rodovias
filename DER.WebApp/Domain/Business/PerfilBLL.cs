@@ -10,6 +10,7 @@ using System.Linq;
 using DER.WebApp.Helper;
 using DER.WebApp.Common.Helper;
 using System.Web;
+using DER.WebApp.ModelosEmail;
 
 namespace DER.WebApp.Domain.Business
 {
@@ -51,7 +52,7 @@ namespace DER.WebApp.Domain.Business
             return (perfil != null) ? true : false;
         }
 
-        public bool Salvar(PerfilAcessoViewModel Perfil)
+        public int Salvar(PerfilAcessoViewModel Perfil)
         {
             try
             {
@@ -74,11 +75,11 @@ namespace DER.WebApp.Domain.Business
                     Perfil.PermissoesIds.ForEach(x => perfil.Permissoes.Add(_permissaoDAO.Get(x)));
 
                 _perfilDAO.AddOrUpdate(perfil);
-                return true;
+                return perfil.Id;
             }
             catch (Exception ex)
             {
-                return false;
+                return 0;
             }
 
         }
@@ -109,7 +110,7 @@ namespace DER.WebApp.Domain.Business
             var retorno = _perfilDAO.ConsultarValidadeCredenciamentoLogin(UsuarioId);
             try
             {
-                if (retorno != null || retorno != "" && Convert.ToDateTime(retorno) >= DateTime.Now)
+                if (retorno != string.Empty && Convert.ToDateTime(retorno) >= DateTime.Now)
                 {
                     
                     var usuario = _usuarioDAO.GetByLogin(PerfilUsuario.LoginUsuario);                                        
@@ -117,7 +118,9 @@ namespace DER.WebApp.Domain.Business
                     Emails Email = new Emails();
                     Email.Destinatario = usuario.Email;
                     Email.Assunto = "SGFD - Credenciamento de Interessado.";
-                    Email.CorpoEmail = $"Olá {usuario.Nome}, o seu cadastro no Sistema de Gestão de Faixas de Domínio vencerá em 30 dias. Por favor, acesse o sistema e realize o recadastramento dos seus dados. ";
+                    //Email.CorpoEmail = $"Olá {usuario.Nome}, o seu cadastro no Sistema de Gestão de Faixas de Domínio vencerá em 30 dias. Por favor, acesse o sistema e realize o recadastramento dos seus dados. ";
+                    var HTMLEmail = ModelosEmails.EmailExpiracaoCadastroCredenciado();
+                    Email.CorpoEmail = HTMLEmail.Replace("{Nome}", usuario.Nome);
 
                     DER.WebApp.Common.Helper.Email EmailHelper = new Common.Helper.Email();
                     EmailHelper.EnviarEmail(Email);
@@ -129,6 +132,7 @@ namespace DER.WebApp.Domain.Business
                 throw new Exception(ex.Message);
             }
         }
+               
         //public string UsuarioSessaoCadastrouInteressado(int UsuarioId)
         //{
         //    try
@@ -142,7 +146,7 @@ namespace DER.WebApp.Domain.Business
 
         //            DER.WebApp.Common.Helper.Email EmailHelper = new Common.Helper.Email();
         //            EmailHelper.EnviarEmail(Email);
-                
+
         //        //return retorno;
         //    }
         //    catch (Exception ex)

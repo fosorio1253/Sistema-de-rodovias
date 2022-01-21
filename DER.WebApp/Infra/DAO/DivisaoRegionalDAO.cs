@@ -17,7 +17,7 @@ namespace DER.WebApp.Infra.DAO
 
         public DivisaoRegionalDAO(DerContext context) : base(context)
         {
-            logger = new Logger("DivisaoRegional", context);
+            logger = new Logger("DivisaoRegional");
         }
 
         public List<DivisaoRegional> ObtemTodos()
@@ -110,8 +110,6 @@ namespace DER.WebApp.Infra.DAO
                 }
 
                 var value = GetById(domain.divisao_regional_id);
-                if (!value.Equals(oldValue))
-                    logger.salvarLog(TipoAlteracao.Edicao, domain.divisao_regional_id.ToString(), logger.serializer.Serialize(oldValue), logger.serializer.Serialize(value));
                 return true;
             }
             catch (Exception ex)
@@ -169,7 +167,6 @@ namespace DER.WebApp.Infra.DAO
                     command.ExecuteNonQuery();
                     command.Parameters.Clear();
                     conn.Close();
-                    logger.salvarLog(TipoAlteracao.Exclusao, model.divisao_regional_id.ToString(), logger.serializer.Serialize(oldValue), "");
                 }
             }
             return true;

@@ -36,6 +36,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(ApiBueiro model)
+        {
+            try
+            {
+                return ExistsById(model.rod_id) ?
+                    apibueiroDAO.Update(model) :
+                    apibueiroDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<ApiBueiroViewModel> LoadView()
         {
             try

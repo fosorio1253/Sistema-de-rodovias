@@ -36,6 +36,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(DominioMateriais model)
+        {
+            try
+            {
+                return ExistsById(model.mat_id) ?
+                    dominiomateriaisDAO.Update(model) :
+                    dominiomateriaisDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<DominioMateriaisViewModel> LoadView()
         {
             try

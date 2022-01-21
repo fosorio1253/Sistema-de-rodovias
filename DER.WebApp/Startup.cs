@@ -23,9 +23,9 @@ namespace DER.WebApp
             app.UseHangfireServer();
 
             var job = new JobController();
-            //RecurringJob.AddOrUpdate("ExecutarAPIS",        () => job.ExecutaTodasAPIs(),   Cron.Monthly);
-            //RecurringJob.AddOrUpdate("RemuneracaoJob",      () => job.RemuneracaoJob(),     Cron.Monthly);
-            //RecurringJob.AddOrUpdate("InadimplentesJob",    () => job.InadimplentesJob(),   Cron.Daily);
+            RecurringJob.AddOrUpdate("ExecutarAPIS",        () => job.ExecutaTodasAPIs(),   Cron.Monthly);
+            RecurringJob.AddOrUpdate("RemuneracaoJob",      () => job.RemuneracaoJob(),     Cron.Monthly);
+            RecurringJob.AddOrUpdate("InadimplentesJob",    () => job.InadimplentesJob(),   Cron.Daily);
 
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {

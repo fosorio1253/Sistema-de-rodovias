@@ -112,7 +112,7 @@ namespace DER.WebApp.Domain.Business
                     SolicitaNovaSenhaUsuario(usuario.Email, 1);
                 }
 
-                return new UsuarioValidatorViewModel() { valid = true };
+                return new UsuarioValidatorViewModel() { valid = true, id = usuario.Id };
             }
             catch (Exception ex)
             {

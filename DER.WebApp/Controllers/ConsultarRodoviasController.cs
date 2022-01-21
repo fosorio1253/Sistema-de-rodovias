@@ -35,7 +35,7 @@ namespace DER.WebApp.Controllers
 
         private List<RodoviaViewModel> ObtemRodovia()
         {
-            return rodoviaBLL.ObterRodovias();
+            return rodoviaBLL.ObtemRodovia();
         }
 
         [HttpPost]

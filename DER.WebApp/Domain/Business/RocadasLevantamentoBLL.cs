@@ -36,6 +36,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(RocadasLevantamento model)
+        {
+            try
+            {
+                return ExistsById(model.rod_id) ?
+                    rocadaslevantamentoDAO.Update(model) :
+                    rocadaslevantamentoDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<RocadasLevantamentoViewModel> LoadView()
         {
             try

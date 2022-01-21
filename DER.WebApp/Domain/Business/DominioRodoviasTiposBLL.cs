@@ -36,6 +36,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(DominioRodoviasTipos model)
+        {
+            try
+            {
+                return ExistsById(model.rtp_id) ?
+                    dominiorodoviastiposDAO.Update(model) :
+                    dominiorodoviastiposDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<DominioRodoviasTiposViewModel> LoadView()
         {
             try

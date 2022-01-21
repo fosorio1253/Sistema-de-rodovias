@@ -7,26 +7,17 @@ namespace DER.WebApp.Domain.Business
 {
     public class TrechosBLL
     {
-        private DerContext _context;
-        private DadosMestresDAO dadosMestresDAO;
+        private OcorrenciaTrechoBLL ocorrenciaTrechoBLL;
 
         public TrechosBLL()
         {
-            _context = new DerContext();
-            dadosMestresDAO = new DadosMestresDAO(_context);
+            ocorrenciaTrechoBLL = new OcorrenciaTrechoBLL();
         }
 
         public List<ViewModels.TrechoViewModel> ObtemTrechos()
         {
             var retorno = new List<ViewModels.TrechoViewModel>();
-
-            var dominio = dadosMestresDAO.ObtemDominio((int)TabelaDadosMestresEnum.OcorrenciaTrecho);
-
-            foreach (var d in dominio)
-            {
-                retorno.Add(new ViewModels.TrechoViewModel() { TrechoId = d.Id, Nome = d.Nome });
-            }
-
+            ocorrenciaTrechoBLL.LoadView().ForEach(x => retorno.Add(new ViewModels.TrechoViewModel() { TrechoId = x.ocorrencia_trecho_id, Nome = x.nome }));
             return retorno;
         }
     }

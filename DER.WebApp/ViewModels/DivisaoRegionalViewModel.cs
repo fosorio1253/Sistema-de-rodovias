@@ -11,5 +11,5 @@ namespace DER.WebApp.ViewModels
         public string sigla { get; set; }
         public string descricao { get; set; }
         public double fator_regional { get; set; }
-}
     }
+}

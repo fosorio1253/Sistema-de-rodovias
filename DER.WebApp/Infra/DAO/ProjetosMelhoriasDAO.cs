@@ -16,10 +16,10 @@ namespace DER.WebApp.Infra.DAO
 {
     public class ProjetosMelhoriasDAO : BaseDAO<ProjetosMelhorias>
     {
-        private Logger _logger;
+        
         public ProjetosMelhoriasDAO(DerContext context) : base(context)
         {
-            _logger = new Logger("Projetos Melhorias", context);
+            
         }
 
         public List<ListaProjetosMelhoriasDTO> GetListProjetosMelhorias()
@@ -112,7 +112,7 @@ namespace DER.WebApp.Infra.DAO
 
                         conn.Close();
                         var value = GetById(Convert.ToInt32(result)); 
-                        _logger.salvarLog(TipoAlteracao.Criacao, result.ToString(),"", _logger.serializer.Serialize(value));
+                        
                         return Convert.ToInt32(result);
                     }
                 }
@@ -178,7 +178,7 @@ namespace DER.WebApp.Infra.DAO
         // Descrição: Atualiza um Projeto de Melhoria.
         //PROC: STP_UPD_PROJETOS_MELHORIAS
         {
-            var oldValue = GetById(domain.Id);
+            
             var connectionString = ConfigurationManager.ConnectionStrings["DerContext"].ConnectionString;
         
             try
@@ -209,9 +209,7 @@ namespace DER.WebApp.Infra.DAO
                         command.Parameters.Add(new SqlParameter("@UnidadeConservacao", domain.UnidadeConservacao));
 
                         var result = command.ExecuteNonQuery();
-                        var newValue = GetById(result);
-                        if(!newValue.Equals(oldValue))
-                            _logger.salvarLog(TipoAlteracao.Edicao, result.ToString(), _logger.serializer.Serialize(oldValue), _logger.serializer.Serialize(newValue));
+                        
                         return domain.Id;
                     }
                 }
@@ -239,7 +237,7 @@ namespace DER.WebApp.Infra.DAO
                     command.ExecuteNonQuery();
                     command.Parameters.Clear();
                     conn.Close();
-                    _logger.salvarLog(TipoAlteracao.Exclusao, id.ToString(),_logger.serializer.Serialize(oldValue),"");
+                    
                 }
             }
         }

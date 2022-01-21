@@ -11,13 +11,25 @@ namespace DER.WebApp.Domain.Business
 {
     public class ConsultarRodoviasBLL
     {
-        private DerContext _context;
-        private DadosMestresDAO dadosMestresDAO;
+        private ApiBueiroBLL apiBueiro;
+        private ApiDispositivoBLL apiDispositivoBLL;
+        private ApiDrenagemBLL apiDrenagemBLL;
+        private ApiEdificacoesBLL apiEdificacoesBLL;
+        private DominioSuperficiesTiposBLL dominioSuperficiesTiposBLL;
+        private DominioDispositivosTiposBLL dominioDispositivosTiposBLL;
+        private DominioDrenagensTiposBLL dominioDrenagensTiposBLL;
+        private DominioEdificacoesTiposBLL dominioEdificacoesTiposBLL;
 
         public ConsultarRodoviasBLL()
         {
-            _context = new DerContext();
-            dadosMestresDAO = new DadosMestresDAO(_context);
+            apiBueiro = new ApiBueiroBLL();
+            apiDispositivoBLL = new ApiDispositivoBLL();
+            apiDrenagemBLL = new ApiDrenagemBLL();
+            apiEdificacoesBLL = new ApiEdificacoesBLL();
+            dominioSuperficiesTiposBLL = new DominioSuperficiesTiposBLL();
+            dominioDispositivosTiposBLL = new DominioDispositivosTiposBLL();
+            dominioDrenagensTiposBLL = new DominioDrenagensTiposBLL();
+            dominioEdificacoesTiposBLL = new DominioEdificacoesTiposBLL();
         }
 
         public List<ConsultarRodoviasViewModels> ObtemLista(ConsultarRodoviasViewModelsParams logViewModel)
@@ -51,22 +63,22 @@ namespace DER.WebApp.Domain.Business
             if (!logViewModel.RodoviaId.Equals(0))
             {
                 if(bueiro)
-                    ConstruirConsultarRodoviasViewModels(dadosMestresDAO.ObterDominio<ApiBueiro>()
+                    ConstruirConsultarRodoviasViewModels(apiBueiro.LoadView()
                         .Where(x => x.rod_id.Equals(logViewModel.RodoviaId) && x.ace_km >= logViewModel.KmInicial && x.ace_km <= logViewModel.KmFinal)
                         .OrderBy(x => x.ace_km).ToList()).ForEach(x => { if (x != null) lDom.Add(x); });
 
                 if(dispositivo)
-                    ConstruirConsultarRodoviasViewModels(dadosMestresDAO.ObterDominio<ApiDispositivo>()
+                    ConstruirConsultarRodoviasViewModels(apiDispositivoBLL.LoadView()
                         .Where(x => x.rod_id.Equals(logViewModel.RodoviaId) && x.dis_km >= logViewModel.KmInicial && x.dis_km <= logViewModel.KmFinal)
                         .OrderBy(x => x.dis_km).ToList()).ForEach(x => { if (x != null) lDom.Add(x); });
 
                 if(drenagem)
-                    ConstruirConsultarRodoviasViewModels(dadosMestresDAO.ObterDominio<ApiDrenagem>()
+                    ConstruirConsultarRodoviasViewModels(apiDrenagemBLL.LoadView()
                         .Where(x => x.rod_id.Equals(logViewModel.RodoviaId) && x.drp_km >= logViewModel.KmInicial && x.drp_km <= logViewModel.KmFinal)
                         .OrderBy(x => x.drp_km).ToList()).ForEach(x => { if (x != null) lDom.Add(x); });
                 
                 if(edifica)
-                ConstruirConsultarRodoviasViewModels(dadosMestresDAO.ObterDominio<ApiEdificacoes>()
+                ConstruirConsultarRodoviasViewModels(apiEdificacoesBLL.LoadView()
                     .Where(x => x.rod_id.Equals(logViewModel.RodoviaId) && x.edi_km >= logViewModel.KmInicial && x.edi_km <= logViewModel.KmFinal)
                     .OrderBy(x => x.edi_km).ToList()).ForEach(x => { if (x != null) lDom.Add(x); });
             }
@@ -83,19 +95,19 @@ namespace DER.WebApp.Domain.Business
             {
                 var CRVM = new ConsultarRodoviasViewModels();
                 if (obj.GetType().Name.ToString().Equals("ApiBueiro"))
-                    nome = dadosMestresDAO.ObterDominio<DominioSuperficiesTipos>()
+                    nome = dominioSuperficiesTiposBLL.LoadView()
                         .Where(x => x.stp_id.Equals(obj.GetType().GetProperty("stp_id").GetValue(obj))).FirstOrDefault().stp_descricao;
 
                 else if (obj.GetType().Name.ToString().Equals("ApiDispositivo"))
-                    nome = dadosMestresDAO.ObterDominio<DominioDispositivosTipos>()
+                    nome = dominioDispositivosTiposBLL.LoadView()
                         .Where(x => x.dit_id.Equals(obj.GetType().GetProperty("dit_id").GetValue(obj))).FirstOrDefault().dit_descricao;
 
                 else if (obj.GetType().Name.ToString().Equals("ApiDrenagem"))
-                    nome = dadosMestresDAO.ObterDominio<DominioDrenagensTipos>()
+                    nome = dominioDrenagensTiposBLL.LoadView()
                         .Where(x => x.drt_id.Equals(obj.GetType().GetProperty("drt_id").GetValue(obj))).FirstOrDefault().drt_descricao;
 
                 else if (obj.GetType().Name.ToString().Equals("ApiEdificacoes"))
-                    nome = dadosMestresDAO.ObterDominio<DominioEdificacoesTipos>()
+                    nome = dominioEdificacoesTiposBLL.LoadView()
                         .Where(x => x.edt_id.Equals(obj.GetType().GetProperty("edt_id").GetValue(obj))).FirstOrDefault().edt_descricao;
 
                 CRVM.Quilometro = (double)obj.GetType().GetProperties().Where(x => x.Name.Contains("_km")).Select(x => x.GetValue(obj)).FirstOrDefault();

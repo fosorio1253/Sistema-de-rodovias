@@ -36,6 +36,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(TachaFaixaCentralLevantamento model)
+        {
+            try
+            {
+                return ExistsById(model.rod_id) ?
+                    tachafaixacentrallevantamentoDAO.Update(model) :
+                    tachafaixacentrallevantamentoDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<TachaFaixaCentralLevantamentoViewModel> LoadView()
         {
             try

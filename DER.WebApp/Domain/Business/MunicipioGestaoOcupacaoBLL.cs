@@ -8,26 +8,17 @@ namespace DER.WebApp.Domain.Business
 {
     public class MunicipioGestaoOcupacaoBLL
     {
-        private DerContext _context;
-        private DadosMestresDAO dadosMestresDAO;
+        private MunicipiosBLL municipiosBLL;
 
         public MunicipioGestaoOcupacaoBLL()
         {
-            _context = new DerContext();
-            dadosMestresDAO = new DadosMestresDAO(_context);
+            municipiosBLL = new MunicipiosBLL();
         }
 
         public List<GestaoOcupacoesMunicipioViewModel> ObtemMunicipio()
         {
             var retorno = new List<GestaoOcupacoesMunicipioViewModel>();
-
-            var dominio = dadosMestresDAO.ObtemDominio((int)TabelaDadosMestresEnum.Municipio, "Municipio");
-
-            foreach (var d in dominio)
-            {
-                retorno.Add(new GestaoOcupacoesMunicipioViewModel() { MunicipioId = d.Id, Nome = d.Nome });
-            }
-
+            municipiosBLL.LoadView().ForEach(X => retorno.Add(new GestaoOcupacoesMunicipioViewModel() { MunicipioId = X.municipio_id, Nome = X.municipio }));
             return retorno;
         }
     }

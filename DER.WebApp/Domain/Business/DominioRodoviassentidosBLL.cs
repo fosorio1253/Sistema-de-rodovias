@@ -36,6 +36,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(DominioRodoviassentidos model)
+        {
+            try
+            {
+                return ExistsById(model.sen_id) ?
+                    dominiorodoviassentidosDAO.Update(model) :
+                    dominiorodoviassentidosDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<DominioRodoviassentidosViewModel> LoadView()
         {
             try

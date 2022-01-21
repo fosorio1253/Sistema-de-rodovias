@@ -36,6 +36,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(DominioSinalizacoesVerticaisTipos model)
+        {
+            try
+            {
+                return ExistsById(model.svt_id) ?
+                    dominiosinalizacoesverticaistiposDAO.Update(model) :
+                    dominiosinalizacoesverticaistiposDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<DominioSinalizacoesVerticaisTiposViewModel> LoadView()
         {
             try

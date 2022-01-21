@@ -13,10 +13,10 @@ namespace DER.WebApp.Infra.DAO
 {
     public class GestaoInteressadoEnderecoDAO : BaseDAO<GestaoInteressadoEndereco>
     {
-        private Logger _logger;
+        
         public GestaoInteressadoEnderecoDAO(DerContext context) : base(context)
         {
-            _logger = new Logger("Gestão Interessado Endereço", context);
+            
         }
 
         public void Inserir(GestaoInteressadoEndereco domain)
@@ -57,7 +57,7 @@ namespace DER.WebApp.Infra.DAO
 
                 conexao.Close();
             }
-            _logger.salvarLog(TipoAlteracao.Criacao,"", "" , _logger.serializer.Serialize(domain));
+            
         }
 
         public void ExcluirPorIdGestao(int idGestao)
@@ -76,7 +76,7 @@ namespace DER.WebApp.Infra.DAO
                 conexao.Query(sql, new { idGestao = idGestao }, commandType: CommandType.Text).ToList();
 
                 conexao.Close();
-                _logger.salvarLog(TipoAlteracao.Exclusao,"", _logger.serializer.Serialize(oldValue) , "");
+                
             }
         }
 

@@ -36,6 +36,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(DominioInstalacoesOperacionaisTipos model)
+        {
+            try
+            {
+                return ExistsById(model.iot_id) ?
+                    dominioinstalacoesoperacionaistiposDAO.Update(model) :
+                    dominioinstalacoesoperacionaistiposDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<DominioInstalacoesOperacionaisTiposViewModel> LoadView()
         {
             try

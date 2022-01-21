@@ -9,26 +9,17 @@ namespace DER.WebApp.Domain.Business
 {
     public class LadoBLL
     {
-        private DerContext _context;
-        private DadosMestresDAO dadosMestresDAO;
+        private LadosBLL ladosBLL;
 
         public LadoBLL()
         {
-            _context = new DerContext();
-            dadosMestresDAO = new DadosMestresDAO(_context);
+            ladosBLL = new LadosBLL();
         }
 
         public List<LadoViewModel> ObtemLados()
         {
             var retorno = new List<LadoViewModel>();
-
-            var dominio = dadosMestresDAO.ObtemDominio((int)TabelaDadosMestresEnum.Lado);
-
-            foreach (var d in dominio)
-            {
-                retorno.Add(new LadoViewModel() { LadoId = d.Id, Nome = d.Nome });
-            }
-
+            ladosBLL.LoadView().ForEach(x => retorno.Add(new LadoViewModel() { LadoId = x.LadoId, Nome = x.Nome }));
             return retorno;
         }
     }

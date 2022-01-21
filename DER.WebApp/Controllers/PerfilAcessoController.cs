@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using DER.WebApp.Helper;
 
 namespace WebApp.Controllers
 {
@@ -17,11 +18,12 @@ namespace WebApp.Controllers
     {
         private PermissaoBLL permissaoBLL;
         private PerfilBLL perfilBLL;
-
+        private Logger logger;
         public PerfilAcessoController()
         {
             permissaoBLL = new PermissaoBLL();
             perfilBLL = new PerfilBLL();
+            logger = new Logger("Perfil Acesso");
         }
         // GET: UsuarioExterno
 
@@ -70,8 +72,19 @@ namespace WebApp.Controllers
                     return Json(new { exists = exists });
                 }
 
+                if (Perfil.Id != 0)
+                {
+                    var perf = perfilBLL.ObtemId(Perfil.Id);
+                    logger.salvarLog(TipoAlteracao.Edicao, Perfil.Id.ToString(), Perfil, perf);
+                }
+                else
+                {
+                    logger.salvarLog(TipoAlteracao.Criacao, Perfil.Id.ToString(), Perfil);
+                }
+
                 var valid = perfilBLL.Salvar(Perfil);
-                return Json(new { status = valid });
+
+                return Json(new { status = valid != 0 ? true : false });
             }
             return Json(new { status = false, html = View("novo", Perfil) });
         }
@@ -79,7 +92,12 @@ namespace WebApp.Controllers
         [HttpPost]
         public ActionResult Excluir(int id)
         {
+            
             var valid = perfilBLL.Excluir(id);
+            if (valid)
+            {
+                logger.salvarLog(TipoAlteracao.Exclusao, id.ToString(), null, perfilBLL.ObtemId(id));
+            }
             return Json(new { status = valid });
         }
 

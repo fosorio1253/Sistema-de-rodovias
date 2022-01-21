@@ -36,6 +36,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(ApiDrenagem model)
+        {
+            try
+            {
+                return ExistsById(model.rod_id) ?
+                    apidrenagemDAO.Update(model) :
+                    apidrenagemDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<ApiDrenagemViewModel> LoadView()
         {
             try

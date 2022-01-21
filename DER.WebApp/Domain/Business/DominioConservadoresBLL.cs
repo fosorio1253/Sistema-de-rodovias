@@ -36,6 +36,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(DominioConservadores model)
+        {
+            try
+            {
+                return ExistsById(model.res_id) ?
+                    dominioconservadoresDAO.Update(model) :
+                    dominioconservadoresDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<DominioConservadoresViewModel> LoadView()
         {
             try

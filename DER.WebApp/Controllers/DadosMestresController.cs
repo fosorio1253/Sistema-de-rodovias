@@ -28,9 +28,6 @@ namespace DER.WebApp.Controllers
             obtemPermissoes(Permissoes.DadosMestresCodigo + id);
             var tabela = dadosMestresBLL.obtemTabela(id);
             return View("novo", tabela);
-            //ObtemGrupo();
-            //var usuario = Mapper.Map<Usuario, UsuarioInternoViewModel>(ObtemUsuario(Id));
-            //return View("Novo", usuario);
         }
 
         public ActionResult Visualizar(string id)
@@ -38,9 +35,6 @@ namespace DER.WebApp.Controllers
             obtemPermissoes(Permissoes.DadosMestresCodigo + id);
             var tabela = dadosMestresBLL.obtemTabela(id);
             return View("novo", tabela);
-            //ObtemGrupo();
-            //var usuario = Mapper.Map<Usuario, UsuarioInternoViewModel>(ObtemUsuario(Id));
-            //return View("Novo", usuario);
         }
 
         public ActionResult Salvar(DadosMestresRetornoViewModel dadosMestres)

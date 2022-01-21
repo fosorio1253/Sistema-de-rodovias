@@ -4,6 +4,7 @@ using DER.WebApp.Domain.Business;
 using DER.WebApp.Domain.Models;
 using DER.WebApp.Domain.Models.Constants;
 using DER.WebApp.Domain.Models.Enum;
+using DER.WebApp.Helper;
 using DER.WebApp.Models;
 using DER.WebApp.Models.Enum;
 using DER.WebApp.ViewModels;
@@ -25,6 +26,7 @@ namespace WebApp.Controllers
         private GrupoBLL grupoBLL;
         private EmpresaBLL empresaBLL;
         private ArquivoBLL arquivoBLL;
+        private Logger logger;
 
         public UsuarioExternoController()
         {
@@ -32,6 +34,7 @@ namespace WebApp.Controllers
             grupoBLL = new GrupoBLL();
             empresaBLL = new EmpresaBLL();
             arquivoBLL = new ArquivoBLL();
+            logger = new Logger("Usuario Externo");
         }
 
         // GET: UsuarioExterno
@@ -102,7 +105,15 @@ namespace WebApp.Controllers
                 }
 
                 var usuario = Mapper.Map<UsuarioExternoViewModel, Usuario>(Usuario);
+
+                if (Usuario.Id != 0)
+                    logger.salvarLog(TipoAlteracao.Edicao, Usuario.Id.ToString());//, Usuario, usuarioBLL.ObtemId(Usuario.Id));
+
                 var valid = usuarioBLL.Salvar(usuario);
+
+                if(Usuario.Id == 0)
+                     logger.salvarLog(TipoAlteracao.Edicao, valid.id.ToString(), Usuario, usuarioBLL.ObtemId(valid.id));
+
                 valid.validCNPJ = true;
                 valid.validCPF = true;
                 return Json(valid);

@@ -36,6 +36,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(FaixasRolamentoLevantamento model)
+        {
+            try
+            {
+                return ExistsById(model.rod_id) ?
+                    faixasrolamentolevantamentoDAO.Update(model) :
+                    faixasrolamentolevantamentoDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<FaixasRolamentoLevantamentoViewModel> LoadView()
         {
             try
@@ -47,6 +61,8 @@ namespace DER.WebApp.Domain.Business
                 return new List<FaixasRolamentoLevantamentoViewModel>();
             }
         }
+
+
 
         public List<FaixasRolamentoLevantamento> Load()
         {

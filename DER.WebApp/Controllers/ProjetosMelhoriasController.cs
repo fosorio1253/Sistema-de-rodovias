@@ -4,6 +4,7 @@ using DER.WebApp.Domain.Business;
 using DER.WebApp.Domain.Models;
 using DER.WebApp.Domain.Models.Constants;
 using DER.WebApp.Domain.Models.Enum;
+using DER.WebApp.Helper;
 using DER.WebApp.ViewModels;
 using DER.WebApp.ViewModels.GestaoInteressados;
 using DER.WebApp.ViewModels.ProjetosMelhorias;
@@ -27,6 +28,7 @@ namespace DER.WebApp.Controllers
         private DispositivoBLL dispositivoBLL;
         private RegionalProjetosMelhoriasBLL regionalBLL;
         private LadoBLL ladoBLL;
+        private Logger logger;
 
         public ProjetosMelhoriasController()
         {          
@@ -35,6 +37,7 @@ namespace DER.WebApp.Controllers
             rodoviaBLL = new RodoviaBLL();
             regionalBLL = new RegionalProjetosMelhoriasBLL();
             ladoBLL = new LadoBLL();
+            logger = new Logger("Projeto Melhorias");
         }
 
         #endregion
@@ -74,7 +77,9 @@ namespace DER.WebApp.Controllers
         {
             try
             {
+                var ant = projetosMelhoriasBLL.ObtemId(id);
                 projetosMelhoriasBLL.Excluir(id);
+                logger.salvarLog(TipoAlteracao.Exclusao, id.ToString(), null, ant);
                 return Json(new { status = true });                
             }
             catch (Exception ex)
@@ -91,6 +96,13 @@ namespace DER.WebApp.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    if(viewModel.Id != 0)
+                    {
+                        logger.salvarLog(TipoAlteracao.Edicao, viewModel.Id.ToString(), viewModel, projetosMelhoriasBLL.ObtemId(viewModel.Id));
+                    }else
+                    {
+                        logger.salvarLog(TipoAlteracao.Criacao, viewModel.Id.ToString(),viewModel);
+                    }
                     var valid = projetosMelhoriasBLL.Inserir(viewModel);
 
                     return Json(valid);
@@ -120,7 +132,7 @@ namespace DER.WebApp.Controllers
             }
 
             retorno.Info = new ProjetosMelhoriasInformacoesRelevantesViewModel();
-            retorno.Municipios = new SelectList(ObtemMunicipio(), "MunicipioId", "Nome");
+            retorno.Municipios = new SelectList(ObtemMunicipio(), "municipio_id", "municipio");
             retorno.Regionais = new SelectList(ObtemRegionais(), "RegionalId", "Nome");
             retorno.Rodovias = new SelectList(ObtemRodovia(), "RodoviaId", "Nome");
             retorno.Lados = new SelectList(ObtemLados(), "LadoId", "Nome");
@@ -148,7 +160,7 @@ namespace DER.WebApp.Controllers
             return rodoviaBLL.ObtemRodovia();
         }
 
-        private List<ViewModels.ProjetosMelhorias.DispositivoViewModel> ObtemDispositivo()
+        private List<ViewModels.DispositivoViewModel> ObtemDispositivo()
         {
             return dispositivoBLL.ObtemDispositivo();
         }

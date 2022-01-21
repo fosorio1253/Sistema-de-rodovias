@@ -195,7 +195,7 @@ namespace DER.WebApp.Domain.Business
                 this.AddConcessao(viewModel.TiposDeConcessoes, idGestao);
 
 
-                return new GestaoInteressadoValidatorViewModel() { valid = true };
+                return new GestaoInteressadoValidatorViewModel() { valid = true, id = idGestao };
             }
             catch (Exception ex)
             {

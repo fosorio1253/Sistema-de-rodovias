@@ -36,6 +36,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(DominioPorticosPmvsTipos model)
+        {
+            try
+            {
+                return ExistsById(model.ppt_id) ?
+                    dominioporticospmvstiposDAO.Update(model) :
+                    dominioporticospmvstiposDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<DominioPorticosPmvsTiposViewModel> LoadView()
         {
             try

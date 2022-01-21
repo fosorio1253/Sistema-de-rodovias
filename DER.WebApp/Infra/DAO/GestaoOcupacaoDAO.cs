@@ -18,10 +18,10 @@ namespace DER.WebApp.Infra.DAO
 {
     public class GestaoOcupacaoDAO : BaseDAO<GestaoOcupacao>
     {
-        private Logger _logger;
+        
         public GestaoOcupacaoDAO(DerContext context) : base(context)
         {
-            _logger = new Logger("Gestão Ocupação", context);
+        
         }
         public List<GestaoOcupacaoWorkflowViewModel> GetListaOcupacaoWorkflow(int workflowId)
         //-- Description:	Busca uma lista de Gestão de Ocupações Workflow
@@ -217,7 +217,7 @@ namespace DER.WebApp.Infra.DAO
         //PROC: STP_UPD_GESTAO_OCUPACAO
         {
             var connectionString = ConfigurationManager.ConnectionStrings["DerContext"].ConnectionString;
-            var oldValue = GetById(domain.Id);
+            
             try
             {
                 using (var conn = new SqlConnection(connectionString))
@@ -251,9 +251,7 @@ namespace DER.WebApp.Infra.DAO
                         conn.Close();
                     }
                 }
-                var value = GetById(domain.Id);
-                if(!value.Equals(oldValue))
-                    _logger.salvarLog(TipoAlteracao.Edicao,domain.Id.ToString(),_logger.serializer.Serialize(oldValue)  , _logger.serializer.Serialize(value));
+                
 
             }
             catch (Exception ex)
@@ -305,9 +303,6 @@ namespace DER.WebApp.Infra.DAO
 
                         conn.Close();
 
-                        var id = Convert.ToInt32(result); 
-                        var value = GetById(id);
-                        _logger.salvarLog(TipoAlteracao.Criacao,id.ToString(),""  , _logger.serializer.Serialize(value));
                         return Convert.ToInt32(result);
                     }
                 }
@@ -322,7 +317,7 @@ namespace DER.WebApp.Infra.DAO
         //Deleta uma Ocupação
         //PROC: STP_DEL_GESTAO_OCUPACAO
         {
-            var oldValue = GetById(id);
+            
             var connectionString = ConfigurationManager.ConnectionStrings["DerContext"].ConnectionString;
 
             try
@@ -338,7 +333,7 @@ namespace DER.WebApp.Infra.DAO
                         command.Parameters.Clear();
                         conn.Close();
 
-                        _logger.salvarLog(TipoAlteracao.Exclusao, id.ToString(), _logger.serializer.Serialize(oldValue), "");
+                        
 
                     }
                 }

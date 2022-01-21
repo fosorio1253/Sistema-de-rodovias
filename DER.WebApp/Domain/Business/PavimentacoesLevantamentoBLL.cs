@@ -36,6 +36,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(PavimentacoesLevantamento model)
+        {
+            try
+            {
+                return ExistsById(model.rod_id) ?
+                    pavimentacoeslevantamentoDAO.Update(model) :
+                    pavimentacoeslevantamentoDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<PavimentacoesLevantamentoViewModel> LoadView()
         {
             try

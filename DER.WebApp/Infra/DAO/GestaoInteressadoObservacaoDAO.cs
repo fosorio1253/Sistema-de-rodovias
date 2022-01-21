@@ -14,10 +14,10 @@ namespace DER.WebApp.Infra.DAO
 {
     public class GestaoInteressadoObservacaoDAO : BaseDAO<GestaoInteressadoObservacao>
     {
-        private Logger _logger;
+        
         public GestaoInteressadoObservacaoDAO(DerContext context) : base(context)
         {
-            _logger = new Logger("Gestão Interessado Observação", context);
+            
         }
 
         public void ExcluirPorIdGestao(int idGestao)
@@ -37,7 +37,7 @@ namespace DER.WebApp.Infra.DAO
                 conexao.Query(sql, new { idGestao = idGestao }, commandType: CommandType.Text).ToList();
 
                 conexao.Close();
-                _logger.salvarLog(TipoAlteracao.Exclusao,"", _logger.serializer.Serialize(oldValue) , "");
+                
             }
         }
 
@@ -87,7 +87,7 @@ namespace DER.WebApp.Infra.DAO
                         var result = command.ExecuteScalar();
 
                         conn.Close();                        
-                    }   _logger.salvarLog(TipoAlteracao.Criacao,"", "" , _logger.serializer.Serialize(domain));
+                    }
                 }
             }
             catch (Exception ex)
@@ -116,7 +116,6 @@ namespace DER.WebApp.Infra.DAO
             //    }, commandType: CommandType.Text);;
 
             //    conexao.Close();
-            //    _logger.salvarLog(TipoAlteracao.Criacao,"", "" , _logger.serializer.Serialize(domain));
             //}
         }
     }

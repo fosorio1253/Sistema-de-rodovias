@@ -36,6 +36,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(AcostamentosLevantamento model)
+        {
+            try
+            {
+                return ExistsById(model.rod_id) ?
+                    acostamentoslevantamentoDAO.Update(model) :
+                    acostamentoslevantamentoDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<AcostamentosLevantamentoViewModel> LoadView()
         {
             try

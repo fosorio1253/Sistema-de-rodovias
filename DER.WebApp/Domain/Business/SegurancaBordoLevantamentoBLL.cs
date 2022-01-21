@@ -36,6 +36,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(SegurancaBordoLevantamento model)
+        {
+            try
+            {
+                return ExistsById(model.rod_id) ?
+                    segurancabordolevantamentoDAO.Update(model) :
+                    segurancabordolevantamentoDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<SegurancaBordoLevantamentoViewModel> LoadView()
         {
             try

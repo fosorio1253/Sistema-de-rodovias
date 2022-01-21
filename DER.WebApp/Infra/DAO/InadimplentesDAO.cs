@@ -15,7 +15,7 @@ namespace DER.WebApp.Infra.DAO
 
         public InadimplentesDAO(DerContext context) : base(context)
         {
-            logger = new Logger("Inadimplentes", context);
+            logger = new Logger("Inadimplentes");
         }
 
         public List<Inadimplentes> ObtemTodos()
@@ -146,8 +146,6 @@ namespace DER.WebApp.Infra.DAO
                     }
                 }
                 var value = GetById(domain.ina_id);
-                if (!value.Equals(oldValue))
-                    logger.salvarLog(TipoAlteracao.Edicao, domain.ina_id.ToString(), logger.serializer.Serialize(oldValue), logger.serializer.Serialize(value));
 
                 return true;
             }
@@ -220,7 +218,6 @@ namespace DER.WebApp.Infra.DAO
                     command.ExecuteNonQuery();
                     command.Parameters.Clear();
                     conn.Close();
-                    logger.salvarLog(TipoAlteracao.Exclusao, model.ina_id.ToString(), logger.serializer.Serialize(oldValue), "");
                 }
             }
             return true;

@@ -36,6 +36,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(DominioPassivosAmbientaisTipos model)
+        {
+            try
+            {
+                return ExistsById(model.pat_id) ?
+                    dominiopassivosambientaistiposDAO.Update(model) :
+                    dominiopassivosambientaistiposDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<DominioPassivosAmbientaisTiposViewModel> LoadView()
         {
             try

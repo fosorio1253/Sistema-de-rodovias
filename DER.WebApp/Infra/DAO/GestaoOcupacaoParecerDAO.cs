@@ -13,10 +13,10 @@ namespace DER.WebApp.Infra.DAO
 {
     public class GestaoOcupacaoParecerDAO : BaseDAO<GestaoOcupacaoParecer>
     {
-        private Logger _logger;
+        
         public GestaoOcupacaoParecerDAO(DerContext context) : base(context)
         {
-            _logger = new Logger("Gestão Ocupação Parecer", context);
+            
         }
 
         public void ExcluirPorIdOcupacao(int idOcupacao)
@@ -130,7 +130,6 @@ namespace DER.WebApp.Infra.DAO
                     parecerRegionalDocumentoArquivo = domain.ParecerRegionalDocumentoArquivo
                 }, commandType: CommandType.Text);
 
-                _logger.salvarLog(TipoAlteracao.Criacao,"", "" , _logger.serializer.Serialize(domain));
                 conexao.Close();
             }
         }

@@ -36,6 +36,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(DominioElementosSegurancaTipos model)
+        {
+            try
+            {
+                return ExistsById(model.est_id) ?
+                    dominioelementossegurancatiposDAO.Update(model) :
+                    dominioelementossegurancatiposDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<DominioElementosSegurancaTiposViewModel> LoadView()
         {
             try

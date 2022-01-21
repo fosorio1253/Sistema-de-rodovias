@@ -8,26 +8,17 @@ namespace DER.WebApp.Domain.Business
 {
     public class SituacaoDaSolicitacaoBLL
     {
-        private DerContext _context;
-        private DadosMestresDAO dadosMestresDAO;
+        private SituacaoSolicitacaoBLL situacaoSolicitacaoBLL;
 
         public SituacaoDaSolicitacaoBLL()
         {
-            _context = new DerContext();
-            dadosMestresDAO = new DadosMestresDAO(_context);
+            situacaoSolicitacaoBLL = new SituacaoSolicitacaoBLL();
         }
 
         public List<GestaoOcupacoesSituacaoSolicitacaoViewModel> ObtemSituacaoSolicitacoes()
         {
             var retorno = new List<GestaoOcupacoesSituacaoSolicitacaoViewModel>();
-
-            var dominio = dadosMestresDAO.ObtemDominio((int)TabelaDadosMestresEnum.SituacaoDaSolicitacao);
-
-            foreach (var d in dominio)
-            {
-                retorno.Add(new GestaoOcupacoesSituacaoSolicitacaoViewModel() { SituacaoSolicitacaoId = d.Id, Nome = d.Nome });
-            }
-
+            situacaoSolicitacaoBLL.LoadView().ForEach(x => retorno.Add(new GestaoOcupacoesSituacaoSolicitacaoViewModel() { SituacaoSolicitacaoId = x.SituacaoSolicitacaoId, Nome = x.Nome }));
             return retorno;
         }
     }

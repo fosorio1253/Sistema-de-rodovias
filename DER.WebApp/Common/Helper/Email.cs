@@ -75,7 +75,7 @@ namespace DER.WebApp.Common.Helper
                 {
                     Attachment data = new Attachment(email.Anexo.InputStream, email.Anexo.FileName);
                     message.Attachments.Add(data);
-                }
+                }   
 
                 client.Send(message);
                 if(save)

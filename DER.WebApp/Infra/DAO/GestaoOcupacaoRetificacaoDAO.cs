@@ -13,10 +13,10 @@ namespace DER.WebApp.Infra.DAO
 {
     public class GestaoOcupacaoRetificacaoDAO : BaseDAO<GestaoOcupacaoRetificacao>
     {
-        private Logger _logger;
+        
         public GestaoOcupacaoRetificacaoDAO(DerContext context) : base(context)
         {
-            _logger = new Logger("Gestão Ocupação Retificacao", context);
+            
         }
 
         public void ExcluirPorIdOcupacao(int idOcupacao)
@@ -93,7 +93,7 @@ namespace DER.WebApp.Infra.DAO
                     ocu_ret_objeto_termo_retificacao = domain.ObjetoTermoRetificacao
                 }, commandType: CommandType.Text);
 
-                _logger.salvarLog(TipoAlteracao.Criacao, "", "", _logger.serializer.Serialize(domain));
+                
                 conexao.Close();
             }
         }

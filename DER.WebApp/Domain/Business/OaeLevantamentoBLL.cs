@@ -35,6 +35,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(OaeLevantamento model)
+        {
+            try
+            {
+                return ExistsById(model.rod_id) ?
+                    oaelevantamentoDAO.Update(model) :
+                    oaelevantamentoDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<OaeLevantamentoViewModel> LoadView()
         {
             try

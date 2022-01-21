@@ -36,6 +36,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(DominioPesosIds model)
+        {
+            try
+            {
+                return ExistsById(model.dominio_pesos_id) ?
+                    dominiopesosidsDAO.Update(model) :
+                    dominiopesosidsDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<DominioPesosIdsViewModel> LoadView()
         {
             try

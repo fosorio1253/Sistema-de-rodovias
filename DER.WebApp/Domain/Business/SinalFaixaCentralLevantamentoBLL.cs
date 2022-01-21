@@ -36,6 +36,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(SinalFaixaCentralLevantamento model)
+        {
+            try
+            {
+                return ExistsById(model.rod_id) ?
+                    sinalfaixacentrallevantamentoDAO.Update(model) :
+                    sinalfaixacentrallevantamentoDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<SinalFaixaCentralLevantamentoViewModel> LoadView()
         {
             try

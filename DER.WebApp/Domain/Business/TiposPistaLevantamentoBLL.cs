@@ -36,6 +36,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(TiposPistaLevantamento model)
+        {
+            try
+            {
+                return ExistsById(model.rod_id) ?
+                    tipospistalevantamentoDAO.Update(model) :
+                    tipospistalevantamentoDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<TiposPistaLevantamentoViewModel> LoadView()
         {
             try

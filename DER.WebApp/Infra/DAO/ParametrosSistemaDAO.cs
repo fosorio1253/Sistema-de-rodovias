@@ -17,7 +17,7 @@ namespace DER.WebApp.Infra.DAO
 
         public ParametrosSistemaDAO(DerContext context) : base(context)
         {
-            logger = new Logger("Parametros Sistema", context);
+            logger = new Logger("Parametros Sistema");
         }
 
         public List<ParametrosSistema> ObtemTodos()
@@ -151,8 +151,6 @@ namespace DER.WebApp.Infra.DAO
                     }
                 }
                 var value = GetById(domain.parametros_sistema_id);
-                if (!value.Equals(oldValue))
-                    logger.salvarLog(TipoAlteracao.Edicao, domain.parametros_sistema_id.ToString(), logger.serializer.Serialize(oldValue), logger.serializer.Serialize(value));
 
                 return true;
             }
@@ -226,7 +224,6 @@ namespace DER.WebApp.Infra.DAO
                     command.ExecuteNonQuery();
                     command.Parameters.Clear();
                     conn.Close();
-                    logger.salvarLog(TipoAlteracao.Exclusao, model.parametros_sistema_id.ToString(), logger.serializer.Serialize(oldValue), "");
                 }
             }
             return true;

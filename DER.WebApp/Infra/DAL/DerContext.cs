@@ -1,16 +1,17 @@
 ﻿using DER.WebApp.Domain.Models;
-using DER.WebApp.Helper;
-using DER.WebApp.Infra.DAL.Map;
-using DER.WebApp.Infra.DAO;
-using DER.WebApp.Models;
+using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
-using System.Threading;
 using System.Web.Script.Serialization;
+using DER.WebApp.Infra.DAL.Map;
+using DER.WebApp.Models;
+using System.Threading;
+using DER.WebApp.Infra.DAO;
+using DER.WebApp.Helper;
 
 namespace DER.WebApp.Infra.DAL
 {

@@ -13,10 +13,10 @@ namespace DER.WebApp.Infra.DAO
 {
     public class TemplateDAO : BaseDAO<Template>
     {
-        private Logger _logger;
+        
         public TemplateDAO(DerContext context) : base(context)
         {
-            _logger = new Logger("Template", context);
+        
         }
 
         public List<Template> GetListTemplates()
@@ -87,7 +87,7 @@ namespace DER.WebApp.Infra.DAO
             }
         }
 
-        public bool SaveTemplate(Template template)
+        public int SaveTemplate(Template template)
         {
             var connectionString = ConfigurationManager.ConnectionStrings["DerContext"].ConnectionString;
 
@@ -108,15 +108,14 @@ namespace DER.WebApp.Infra.DAO
                         conn.Close();
 
                         var id = Convert.ToInt32(result);
-                        _logger.salvarLog(TipoAlteracao.Criacao, id.ToString(), "", _logger.serializer.Serialize(template));
+                        return id;
                     }
                 }
 
-                return true;
             }
             catch (Exception ex)
             {
-                return false;
+                return 0;
                 //throw new Exception(ex.Message);
             }
         }

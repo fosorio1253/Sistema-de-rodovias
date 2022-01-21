@@ -11,11 +11,8 @@ namespace DER.WebApp.Infra.DAO
 {
     public class BancoBrasilBoletoDAO : BaseDAO<Boleto>
 	{
-        Logger logger;
-
         public BancoBrasilBoletoDAO(DerContext context) : base(context)
         {
-            logger = new Logger("BancoBrasilBoleto", context);
         }
 
         public List<Boleto> ObtemTodosBoletos()
@@ -181,7 +178,6 @@ namespace DER.WebApp.Infra.DAO
         public void Update(Boleto domain)
         {
             var connectionString = ConfigurationManager.ConnectionStrings["DerContext"].ConnectionString;
-            var oldValue = GetById(domain.Boleto_Id);
             try
             {
                 using (var conn = new SqlConnection(connectionString))
@@ -246,9 +242,7 @@ namespace DER.WebApp.Infra.DAO
                         conn.Close();
                     }
                 }
-                var value = GetById(domain.Boleto_Id);
-                if (!value.Equals(oldValue))
-                    logger.salvarLog(TipoAlteracao.Edicao, domain.Boleto_Id.ToString(), logger.serializer.Serialize(oldValue), logger.serializer.Serialize(value));
+                
 
             }
             catch (Exception ex)

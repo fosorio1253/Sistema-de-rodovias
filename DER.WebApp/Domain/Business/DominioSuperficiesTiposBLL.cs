@@ -36,6 +36,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(DominioSuperficiesTipos model)
+        {
+            try
+            {
+                return ExistsById(model.stp_id) ?
+                    dominiosuperficiestiposDAO.Update(model) :
+                    dominiosuperficiestiposDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<DominioSuperficiesTiposViewModel> LoadView()
         {
             try

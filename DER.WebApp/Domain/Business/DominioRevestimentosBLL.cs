@@ -36,6 +36,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(DominioRevestimentos model)
+        {
+            try
+            {
+                return ExistsById(model.rev_id) ?
+                    dominiorevestimentosDAO.Update(model) :
+                    dominiorevestimentosDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<DominioRevestimentosViewModel> LoadView()
         {
             try

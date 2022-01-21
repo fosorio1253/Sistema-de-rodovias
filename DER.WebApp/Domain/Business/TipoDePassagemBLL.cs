@@ -8,26 +8,17 @@ namespace DER.WebApp.Domain.Business
 {
     public class TipoDePassagemBLL
     {
-        private DerContext _context;
-        private DadosMestresDAO dadosMestresDAO;
+        private TipoPassagemBLL tipoPassagemBLL;
 
         public TipoDePassagemBLL()
         {
-            _context = new DerContext();
-            dadosMestresDAO = new DadosMestresDAO(_context);
+            tipoPassagemBLL = new TipoPassagemBLL();
         }
 
         public List<GestaoOcupacoesTipoPassagemViewModel> ObtemTipoPassagens()
         {
             var retorno = new List<GestaoOcupacoesTipoPassagemViewModel>();
-
-            var dominio = dadosMestresDAO.ObtemDominio((int)TabelaDadosMestresEnum.TipoDePassagem);
-
-            foreach (var d in dominio)
-            {
-                retorno.Add(new GestaoOcupacoesTipoPassagemViewModel() { TipoPassagemId = d.Id, Nome = d.Nome });
-            }
-
+            tipoPassagemBLL.LoadView().ForEach(x => retorno.Add(new GestaoOcupacoesTipoPassagemViewModel() { TipoPassagemId = (int)x.TipoPassagemId, Nome = x.Nome }));
             return retorno;
         }
     }

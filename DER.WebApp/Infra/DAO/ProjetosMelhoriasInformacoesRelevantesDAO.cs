@@ -15,10 +15,10 @@ namespace DER.WebApp.Infra.DAO
 {
     public class ProjetosMelhoriasInformacoesRelevantesDAO : BaseDAO<ProjetosMelhoriasInformacoesRelevantes>
     {
-        private Logger _logger;
+        
         public ProjetosMelhoriasInformacoesRelevantesDAO(DerContext context) : base(context)
         {
-            _logger = new Logger("Projetos Melhorias Informações Relevantes", context);
+            
         }
         public void ExcluirPorIdProjetos(int idProjetos)
         //-- Description:	Deleta uma informação relevante de um Projeto de Melhoria.
@@ -36,7 +36,7 @@ namespace DER.WebApp.Infra.DAO
                     command.ExecuteNonQuery();
                     command.Parameters.Clear();
                     conn.Close();
-                    _logger.salvarLog(TipoAlteracao.Exclusao, idProjetos.ToString(), "", "");
+                    
                 }
             }
         }
@@ -108,7 +108,7 @@ namespace DER.WebApp.Infra.DAO
                         var result = command.ExecuteScalar();
 
                         conn.Close();
-                        _logger.salvarLog(TipoAlteracao.Criacao, "", "", _logger.serializer.Serialize(domain));
+                        
 
                         return Convert.ToInt32(result);
                     }

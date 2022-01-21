@@ -17,7 +17,7 @@ namespace DER.WebApp.Infra.DAO
 
         public DominioRegionaisCodeDAO(DerContext context) : base(context)
         {
-            logger = new Logger("DominioRegionaisCode", context);
+            logger = new Logger("DominioRegionaisCode");
         }
 
         public List<DominioRegionaisCode> ObtemTodos()
@@ -104,8 +104,6 @@ namespace DER.WebApp.Infra.DAO
                 }
 
                 var value = GetById(domain.reg_id);
-                if (!value.Equals(oldValue))
-                    logger.salvarLog(TipoAlteracao.Edicao, domain.reg_id.ToString(), logger.serializer.Serialize(oldValue), logger.serializer.Serialize(value));
                 return true;
             }
             catch (Exception ex)
@@ -161,7 +159,6 @@ namespace DER.WebApp.Infra.DAO
                     command.ExecuteNonQuery();
                     command.Parameters.Clear();
                     conn.Close();
-                    logger.salvarLog(TipoAlteracao.Exclusao, model.reg_id.ToString(), logger.serializer.Serialize(oldValue), "");
                 }
             }
             return true;

@@ -17,7 +17,7 @@ namespace DER.WebApp.Infra.DAO
 
         public ResidenciaConservacaoDAO(DerContext context) : base(context)
         {
-            logger = new Logger("ResidenciaConservacao", context);
+            logger = new Logger("ResidenciaConservacao");
         }
 
         public List<ResidenciaConservacao> ObtemTodos()
@@ -107,8 +107,6 @@ namespace DER.WebApp.Infra.DAO
                 }
 
                 var value = GetById(domain.residencia_conservacao_id);
-                if (!value.Equals(oldValue))
-                    logger.salvarLog(TipoAlteracao.Edicao, domain.residencia_conservacao_id.ToString(), logger.serializer.Serialize(oldValue), logger.serializer.Serialize(value));
                 return true;
             }
             catch (Exception ex)
@@ -165,12 +163,9 @@ namespace DER.WebApp.Infra.DAO
                     command.ExecuteNonQuery();
                     command.Parameters.Clear();
                     conn.Close();
-                    logger.salvarLog(TipoAlteracao.Exclusao, model.residencia_conservacao_id.ToString(), logger.serializer.Serialize(oldValue), "");
                 }
             }
             return true;
         }
     }
-
-
 }

@@ -7,11 +7,6 @@ namespace DER.WebApp.Controllers
 {
     public class APIController : Controller
     {
-        DadosMestresBLL dadosMestresBLL;
-        public APIController()
-        {
-            dadosMestresBLL = new DadosMestresBLL();
-        }
         public ActionResult Index()
         {
             return View(new APIViewModel().RetornaApisSirgeo());

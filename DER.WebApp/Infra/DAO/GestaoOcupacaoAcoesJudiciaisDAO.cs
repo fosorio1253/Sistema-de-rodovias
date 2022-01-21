@@ -11,11 +11,11 @@ namespace DER.WebApp.Infra.DAO
 {
     public class GestaoOcupacaoAcoesJudiciaisDAO : BaseDAO<AcoesJudiciais>
     {
-        Logger logger;
+        
 
         public GestaoOcupacaoAcoesJudiciaisDAO(DerContext context) : base(context)
         {
-            logger = new Logger("AcoesJudiciais", context);
+        
         }
 
         public List<AcoesJudiciais> ObtemTodos()
@@ -124,7 +124,6 @@ namespace DER.WebApp.Infra.DAO
         public bool Update(AcoesJudiciais domain)
         {
             var connectionString = ConfigurationManager.ConnectionStrings["DerContext"].ConnectionString;
-            var oldValue = GetById(domain.ocu_acoesjud_id);
             try
             {
                 using (var conn = new SqlConnection(connectionString))
@@ -160,9 +159,6 @@ namespace DER.WebApp.Infra.DAO
                         conn.Close();
                     }
                 }
-                var value = GetById(domain.ocu_acoesjud_id);
-                if (!value.Equals(oldValue))
-                    logger.salvarLog(TipoAlteracao.Edicao, domain.ocu_acoesjud_id.ToString(), logger.serializer.Serialize(oldValue), logger.serializer.Serialize(value));
 
                 return true;
             }

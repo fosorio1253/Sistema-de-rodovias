@@ -11,42 +11,36 @@ namespace DER.WebApp.Domain.Business
     public class TipoDeConcessaoBLL
     {
         private DerContext _context;
-        private DadosMestresDAO dadosMestresDAO;
         private GestaoInteressadoTipoDeConcessaoDAO gestaoInteressadoTipoDeConcessaoDAO;
+        private TipoConcessaoBLL tipoConcessaoBLL;
 
         public TipoDeConcessaoBLL()
         {
             _context = new DerContext();
-            dadosMestresDAO = new DadosMestresDAO(_context);
             gestaoInteressadoTipoDeConcessaoDAO = new GestaoInteressadoTipoDeConcessaoDAO(_context);
+            tipoConcessaoBLL = new TipoConcessaoBLL();
         }
 
         public List<TipoDeConcessaoViewModel> ObtemTipoDeConcessao(int? idGestao)
         {
             var retorno = new List<TipoDeConcessaoViewModel>();
-
-            var dominio = dadosMestresDAO.ObtemDominio((int)TabelaDadosMestresEnum.TipoDeConcessao);
-
             var concessoes = new List<TipoDeConcessaoViewModel>();
 
             if (idGestao != null)
-            {
                 concessoes = gestaoInteressadoTipoDeConcessaoDAO.GetByGestaoId((int)idGestao);
-            }
 
-            foreach (var d in dominio)
+            tipoConcessaoBLL.LoadView().ForEach(x =>
             {
                 var marcado = false;
 
                 if (idGestao != null)
                 {
-                    var con = concessoes.FirstOrDefault(x => x.IdGestao == (int)idGestao && x.TipoConcessaoId == d.Id);
+                    var con = concessoes.FirstOrDefault(y => y.IdGestao == (int)idGestao && y.TipoConcessaoId == x.tipo_concessao_id);
                     marcado = (con != null) ? con.Marcado : marcado;
                 }
 
-                retorno.Add(new TipoDeConcessaoViewModel() { TipoConcessaoId = d.Id, Nome = " - " + d.Nome, Marcado = marcado  });
-            }
-
+                retorno.Add(new TipoDeConcessaoViewModel() { TipoConcessaoId = x.tipo_concessao_id, Nome = " - " + x.Descricao, Marcado = marcado });
+            });
             return retorno;
         }
     }

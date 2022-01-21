@@ -143,7 +143,7 @@ namespace DER.WebApp.Domain.Business
                     EmailHelper.EnviarEmail(Email);
                 }
 
-                return new GestaoOcorrenciaValidatorViewModel() { valid = true, mensagem = "Cadastrado com sucesso" };
+                return new GestaoOcorrenciaValidatorViewModel() { id = idOcorrencia, valid = true, mensagem = "Cadastrado com sucesso" };
             }
             catch (Exception ex)
             {
@@ -218,7 +218,7 @@ namespace DER.WebApp.Domain.Business
                     EmailHelper.EnviarEmail(Email);
                 }
 
-                return new GestaoOcorrenciaValidatorViewModel() { valid = true, mensagem = "Cadastrado com sucesso" };
+                return new GestaoOcorrenciaValidatorViewModel() { valid = true, id = idOcorrencia, mensagem = "Cadastrado com sucesso" };
             }
             catch (Exception ex)
             {

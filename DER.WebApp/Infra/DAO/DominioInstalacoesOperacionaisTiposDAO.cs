@@ -17,7 +17,7 @@ namespace DER.WebApp.Infra.DAO
 
         public DominioInstalacoesOperacionaisTiposDAO(DerContext context) : base(context)
         {
-            logger = new Logger("DominioInstalacoesOperacionaisTipos", context);
+            logger = new Logger("DominioInstalacoesOperacionaisTipos");
         }
 
         public List<DominioInstalacoesOperacionaisTipos> ObtemTodos()
@@ -104,8 +104,6 @@ namespace DER.WebApp.Infra.DAO
                 }
 
                 var value = GetById(domain.iot_id);
-                if (!value.Equals(oldValue))
-                    logger.salvarLog(TipoAlteracao.Edicao, domain.iot_id.ToString(), logger.serializer.Serialize(oldValue), logger.serializer.Serialize(value));
                 return true;
             }
             catch (Exception ex)
@@ -161,7 +159,6 @@ namespace DER.WebApp.Infra.DAO
                     command.ExecuteNonQuery();
                     command.Parameters.Clear();
                     conn.Close();
-                    logger.salvarLog(TipoAlteracao.Exclusao, model.iot_id.ToString(), logger.serializer.Serialize(oldValue), "");
                 }
             }
             return true;

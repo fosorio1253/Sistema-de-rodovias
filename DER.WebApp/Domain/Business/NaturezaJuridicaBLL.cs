@@ -9,26 +9,17 @@ namespace DER.WebApp.Domain.Business
 {
     public class NaturezaJuridicaBLL
     {
-        private DerContext _context;
-        private DadosMestresDAO dadosMestresDAO;
+        private NaturezaJuridicasBLL naturezaJuridicasBLL;
 
         public NaturezaJuridicaBLL()
         {
-            _context = new DerContext();
-            dadosMestresDAO = new DadosMestresDAO(_context);
+            naturezaJuridicasBLL = new NaturezaJuridicasBLL();
         }
 
         public List<ViewModels.NaturezaJuridicaViewModel> ObtemNaturezaJuridica()
         {
             var retorno = new List<ViewModels.NaturezaJuridicaViewModel>();
-
-            var dominio = dadosMestresDAO.ObtemDominio((int)TabelaDadosMestresEnum.NaturezaJuridica);
-
-            foreach (var d in dominio)
-            {
-                retorno.Add(new ViewModels.NaturezaJuridicaViewModel() { NaturezaJuridicaId = d.Id, Nome = d.Nome });
-            }
-
+            naturezaJuridicasBLL.LoadView().ForEach(x => retorno.Add(new ViewModels.NaturezaJuridicaViewModel() { NaturezaJuridicaId = x.NaturezaJuridicaId, Nome = x.Nome }));
             return retorno;
         }
     }

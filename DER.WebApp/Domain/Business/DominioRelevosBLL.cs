@@ -36,6 +36,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(DominioRelevos model)
+        {
+            try
+            {
+                return ExistsById(model.rel_id) ?
+                    dominiorelevosDAO.Update(model) :
+                    dominiorelevosDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<DominioRelevosViewModel> LoadView()
         {
             try

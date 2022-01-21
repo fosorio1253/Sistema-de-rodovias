@@ -9,29 +9,23 @@ namespace DER.WebApp.Domain.Business
 {
     public class TipoOcupacoesBLL
     {
-        private DerContext _context;
-        private DadosMestresDAO dadosMestresDAO;
+        private TipoOcupacaoBLL tipoOcupacaoBLL;
 
         public TipoOcupacoesBLL()
         {
-            _context = new DerContext();
-            dadosMestresDAO = new DadosMestresDAO(_context);
+            tipoOcupacaoBLL = new TipoOcupacaoBLL();
         }
 
-        public List<ViewModels.TipoOcupacaoViewModel> ObtemTipoOcupacoes()
+        public List<TipoOcupacaoViewModel> ObtemTipoOcupacoes()
         {
-            var retorno = new List<ViewModels.TipoOcupacaoViewModel>();
-
-            //var dominio = dadosMestresDAO.ObtemDominio((int)TabelaDadosMestresEnum.TipoOcupacao);
-            var dominio = dadosMestresDAO.ObtemDominioTipoOcupacao((int)TabelaDadosMestresEnum.TipoOcupacao);
-            
-
-            foreach (var d in dominio)
+            var retorno = new List<TipoOcupacaoViewModel>();
+            tipoOcupacaoBLL.LoadView().ForEach(x => retorno.Add(new TipoOcupacaoViewModel()
             {
-                retorno.Add(new ViewModels.TipoOcupacaoViewModel() { TipoOcupacaoId = d.Id, Nome = d.Nome, 
-                                                                     AlturaMinima = d.AlturaMinima, ProfundidadeMinima = d.ProfundidadeMinima});
-            }
-
+                tipo_ocupacao_id = x.tipo_ocupacao_id,
+                nome = x.nome,
+                altura_minima = x.altura_minima,
+                profundidade_minima = x.profundidade_minima
+            }));
             return retorno;
         }
     }

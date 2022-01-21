@@ -60,8 +60,6 @@
                                         if (linhas.i + 1 == Model.Colunas.Count())
                                         {
                                             <td class="ultimaColuna">
-                                                @*<button type="button" onclick="Editar('@Model.CodigoTabela', '@linhas.value.linha')" @(permissao.Editar ? "" : "disabled") class="btn btn-link"><i class="fa fa-pencil"></i></button>
-                                                <button type="button" onclick="Excluir('@linhas.value.id')" @(permissao.Excluir ? "" : "disabled") class="btn btn-link"><i class="fa fa-trash"></i></button>*@
                                                 <button type="button" onclick="Editar('@Model.CodigoTabela', '@linhas.value.linha')" @(permissao.Editar) class="btn btn-link"><i class="fa fa-pencil"></i></button>
                                                 <button type="button" onclick="Excluir('@linhas.value.id')" @(permissao.Excluir) class="btn btn-link"><i class="fa fa-trash"></i></button>
                                             </td>

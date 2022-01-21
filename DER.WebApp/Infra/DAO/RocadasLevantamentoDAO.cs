@@ -17,7 +17,7 @@ namespace DER.WebApp.Infra.DAO
 
         public RocadasLevantamentoDAO(DerContext context) : base(context)
         {
-            logger = new Logger("RocadasLevantamento", context);
+            logger = new Logger("RocadasLevantamento");
         }
 
         public List<RocadasLevantamento> ObtemTodos()
@@ -131,8 +131,6 @@ namespace DER.WebApp.Infra.DAO
                 }
 
                 var value = GetById(domain.rod_id);
-                if (!value.Equals(oldValue))
-                    logger.salvarLog(TipoAlteracao.Edicao, domain.rod_id.ToString(), logger.serializer.Serialize(oldValue), logger.serializer.Serialize(value));
                 return true;
             }
             catch (Exception ex)
@@ -197,7 +195,6 @@ namespace DER.WebApp.Infra.DAO
                     command.ExecuteNonQuery();
                     command.Parameters.Clear();
                     conn.Close();
-                    logger.salvarLog(TipoAlteracao.Exclusao, model.rod_id.ToString(), logger.serializer.Serialize(oldValue), "");
                 }
             }
             return true;

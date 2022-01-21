@@ -36,6 +36,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(DominioFlags model)
+        {
+            try
+            {
+                return ExistsById(model.fla_id) ?
+                    dominioflagsDAO.Update(model) :
+                    dominioflagsDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<DominioFlagsViewModel> LoadView()
         {
             try

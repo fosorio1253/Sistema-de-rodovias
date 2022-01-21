@@ -12,11 +12,11 @@ namespace DER.WebApp.Infra.DAO
 {
     public class GestaoOcupacoesPEPDAO : BaseDAO<GestaoOcupacoesPEP>
     {
-        Logger logger;
+        
 
         public GestaoOcupacoesPEPDAO(DerContext context) : base(context)
         {
-            logger = new Logger("GestaoOcupacoesPEP", context);
+            
         }
 
         public List<GestaoOcupacoesPEP> ObtemTodos()
@@ -161,9 +161,7 @@ namespace DER.WebApp.Infra.DAO
                         conn.Close();
                     }
                 }
-                var value = GetById(domain.Id_PEP);
-                if (!value.Equals(oldValue))
-                    logger.salvarLog(TipoAlteracao.Edicao, domain.Id_PEP.ToString(), logger.serializer.Serialize(oldValue), logger.serializer.Serialize(value));
+                
                 return true;
             }
             catch (Exception ex)

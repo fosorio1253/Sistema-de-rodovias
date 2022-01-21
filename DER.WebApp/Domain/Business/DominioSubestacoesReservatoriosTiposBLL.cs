@@ -36,6 +36,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(DominioSubestacoesReservatoriosTipos model)
+        {
+            try
+            {
+                return ExistsById(model.srt_id) ?
+                    dominiosubestacoesreservatoriostiposDAO.Update(model) :
+                    dominiosubestacoesreservatoriostiposDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<DominioSubestacoesReservatoriosTiposViewModel> LoadView()
         {
             try

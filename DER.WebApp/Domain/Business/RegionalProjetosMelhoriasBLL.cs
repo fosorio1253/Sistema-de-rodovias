@@ -9,26 +9,17 @@ namespace DER.WebApp.Domain.Business
 {
     public class RegionalProjetosMelhoriasBLL
     {
-        private DerContext _context;
-        private DadosMestresDAO dadosMestresDAO;
+        private DivisaoRegionalBLL divisaoRegionalBLL;
 
         public RegionalProjetosMelhoriasBLL()
         {
-            _context = new DerContext();
-            dadosMestresDAO = new DadosMestresDAO(_context);
+            divisaoRegionalBLL = new DivisaoRegionalBLL();
         }
 
         public List<ProjetosMelhoriasRegionalViewModel> ObtemRegionais()
         {
             var retorno = new List<ProjetosMelhoriasRegionalViewModel>();
-
-            var dominio = dadosMestresDAO.ObtemDominio((int)TabelaDadosMestresEnum.DivisaoRegional, "Regional");
-
-            foreach(var d in dominio)
-            {
-                retorno.Add(new ProjetosMelhoriasRegionalViewModel() { RegionalId = d.Id, Nome = d.Nome, Sigla = d.Sigla });
-            }
-
+            divisaoRegionalBLL.LoadView().ForEach(x => retorno.Add(new ProjetosMelhoriasRegionalViewModel() { RegionalId = x.divisao_regional_id, Nome = x.descricao, Sigla = x.sigla }));
             return retorno;
         }
     }

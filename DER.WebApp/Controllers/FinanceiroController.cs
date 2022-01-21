@@ -32,6 +32,7 @@ namespace DER.WebApp.Controllers
         private FaturamentoOcupacaoBLL faturamentoOcupacaoBLL;
         private RodoviaBLL rodoviaBLL;
         private GestaoInteressadoBLL gestaoInteressadoBLL;
+        private Logger logger;
 
         public FinanceiroController()
         {
@@ -42,6 +43,7 @@ namespace DER.WebApp.Controllers
             faturamentoOcupacaoBLL = new FaturamentoOcupacaoBLL();
             rodoviaBLL = new RodoviaBLL();
             gestaoInteressadoBLL = new GestaoInteressadoBLL();
+            logger = new Logger("Financeiro");
         }
 
         public ActionResult Faturamento()
@@ -369,7 +371,7 @@ namespace DER.WebApp.Controllers
 
         private List<ViewModels.ProjetosMelhorias.RodoviaViewModel> ObtemRodovia()
         {
-            return rodoviaBLL.ObterRodovias();
+            return rodoviaBLL.ObtemRodovia();
         }
 
         private List<TipoOcupacaoViewModel> ObtemOcupacoes()

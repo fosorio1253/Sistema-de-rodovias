@@ -15,7 +15,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DER.WebApp</RootNamespace>
     <AssemblyName>DER.WebApp</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
@@ -26,7 +26,6 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -141,6 +140,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.5.0.0\lib\net45\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
@@ -202,6 +202,7 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
@@ -241,8 +242,10 @@
     <Compile Include="Domain\Business\ApiDrenagemBLL.cs" />
     <Compile Include="Domain\Business\ApiEdificacoesBLL.cs" />
     <Compile Include="Domain\Business\AreaBLL.cs" />
+    <Compile Include="Domain\Business\AreasBLL.cs" />
     <Compile Include="Domain\Business\AreasGramadasLevantamentoBLL.cs" />
     <Compile Include="Domain\Business\ArquivoBLL.cs" />
+    <Compile Include="Domain\Business\AssuntosBLL.cs" />
     <Compile Include="Domain\Business\BancoBrasilBoletoBLL.cs" />
     <Compile Include="Domain\Business\BancoBrasilBoletoRespostaBLL.cs" />
     <Compile Include="Domain\Business\CercasLevantamentoBLL.cs" />
@@ -300,14 +303,21 @@
     <Compile Include="Domain\Business\IgpBLL.cs" />
     <Compile Include="Domain\Business\InadimplentesBLL.cs" />
     <Compile Include="Domain\Business\InadimplentesViewBLL.cs" />
+    <Compile Include="Domain\Business\LadosBLL.cs" />
     <Compile Include="Domain\Business\MunicipiosBLL.cs" />
+    <Compile Include="Domain\Business\NaturezaJuridicasBLL.cs" />
     <Compile Include="Domain\Business\OaeLevantamentoBLL.cs" />
+    <Compile Include="Domain\Business\OcorrenciaSeveridadeBLL.cs" />
+    <Compile Include="Domain\Business\OcorrenciaStatusBLL.cs" />
+    <Compile Include="Domain\Business\OcorrenciaTrechoBLL.cs" />
+    <Compile Include="Domain\Business\OrigemSolicitacaoBLL.cs" />
     <Compile Include="Domain\Business\ParametrosSistemaBLL.cs" />
     <Compile Include="Domain\Business\PassivosAmbientaisLinLevantamentoBLL.cs" />
     <Compile Include="Domain\Business\PavimentacoesLevantamentoBLL.cs" />
     <Compile Include="Domain\Business\PavimentosRigidosLevantamentoBLL.cs" />
     <Compile Include="Domain\Business\PEPBLL.cs" />
     <Compile Include="Domain\Business\PiBLL.cs" />
+    <Compile Include="Domain\Business\RegionalsBLL.cs" />
     <Compile Include="Domain\Business\RemuneracaoBLL.cs" />
     <Compile Include="Domain\Business\ResidenciaConservacaoBLL.cs" />
     <Compile Include="Domain\Business\RocadasLevantamentoBLL.cs" />
@@ -318,14 +328,22 @@
     <Compile Include="Domain\Business\SinalFaixaBordoLevantamentoBLL.cs" />
     <Compile Include="Domain\Business\SinalFaixaCentralLevantamentoBLL.cs" />
     <Compile Include="Domain\Business\SituacaoDaOcupacaoBLL.cs" />
+    <Compile Include="Domain\Business\SituacaoOcupacaoBLL.cs" />
+    <Compile Include="Domain\Business\SituacaoSolicitacaoBLL.cs" />
     <Compile Include="Domain\Business\TachaFaixaBordoLevantamentoBLL.cs" />
     <Compile Include="Domain\Business\TachaFaixaCentralLevantamentoBLL.cs" />
     <Compile Include="Domain\Business\TerceiraFaixaLevantamentoBLL.cs" />
     <Compile Include="Domain\Business\TipoConcessaoBLL.cs" />
     <Compile Include="Domain\Business\TipoDeDocumentoInteressadoBLL.cs" />
+    <Compile Include="Domain\Business\TipoDocumentoBLL.cs" />
     <Compile Include="Domain\Business\TipoDocumentoInteressadoBLL.cs" />
+    <Compile Include="Domain\Business\TipoDocumentoOcupacaoBLL.cs" />
+    <Compile Include="Domain\Business\TipoEmpresasBLL.cs" />
+    <Compile Include="Domain\Business\TipoImplantacaoBLL.cs" />
     <Compile Include="Domain\Business\TipoInteressadosBLL.cs" />
+    <Compile Include="Domain\Business\TipoInterferenciaBLL.cs" />
     <Compile Include="Domain\Business\TipoOcupacaoBLL.cs" />
+    <Compile Include="Domain\Business\TipoPassagemBLL.cs" />
     <Compile Include="Domain\Business\TiposPistaLevantamentoBLL.cs" />
     <Compile Include="Domain\Business\TrechosBLL.cs" />
     <Compile Include="Domain\Business\StatusBLL.cs" />
@@ -364,6 +382,7 @@
     <Compile Include="Domain\Business\TipoInteressadoBLL.cs" />
     <Compile Include="Domain\Business\TuneisLevantamentoBLL.cs" />
     <Compile Include="Domain\Business\UaBLL.cs" />
+    <Compile Include="Domain\Business\UFBLL.cs" />
     <Compile Include="Domain\Business\UfespBLL.cs" />
     <Compile Include="Domain\Business\UnidadeBLL.cs" />
     <Compile Include="Domain\Business\UnidadeGestaoOcupacaoBLL.cs" />
@@ -383,6 +402,8 @@
     <Compile Include="Domain\Models\ApiDispositivo.cs" />
     <Compile Include="Domain\Models\ApiDrenagem.cs" />
     <Compile Include="Domain\Models\ApiEdificacoes.cs" />
+    <Compile Include="Domain\Models\Area.cs" />
+    <Compile Include="Domain\Models\Assunto.cs" />
     <Compile Include="Domain\Models\Boleto.cs" />
     <Compile Include="Domain\Models\BoletoResposta.cs" />
     <Compile Include="Domain\Models\Concessionaria.cs" />
@@ -392,6 +413,7 @@
     <Compile Include="Domain\Models\DominioAdministradores.cs" />
     <Compile Include="Domain\Models\DominioCircunscricao.cs" />
     <Compile Include="Domain\Models\DominioConservadores.cs" />
+    <Compile Include="Domain\Models\DominioDispositivo.cs" />
     <Compile Include="Domain\Models\DominioDispositivosTipos.cs" />
     <Compile Include="Domain\Models\DominioEdificacoesTipos.cs" />
     <Compile Include="Domain\Models\DominioElementosSegurancaTipos.cs" />
@@ -422,6 +444,7 @@
     <Compile Include="Domain\Models\DominioRelevos.cs" />
     <Compile Include="Domain\Models\DominioResidencias.cs" />
     <Compile Include="Domain\Models\DominioRevestimentos.cs" />
+    <Compile Include="Domain\Models\DominioRodovia.cs" />
     <Compile Include="Domain\Models\DominioRodoviassentidos.cs" />
     <Compile Include="Domain\Models\DominioRodoviasTipos.cs" />
     <Compile Include="Domain\Models\DominioSensoresEletronicosTipos.cs" />
@@ -466,8 +489,14 @@
     <Compile Include="Domain\Models\GestaoOcupacoesRemuneracao.cs" />
     <Compile Include="Domain\Models\Igp.cs" />
     <Compile Include="Domain\Models\Inadimplentes.cs" />
+    <Compile Include="Domain\Models\Lado.cs" />
     <Compile Include="Domain\Models\Municipio.cs" />
+    <Compile Include="Domain\Models\NaturezaJuridica.cs" />
     <Compile Include="Domain\Models\OaeLevantamento.cs" />
+    <Compile Include="Domain\Models\OcorrenciaSeveridade.cs" />
+    <Compile Include="Domain\Models\OcorrenciaStatus.cs" />
+    <Compile Include="Domain\Models\OcorrenciaTrecho.cs" />
+    <Compile Include="Domain\Models\OrigemSolicitacao.cs" />
     <Compile Include="Domain\Models\ParametrosSistema.cs" />
     <Compile Include="Domain\Models\PassivosAmbientaisLinLevantamento.cs" />
     <Compile Include="Domain\Models\PavimentacoesLevantamento.cs" />
@@ -475,6 +504,7 @@
     <Compile Include="Domain\Models\Pi.cs" />
     <Compile Include="Domain\Models\ProjetosMelhorias.cs" />
     <Compile Include="Domain\Models\ProjetosMelhoriasInformacoesRelevantes.cs" />
+    <Compile Include="Domain\Models\Regional.cs" />
     <Compile Include="Domain\Models\ResidenciaConservacao.cs" />
     <Compile Include="Domain\Models\RocadasLevantamento.cs" />
     <Compile Include="Domain\Models\Rodovia.cs" />
@@ -483,12 +513,19 @@
     <Compile Include="Domain\Models\SegurancaGuardaCorpoLevantamento.cs" />
     <Compile Include="Domain\Models\SinalFaixaBordoLevantamento.cs" />
     <Compile Include="Domain\Models\SinalFaixaCentralLevantamento.cs" />
+    <Compile Include="Domain\Models\SituacaoOcupacao.cs" />
+    <Compile Include="Domain\Models\SituacaoSolicitacao.cs" />
+    <Compile Include="Domain\Models\SolicitacaoOcupacao.cs" />
     <Compile Include="Domain\Models\TachaFaixaBordoLevantamento.cs" />
     <Compile Include="Domain\Models\TachaFaixaCentralLevantamento.cs" />
     <Compile Include="Domain\Models\TerceiraFaixaLevantamento.cs" />
     <Compile Include="Domain\Models\TipoConcessao.cs" />
     <Compile Include="Domain\Models\TipoDeOcupacao.cs" />
     <Compile Include="Domain\Models\TipoDocumentoInteressado.cs" />
+    <Compile Include="Domain\Models\TipoDocumentoOcupacao.cs" />
+    <Compile Include="Domain\Models\TipoDocumentos.cs" />
+    <Compile Include="Domain\Models\TipoEmpresa.cs" />
+    <Compile Include="Domain\Models\TipoImplantacao.cs" />
     <Compile Include="Domain\Models\TipoInteressado.cs" />
     <Compile Include="Domain\Models\DTO\ListaDocumentosDTO.cs" />
     <Compile Include="Domain\Models\DTO\ListaGestaoInteressadoDTO.cs" />
@@ -497,10 +534,13 @@
     <Compile Include="Domain\Models\Enum\TipoArquivoEnum.cs" />
     <Compile Include="Domain\Models\Enum\TipoInteressadoEnum.cs" />
     <Compile Include="Domain\Models\TipoDocumento.cs" />
+    <Compile Include="Domain\Models\TipoInterferencia.cs" />
     <Compile Include="Domain\Models\TipoOcupacao.cs" />
+    <Compile Include="Domain\Models\TipoPassagem.cs" />
     <Compile Include="Domain\Models\TiposPistaLevantamento.cs" />
     <Compile Include="Domain\Models\TuneisLevantamento.cs" />
     <Compile Include="Domain\Models\Ua.cs" />
+    <Compile Include="Domain\Models\UF.cs" />
     <Compile Include="Domain\Models\Ufesp.cs" />
     <Compile Include="Domain\Models\Unidade.cs" />
     <Compile Include="Helper\Email.cs" />
@@ -538,8 +578,10 @@
     <Compile Include="Infra\DAO\ApiDispositivoDAO.cs" />
     <Compile Include="Infra\DAO\ApiDrenagemDAO.cs" />
     <Compile Include="Infra\DAO\ApiEdificacoesDAO.cs" />
+    <Compile Include="Infra\DAO\AreaDAO.cs" />
     <Compile Include="Infra\DAO\AreasGramadasLevantamentoDAO.cs" />
     <Compile Include="Infra\DAO\ArquivoDAO.cs" />
+    <Compile Include="Infra\DAO\AssuntoDAO.cs" />
     <Compile Include="Infra\DAO\BancoBrasilBoletoDAO.cs" />
     <Compile Include="Infra\DAO\BancoBrasilBoletoRespostaDAO.cs" />
     <Compile Include="Infra\DAO\BaseDAO.cs" />
@@ -619,9 +661,15 @@
     <Compile Include="Infra\DAO\GrupoDAO.cs" />
     <Compile Include="Infra\DAO\IgpDAO.cs" />
     <Compile Include="Infra\DAO\InadimplentesDAO.cs" />
+    <Compile Include="Infra\DAO\LadoDAO.cs" />
     <Compile Include="Infra\DAO\LogAlteracaoDAO.cs" />
     <Compile Include="Infra\DAO\MunicipioDAO.cs" />
+    <Compile Include="Infra\DAO\NaturezaJuridicaDAO.cs" />
     <Compile Include="Infra\DAO\OaeLevantamentoDAO.cs" />
+    <Compile Include="Infra\DAO\OcorrenciaSeveridadeDAO.cs" />
+    <Compile Include="Infra\DAO\OcorrenciaStatusDAO.cs" />
+    <Compile Include="Infra\DAO\OcorrenciaTrechoDAO.cs" />
+    <Compile Include="Infra\DAO\OrigemSolicitacaoDAO.cs" />
     <Compile Include="Infra\DAO\ParametrosSistemaDAO.cs" />
     <Compile Include="Infra\DAO\PassivosAmbientaisLinLevantamentoDAO.cs" />
     <Compile Include="Infra\DAO\PavimentacoesLevantamentoDAO.cs" />
@@ -631,6 +679,7 @@
     <Compile Include="Infra\DAO\PiDAO.cs" />
     <Compile Include="Infra\DAO\ProjetosMelhoriasDAO.cs" />
     <Compile Include="Infra\DAO\ProjetosMelhoriasInformacoesRelevantesDAO.cs" />
+    <Compile Include="Infra\DAO\RegionalDAO.cs" />
     <Compile Include="Infra\DAO\ResidenciaConservacaoDAO.cs" />
     <Compile Include="Infra\DAO\RocadasLevantamentoDAO.cs" />
     <Compile Include="Infra\DAO\RodoviaDAO.cs" />
@@ -640,17 +689,26 @@
     <Compile Include="Infra\DAO\SegurancaGuardaCorpoLevantamentoDAO.cs" />
     <Compile Include="Infra\DAO\SinalFaixaBordoLevantamentoDAO.cs" />
     <Compile Include="Infra\DAO\SinalFaixaCentralLevantamentoDAO.cs" />
+    <Compile Include="Infra\DAO\SituacaoOcupacaoDAO.cs" />
+    <Compile Include="Infra\DAO\SituacaoSolicitacaoDAO.cs" />
     <Compile Include="Infra\DAO\StatusAprovacaoDAO.cs" />
     <Compile Include="Infra\DAO\TachaFaixaBordoLevantamentoDAO.cs" />
     <Compile Include="Infra\DAO\TachaFaixaCentralLevantamentoDAO.cs" />
     <Compile Include="Infra\DAO\TerceiraFaixaLevantamentoDAO.cs" />
     <Compile Include="Infra\DAO\TipoConcessaoDAO.cs" />
+    <Compile Include="Infra\DAO\TipoDocumentoDAO.cs" />
     <Compile Include="Infra\DAO\TipoDocumentoInteressadoDAO.cs" />
+    <Compile Include="Infra\DAO\TipoDocumentoOcupacaoDAO.cs" />
+    <Compile Include="Infra\DAO\TipoEmpresaDAO.cs" />
+    <Compile Include="Infra\DAO\TipoImplantacaoDAO.cs" />
     <Compile Include="Infra\DAO\TipoInteressadoDAO.cs" />
+    <Compile Include="Infra\DAO\TipoInterferenciaDAO.cs" />
     <Compile Include="Infra\DAO\TipoOcupacaoDAO.cs" />
+    <Compile Include="Infra\DAO\TipoPassagemDAO.cs" />
     <Compile Include="Infra\DAO\TiposPistaLevantamentoDAO.cs" />
     <Compile Include="Infra\DAO\TuneisLevantamentoDAO.cs" />
     <Compile Include="Infra\DAO\UaDAO.cs" />
+    <Compile Include="Infra\DAO\UFDAO.cs" />
     <Compile Include="Infra\DAO\UfespDAO.cs" />
     <Compile Include="Infra\DAO\UnidadeDAO.cs" />
     <Compile Include="Infra\DAO\UsuarioDAO.cs" />
@@ -695,6 +753,7 @@
     <Compile Include="Domain\Models\Permissao.cs" />
     <Compile Include="Domain\Models\StatusAprovacao.cs" />
     <Compile Include="Domain\Models\Usuario.cs" />
+    <Compile Include="ModelosEmail\ModelosEmails.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceAPI\Helpers\BancoBrasilTokenApiHelper.cs" />
     <Compile Include="ServiceAPI\Helpers\BueiroApiHelper.cs" />
@@ -728,6 +787,7 @@
     <Compile Include="ViewModels\API\APIViewModel.cs" />
     <Compile Include="ViewModels\AreasGramadasLevantamentoViewModel.cs" />
     <Compile Include="ViewModels\ArquivoViewModel.cs" />
+    <Compile Include="ViewModels\AssuntoViewModel.cs" />
     <Compile Include="ViewModels\CercasLevantamentoViewModel.cs" />
     <Compile Include="ViewModels\ConcessionariaViewModel.cs" />
     <Compile Include="ViewModels\DispositivoViewModel.cs" />
@@ -794,6 +854,10 @@
     <Compile Include="ViewModels\IgpViewModel.cs" />
     <Compile Include="ViewModels\InadimplentesViewModel.cs" />
     <Compile Include="ViewModels\OaeLevantamentoViewModel.cs" />
+    <Compile Include="ViewModels\OcorrenciaSeveridadeViewModel.cs" />
+    <Compile Include="ViewModels\OcorrenciaStatusViewModel.cs" />
+    <Compile Include="ViewModels\OcorrenciaTrechoViewModel.cs" />
+    <Compile Include="ViewModels\OrigemSolicitacaoViewModel.cs" />
     <Compile Include="ViewModels\ParametrosSistemaViewModel.cs" />
     <Compile Include="ViewModels\PassivosAmbientaisLinLevantamentoViewModel.cs" />
     <Compile Include="ViewModels\PavimentacoesLevantamentoViewModel.cs" />
@@ -808,6 +872,7 @@
     <Compile Include="ViewModels\SegurancaGuardaCorpoLevantamentoViewModel.cs" />
     <Compile Include="ViewModels\SinalFaixaBordoLevantamentoViewModel.cs" />
     <Compile Include="ViewModels\SinalFaixaCentralLevantamentoViewModel.cs" />
+    <Compile Include="ViewModels\SolicitacaoOcupacaoViewModel.cs" />
     <Compile Include="ViewModels\StatusOcorrenciaViewModel.cs" />
     <Compile Include="ViewModels\SeveridadesViewModel.cs" />
     <Compile Include="ViewModels\GestaoInteressados\EmpresaViewModel.cs" />
@@ -821,11 +886,13 @@
     <Compile Include="ViewModels\TipoConcessaoViewModel.cs" />
     <Compile Include="ViewModels\TipoDeDocumentoInteressadoViewModel.cs" />
     <Compile Include="ViewModels\TipoDocumentoInteressadoViewModel.cs" />
+    <Compile Include="ViewModels\TipoDocumentoViewModel.cs" />
     <Compile Include="ViewModels\TipoInteressadoViewModel.cs" />
     <Compile Include="ViewModels\TiposPistaLevantamentoViewModel.cs" />
     <Compile Include="ViewModels\TuneisLevantamentoViewModel.cs" />
     <Compile Include="ViewModels\UaViewModel.cs" />
     <Compile Include="ViewModels\UfespViewModel.cs" />
+    <Compile Include="ViewModels\UFViewModel.cs" />
     <Compile Include="ViewModels\UnidadeViewModel.cs" />
     <Compile Include="ViewModels\GestaoInteressados\GestaoContatoViewModel.cs" />
     <Compile Include="ViewModels\GestaoInteressados\GestaoDocumentoViewModel.cs" />
@@ -1056,6 +1123,8 @@
     <Content Include="img\logo.png" />
     <Content Include="img\logo_branco.png" />
     <Content Include="img\logo_der.png" />
+    <Content Include="ModelosEmail\emailExpiracaoCadastroCredenciado.html" />
+    <Content Include="ModelosEmail\img\RODAPÉ EMAIL.png" />
     <Content Include="Rotativa\help-wkhtmltoimage.txt" />
     <Content Include="Rotativa\help-wkhtmltopdf.txt" />
     <Content Include="Rotativa\wkhtmltoimage.exe" />
@@ -1182,7 +1251,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Arquivos\" />
-    <Folder Include="Migrations\" />
     <Folder Include="Views\Job\" />
   </ItemGroup>
   <ItemGroup>
@@ -1194,6 +1262,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Infra\Migrations\202012111941497_LogUsuario_DadosMestres.resx">
       <DependentUpon>202012111941497_LogUsuario_DadosMestres.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202101121852310_202101121552_LogTeste.resx">
+      <DependentUpon>202101121852310_202101121552_LogTeste.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

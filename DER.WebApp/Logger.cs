@@ -19,19 +19,20 @@ namespace DER.WebApp.Helper
 
     }
     
-    // _logger = new Logger("Nome Entidade", context);
+    // _logger = new Logger("Nome Entidade");
     public class Logger
     {
         private DerContext _context;
         private String nomeEntidade;
-        public JavaScriptSerializer serializer = new JavaScriptSerializer();
-        public Logger(String nomeEntidade, DerContext ctx)
+        private JavaScriptSerializer serializer = new JavaScriptSerializer();
+
+        public Logger(String nomeEntidade)
         {
             this.nomeEntidade = nomeEntidade;
-            _context = ctx;
-        }
+            _context = new DerContext();
+        } 
 
-        public void salvarLog(TipoAlteracao tipoAlteracao, String id, String valorAntigo, String valorNovo)
+        public void salvarLog(TipoAlteracao tipoAlteracao, String id, Object valorNovo = null, Object valorAntigo = null)
         {
             var userId = System.Web.HttpContext.Current.Session["UserId"];
             var userName = Thread.CurrentPrincipal.Identity.Name;
@@ -40,8 +41,8 @@ namespace DER.WebApp.Helper
             {
                 NomeEntidade = nomeEntidade,
                 IdPrimaryKey = id,
-                ValorAntigo = valorAntigo,
-                NovoValor = valorNovo,
+                ValorAntigo = valorAntigo == null ? "" : serialize(valorAntigo),
+                NovoValor = valorNovo == null ? "" : serialize(valorNovo),
                 DataAlteracao = DateTime.UtcNow,
                 ReponsavelAlteracao = Convert.ToInt32(userId),
                 NomeUsuarioResponsavel = userName,
@@ -50,6 +51,11 @@ namespace DER.WebApp.Helper
             LogAlteracaoDAO logAlteracaoDAO = new LogAlteracaoDAO(_context);
             logAlteracaoDAO.Salvar(log);
         }
-        
+
+        private String serialize(Object obj)
+        {
+            return serializer.Serialize(obj);
+        }
+
     }
 }

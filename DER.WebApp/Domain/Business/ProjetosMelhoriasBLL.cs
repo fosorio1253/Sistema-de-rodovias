@@ -83,7 +83,7 @@ namespace DER.WebApp.Domain.Business
                 } 
                 this.AddInformacoesRelevantes(viewModel.Informacoes, idProjetos);                
 
-                return new ProjetosMelhoriasValidatorViewModel() { valid = true };
+                return new ProjetosMelhoriasValidatorViewModel() { valid = true, id = idProjetos };
             }
             catch (Exception ex)
             {

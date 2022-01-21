@@ -8,28 +8,18 @@ namespace DER.WebApp.Domain.Business
 {
     public class AreaBLL
     {
-        private DerContext _context;
-        private DadosMestresDAO dadosMestresDAO;
+        private AreasBLL areasBLL;
 
         public AreaBLL()
         {
-            _context = new DerContext();
-            dadosMestresDAO = new DadosMestresDAO(_context);
+            areasBLL = new AreasBLL();
         }
 
         public List<AreaViewModel> ObtemAreas()
         {
             var retorno = new List<AreaViewModel>();
-
-            var dominio = dadosMestresDAO.ObtemDominio((int)TabelaDadosMestresEnum.Area);
-
             retorno.Add(new AreaViewModel() { AreaId = 0, Nome = "Selecione" });
-
-            foreach (var d in dominio)
-            {
-                retorno.Add(new AreaViewModel() { AreaId = d.Id, Nome = d.Nome });
-            }
-
+            areasBLL.LoadView().ForEach(x => retorno.Add(new AreaViewModel() { AreaId = x.AreaId, Nome = x.Nome }));
             return retorno;
         }
     }

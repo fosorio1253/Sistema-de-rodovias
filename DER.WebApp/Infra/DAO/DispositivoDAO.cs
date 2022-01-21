@@ -17,7 +17,7 @@ namespace DER.WebApp.Infra.DAO
 
         public DispositivoDAO(DerContext context) : base(context)
         {
-            logger = new Logger("Dispositivo", context);
+            logger = new Logger("Dispositivo");
         }
 
         public List<Dispositivo> ObtemTodos()
@@ -167,8 +167,6 @@ namespace DER.WebApp.Infra.DAO
                 }
 
                 var value = GetById(domain.dis_id);
-                if (!value.Equals(oldValue))
-                    logger.salvarLog(TipoAlteracao.Edicao, domain.dis_id.ToString(), logger.serializer.Serialize(oldValue), logger.serializer.Serialize(value));
                 return true;
             }
             catch (Exception ex)
@@ -245,7 +243,6 @@ namespace DER.WebApp.Infra.DAO
                     command.ExecuteNonQuery();
                     command.Parameters.Clear();
                     conn.Close();
-                    logger.salvarLog(TipoAlteracao.Exclusao, model.dis_id.ToString(), logger.serializer.Serialize(oldValue), "");
                 }
             }
             return true;

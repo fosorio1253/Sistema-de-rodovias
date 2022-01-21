@@ -8,26 +8,17 @@ namespace DER.WebApp.Domain.Business
 {
     public class TipoInteressadoBLL
     {
-        private DerContext _context;
-        private DadosMestresDAO dadosMestresDAO;
+        private TipoInteressadosBLL tipoInteressadoBLL;
 
         public TipoInteressadoBLL()
         {
-            _context = new DerContext();
-            dadosMestresDAO = new DadosMestresDAO(_context);
+            tipoInteressadoBLL = new TipoInteressadosBLL();
         }
 
         public List<TipoInteressadoViewModel> ObtemTipoInteressado()
         {
             var retorno = new List<TipoInteressadoViewModel>();
-
-            var dominio = dadosMestresDAO.ObtemDominio((int)TabelaDadosMestresEnum.TipoInteressado);
-
-            foreach (var d in dominio)
-            {
-                retorno.Add(new TipoInteressadoViewModel() { TipoInteressadoId = d.Id, Nome = d.Nome });
-            }
-
+            tipoInteressadoBLL.LoadView().ForEach(x => retorno.Add(new TipoInteressadoViewModel() { TipoInteressadoId = x.tipo_interessado_id, Nome = x.descricao }));
             return retorno;
         }
     }

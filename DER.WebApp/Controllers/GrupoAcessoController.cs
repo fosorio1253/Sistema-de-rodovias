@@ -3,6 +3,7 @@ using DER.WebApp.Common.Helper;
 using DER.WebApp.Domain.Business;
 using DER.WebApp.Domain.Models;
 using DER.WebApp.Domain.Models.Constants;
+using DER.WebApp.Helper;
 using DER.WebApp.ViewModels;
 using System.Linq;
 using System.Web.Mvc;
@@ -15,12 +16,14 @@ namespace WebApp.Controllers
         private PerfilBLL _perfilBLL;
         private UsuarioBLL _usuarioBLL;
         private GrupoBLL _grupoBLL;
+        private Logger logger;
 
         public GrupoAcessoController()
         {
             _perfilBLL = new PerfilBLL();
             _usuarioBLL = new UsuarioBLL();
             _grupoBLL = new GrupoBLL();
+            logger = new Logger("Grupo Acesso");
         }
         [AuthorizeCustomAttribute(Roles = Permissoes.GrupoCodigo)]
         public ActionResult List()
@@ -69,7 +72,11 @@ namespace WebApp.Controllers
                 }
 
                 var valid = _grupoBLL.Salvar(Grupo);
-                return Json(new { status = valid });
+                if (valid != 0)
+                {
+                    logger.salvarLog(TipoAlteracao.Criacao, valid.ToString(), _grupoBLL.ObtemId(valid));
+                }
+                return Json(new { status = valid == 0 ? false : true });
             }
             return Json(new { status = false });
         }
@@ -77,6 +84,7 @@ namespace WebApp.Controllers
         [HttpPost]
         public ActionResult Excluir(int id)
         {
+            logger.salvarLog(TipoAlteracao.Exclusao, id.ToString(), null, _grupoBLL.ObtemId(id));
             var valid = _grupoBLL.Excluir(id);
             return Json(new { status = valid });
         }

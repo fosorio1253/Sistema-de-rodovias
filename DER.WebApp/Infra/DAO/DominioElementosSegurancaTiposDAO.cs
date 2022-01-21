@@ -17,7 +17,7 @@ namespace DER.WebApp.Infra.DAO
 
         public DominioElementosSegurancaTiposDAO(DerContext context) : base(context)
         {
-            logger = new Logger("DominioElementosSegurancaTipos", context);
+            logger = new Logger("DominioElementosSegurancaTipos");
         }
 
         public List<DominioElementosSegurancaTipos> ObtemTodos()
@@ -104,8 +104,6 @@ namespace DER.WebApp.Infra.DAO
                 }
 
                 var value = GetById(domain.est_id);
-                if (!value.Equals(oldValue))
-                    logger.salvarLog(TipoAlteracao.Edicao, domain.est_id.ToString(), logger.serializer.Serialize(oldValue), logger.serializer.Serialize(value));
                 return true;
             }
             catch (Exception ex)
@@ -161,7 +159,6 @@ namespace DER.WebApp.Infra.DAO
                     command.ExecuteNonQuery();
                     command.Parameters.Clear();
                     conn.Close();
-                    logger.salvarLog(TipoAlteracao.Exclusao, model.est_id.ToString(), logger.serializer.Serialize(oldValue), "");
                 }
             }
             return true;

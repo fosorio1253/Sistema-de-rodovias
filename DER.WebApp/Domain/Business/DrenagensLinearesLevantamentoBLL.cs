@@ -36,6 +36,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(DrenagensLinearesLevantamento model)
+        {
+            try
+            {
+                return ExistsById(model.rod_id) ?
+                    drenagenslineareslevantamentoDAO.Update(model) :
+                    drenagenslineareslevantamentoDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<DrenagensLinearesLevantamentoViewModel> LoadView()
         {
             try

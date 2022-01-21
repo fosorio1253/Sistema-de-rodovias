@@ -36,6 +36,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(DominioSinalizacoesHorizontaisTipos model)
+        {
+            try
+            {
+                return ExistsById(model.sht_id) ?
+                    dominiosinalizacoeshorizontaistiposDAO.Update(model) :
+                    dominiosinalizacoeshorizontaistiposDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<DominioSinalizacoesHorizontaisTiposViewModel> LoadView()
         {
             try

@@ -36,6 +36,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(DominioAdministradores model)
+        {
+            try
+            {
+                return ExistsById(model.adm_id) ?
+                    dominioadministradoresDAO.Update(model) :
+                    dominioadministradoresDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<DominioAdministradoresViewModel> LoadView()
         {
             try

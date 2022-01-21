@@ -35,6 +35,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(DominioArquivoTipos model)
+        {
+            try
+            {
+                return ExistsById(model.arq_id) ?
+                    dominioarquivotiposDAO.Update(model) :
+                    dominioarquivotiposDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<DominioArquivoTiposViewModel> LoadView()
         {
             try

@@ -36,6 +36,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(CercasLevantamento model)
+        {
+            try
+            {
+                return ExistsById(model.rod_id) ?
+                    cercaslevantamentoDAO.Update(model) :
+                    cercaslevantamentoDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<CercasLevantamentoViewModel> LoadView()
         {
             try

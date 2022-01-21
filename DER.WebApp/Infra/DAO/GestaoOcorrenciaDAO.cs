@@ -16,11 +16,11 @@ namespace DER.WebApp.Infra.DAO
 {
     public class GestaoOcorrenciaDAO : BaseDAO<GestaoOcorrencia>
     {
-        Logger logger;
+        
 
         public GestaoOcorrenciaDAO(DerContext context) : base(context)
         {
-            logger = new Logger("Gestão Ocorrencia", context);
+         
         }
 
         public List<ListaGestaoOcorrenciaDTO> ObtemListaGestaoOcorrencia(string UsuarioAtualizacao)
@@ -251,9 +251,7 @@ namespace DER.WebApp.Infra.DAO
                         var result = command.ExecuteNonQuery();
 
                         conn.Close();
-                        var newValue = GetById(domain.Id);
-                        if (!newValue.Equals(oldValue))
-                            logger.salvarLog(TipoAlteracao.Edicao, domain.Id.ToString(), logger.serializer.Serialize(oldValue), logger.serializer.Serialize(newValue));
+                        
                     }
                 }
 
@@ -307,8 +305,8 @@ namespace DER.WebApp.Infra.DAO
                         var result = command.ExecuteScalar();
                         var id = Convert.ToInt32(result);
                         conn.Close();
-                        var newValue = GetById(id);
-                        logger.salvarLog(TipoAlteracao.Criacao, id.ToString(), "", logger.serializer.Serialize(newValue));
+                        
+                        
 
                         return id;
                     }
@@ -326,7 +324,7 @@ namespace DER.WebApp.Infra.DAO
         {
             var connectionString = ConfigurationManager.ConnectionStrings["DerContext"].ConnectionString;
             var oldValue = GetById(id);
-            logger.salvarLog(TipoAlteracao.Exclusao, id.ToString(), logger.serializer.Serialize(oldValue), "");
+            
             
             using (var conn = new SqlConnection(connectionString))
             {

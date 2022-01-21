@@ -36,6 +36,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(DominioBueirosDiagnosticos model)
+        {
+            try
+            {
+                return ExistsById(model.bdg_id) ?
+                    dominiobueirosdiagnosticosDAO.Update(model) :
+                    dominiobueirosdiagnosticosDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<DominioBueirosDiagnosticosViewModel> LoadView()
         {
             try

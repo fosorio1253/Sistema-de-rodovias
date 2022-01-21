@@ -14,7 +14,7 @@ namespace DER.WebApp.Domain.Business
         private AcoesJudiciaisBLL acoesJudiciaisBLL;
         private BancoBrasilBoletoBLL _Boleto;
         private GestaoOcupacaoBLL _Ocupacao;
-        private DadosMestresBLL _dadosMestresBLL;
+        private TipoOcupacaoBLL tipoOcupacaoBLL;
 
         public FaturamentoOcupacaoBLL()
         {
@@ -23,7 +23,7 @@ namespace DER.WebApp.Domain.Business
             acoesJudiciaisBLL = new AcoesJudiciaisBLL();
             _Boleto = new BancoBrasilBoletoBLL();
             _Ocupacao = new GestaoOcupacaoBLL();
-            _dadosMestresBLL = new DadosMestresBLL();
+            tipoOcupacaoBLL = new TipoOcupacaoBLL();
         }
 
         public List<FaturamentoPorOcupacaoViewModel> ObterFaturamento(FaturamentoPorOcupacaoViewModelParam viewModel = null)
@@ -85,7 +85,7 @@ namespace DER.WebApp.Domain.Business
                 var faturamento = new FaturamentoPorOcupacaoViewModel();
                 faturamento.TipoFaturamento     = "PEP";
                 faturamento.TipoOcupacaoId      = ocupacao.Trechos.Count.Equals(0) ? "" : ocupacao.Trechos.First().TipoOcupacaoId.ToString();
-                faturamento.TipoOcupacao        = _dadosMestresBLL.ObtemTipoOcupacao(faturamento.TipoOcupacaoId.Equals("") ? 0 : Convert.ToInt32(faturamento.TipoOcupacaoId));
+                faturamento.TipoOcupacao = tipoOcupacaoBLL.LoadView().Where(x => x.tipo_ocupacao_id.Equals(Convert.ToInt32(faturamento.TipoOcupacaoId))).Select(x => x.nome).FirstOrDefault();
                 faturamento.ValorTotal          = (double)pep.Valor;
                 faturamento.ValorPrevisto       = (double)pep.Valor + ((double)pep.Valor / 100 * 10.20);//ajustar calculo
                 faturamento.PeriodoInt          = pep.DataEmissãoPEP;
@@ -119,7 +119,7 @@ namespace DER.WebApp.Domain.Business
                 var faturamento = new FaturamentoPorOcupacaoViewModel();
                 faturamento.TipoFaturamento = "Anuidade";
                 faturamento.TipoOcupacaoId  = ocupacao.Trechos.Count.Equals(0) ? "" : ocupacao.Trechos.First().TipoOcupacaoId.ToString();
-                faturamento.TipoOcupacao    = _dadosMestresBLL.ObtemTipoOcupacao(faturamento.TipoOcupacaoId.Equals("") ? 0 : Convert.ToInt32(faturamento.TipoOcupacaoId));
+                faturamento.TipoOcupacao    = tipoOcupacaoBLL.LoadView().Where(x => x.tipo_ocupacao_id.Equals(Convert.ToInt32(faturamento.TipoOcupacaoId))).Select(x => x.nome).FirstOrDefault();
                 faturamento.ValorTotal      = (double)rem.ValorRemuneracao;
                 faturamento.ValorPrevisto   = (double)rem.ValorRemuneracao + ((double)rem.ValorRemuneracao / 100 * 10.20);//ajustar calculo
                 faturamento.PeriodoInt      = rem.DataRemuneracao;

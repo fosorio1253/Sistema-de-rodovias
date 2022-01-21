@@ -17,7 +17,7 @@ namespace DER.WebApp.Infra.DAO
 
         public TipoInteressadoDAO(DerContext context) : base(context)
         {
-            logger = new Logger("TipoInteressado", context);
+            logger = new Logger("TipoInteressado");
         }
 
         public List<TipoInteressado> ObtemTodos()
@@ -107,8 +107,6 @@ namespace DER.WebApp.Infra.DAO
                 }
 
                 var value = GetById(domain.tipo_interessado_id);
-                if (!value.Equals(oldValue))
-                    logger.salvarLog(TipoAlteracao.Edicao, domain.tipo_interessado_id.ToString(), logger.serializer.Serialize(oldValue), logger.serializer.Serialize(value));
                 return true;
             }
             catch (Exception ex)
@@ -165,7 +163,6 @@ namespace DER.WebApp.Infra.DAO
                     command.ExecuteNonQuery();
                     command.Parameters.Clear();
                     conn.Close();
-                    logger.salvarLog(TipoAlteracao.Exclusao, model.tipo_interessado_id.ToString(), logger.serializer.Serialize(oldValue), "");
                 }
             }
             return true;

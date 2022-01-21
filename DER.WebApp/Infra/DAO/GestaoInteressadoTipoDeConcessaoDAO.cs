@@ -15,12 +15,8 @@ namespace DER.WebApp.Infra.DAO
 {
     public class GestaoInteressadoTipoDeConcessaoDAO : BaseDAO<GestaoInteressadoTipoDeConcessao>
     {
-        private Logger _logger;
-        private DadosMestresDAO dadosMestresDAO;
         public GestaoInteressadoTipoDeConcessaoDAO(DerContext context) : base(context)
         {
-            _logger = new Logger("Gestão Interessado Tipo de Concessão", context);
-            dadosMestresDAO = new DadosMestresDAO(context);
         }
 
         public void ExcluirPorIdGestao(int idGestao)
@@ -40,7 +36,7 @@ namespace DER.WebApp.Infra.DAO
                     command.ExecuteNonQuery();
                     command.Parameters.Clear();
                     conn.Close();
-                    _logger.salvarLog(TipoAlteracao.Exclusao, idGestao.ToString(), _logger.serializer.Serialize(oldValue), "");
+                    
                 }
             }
         }
@@ -134,8 +130,8 @@ namespace DER.WebApp.Infra.DAO
                         conn.Close();
 
                         var id = Convert.ToInt32(result);
-                        var value = GetByGestaoId(id);
-                        _logger.salvarLog(TipoAlteracao.Criacao, id.ToString(), "", _logger.serializer.Serialize(value));
+                        
+                        
                         return Convert.ToInt32(result);
 
                     }

@@ -36,6 +36,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(ApiDispositivo model)
+        {
+            try
+            {
+                return ExistsById(model.rod_id) ?
+                    apidispositivoDAO.Update(model) :
+                    apidispositivoDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<ApiDispositivoViewModel> LoadView()
         {
             try

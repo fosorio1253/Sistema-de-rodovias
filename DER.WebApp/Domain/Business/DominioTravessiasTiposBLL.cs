@@ -36,6 +36,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(DominioTravessiasTipos model)
+        {
+            try
+            {
+                return ExistsById(model.trt_id) ?
+                    dominiotravessiastiposDAO.Update(model) :
+                    dominiotravessiastiposDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<DominioTravessiasTiposViewModel> LoadView()
         {
             try

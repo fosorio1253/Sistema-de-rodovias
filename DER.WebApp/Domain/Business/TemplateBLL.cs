@@ -21,7 +21,7 @@ namespace DER.WebApp.Domain.Business
             return templateDAO.GetListTemplates();
         }
 
-        public bool SaveTemplate(Template template)
+        public int SaveTemplate(Template template)
         {
             return templateDAO.SaveTemplate(template);
         }

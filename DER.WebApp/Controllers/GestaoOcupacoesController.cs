@@ -79,6 +79,7 @@ namespace DER.WebApp.Controllers
         private GestaoOcupacaoPEPBLL gestaoOcupacaoPEPBLL;
         private GestaoOcupacaoRemuneracaoBLL gestaoOcupacaoRemuneracaoBLL;
         private GestaoOcupacaoAcoesJudiciaisBLL gestaoOcupacaoAcoesJudiciaisBLL;
+        private Logger logger;
 
         public GestaoOcupacoesController()
         {
@@ -108,7 +109,9 @@ namespace DER.WebApp.Controllers
             gestaoOcupacaoPEPBLL = new GestaoOcupacaoPEPBLL();
             gestaoOcupacaoRemuneracaoBLL = new GestaoOcupacaoRemuneracaoBLL();
             gestaoOcupacaoAcoesJudiciaisBLL = new GestaoOcupacaoAcoesJudiciaisBLL();
+            logger = new Logger("Gestão Ocupações");
         }
+
 
         #endregion
 
@@ -289,7 +292,7 @@ namespace DER.WebApp.Controllers
             try
             {
                 gestaoOcupacaoBLL.Excluir(id);
-
+                logger.salvarLog(TipoAlteracao.Exclusao, id.ToString(), null,gestaoOcupacaoBLL.ObtemId(id));
                 return Json(new { status = true });
             }
             catch (Exception ex)
@@ -305,6 +308,9 @@ namespace DER.WebApp.Controllers
         {
             ViewBag.Usuario = User.Identity.Name.ToString();
             var valid = gestaoOcupacaoBLL.Inserir(viewModel, ViewBag.Usuario);
+
+            if (valid.valid)
+                logger.salvarLog(viewModel.Id == 0 ? TipoAlteracao.Criacao : TipoAlteracao.Edicao, valid.id.ToString(), gestaoOcupacaoBLL.ObtemId(valid.id));
 
             return Json(valid);
         }
@@ -445,6 +451,7 @@ namespace DER.WebApp.Controllers
         {
             try
             {
+                logger.salvarLog(TipoAlteracao.Edicao, model.Id.ToString(), model);
                 return gestaoOcupacaoAcoesJudiciaisBLL.Write(model.AcoesJudiciais) ? Editar(model.Id) : List();
             }
             catch (Exception e)
@@ -508,7 +515,7 @@ namespace DER.WebApp.Controllers
             retorno.Regulamento = DisponibilizarArquivoRegulamento();
             retorno.Norma = DisponibilizarArquivoNorma();
             retorno.Rodovia = ObtemRodovias().Where(x => x.RodoviaId.Equals(retorno.RodoviaId)).Select(x => x.Nome).FirstOrDefault();
-            retorno.TipoOcupacao = retorno.TipoOcupacoes.Where(x => x.TipoOcupacaoId.Equals(retorno.TipoOcupacaoId)).Select(x => x.Nome).FirstOrDefault();
+            retorno.TipoOcupacao = retorno.TipoOcupacoes.Where(x => x.tipo_ocupacao_id.Equals(retorno.TipoOcupacaoId)).Select(x => x.nome).FirstOrDefault();
             retorno.Regionais = new SelectList(ObtemRegionais(), "RegionalId", "Nome");
             retorno.ResidenciaConservacoes = new SelectList(ObtemResidenciaConservacoes(), "ResidenciaConservacaoId", "Nome");
             retorno.OrigemSolicitacoes = new SelectList(ObtemOrigemSolicitacoes(), "OrigemSolicitacaoId", "Nome");
@@ -742,8 +749,8 @@ namespace DER.WebApp.Controllers
                     retorno.TipoOcupacaoId = (tre.IdTipoOcupacao != null) ? (int)tre.IdTipoOcupacao : 0;
                     tre.TipoOcupacao = new TipoOcupacaoViewModel
                     {
-                        TipoOcupacaoId = tre.TipoOcupacaoId,
-                        Nome = tre.NomeTipoOcupacao
+                        tipo_ocupacao_id = tre.TipoOcupacaoId,
+                        nome = tre.NomeTipoOcupacao
                     };
 
                     retorno.TipoPassagemId = tre.TipoPassagemId;
@@ -785,7 +792,7 @@ namespace DER.WebApp.Controllers
             return rodoviaBLL.ObtemRodovia();
         }
 
-        private List<ViewModels.ProjetosMelhorias.DispositivoViewModel> ObtemDispositivo()
+        private List<ViewModels.DispositivoViewModel> ObtemDispositivo()
         {
             return dispositivoBLL.ObtemDispositivo();
         }
@@ -857,7 +864,7 @@ namespace DER.WebApp.Controllers
             return rodoviaBLL.ObtemRodovia();
         }
 
-        private List<ViewModels.ProjetosMelhorias.DispositivoViewModel> ObtemDispositivos()
+        private List<ViewModels.DispositivoViewModel> ObtemDispositivos()
         {
             return dispositivoBLL.ObtemDispositivo();
         }

@@ -36,6 +36,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(DominioResidencias model)
+        {
+            try
+            {
+                return ExistsById(model.res_id) ?
+                    dominioresidenciasDAO.Update(model) :
+                    dominioresidenciasDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<DominioResidenciasViewModel> LoadView()
         {
             try

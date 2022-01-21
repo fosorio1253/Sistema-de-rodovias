@@ -36,6 +36,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(TuneisLevantamento model)
+        {
+            try
+            {
+                return ExistsById(model.rod_id) ?
+                    tuneislevantamentoDAO.Update(model) :
+                    tuneislevantamentoDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<TuneisLevantamentoViewModel> LoadView()
         {
             try

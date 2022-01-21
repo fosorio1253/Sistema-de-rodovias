@@ -1,33 +1,20 @@
-﻿using DER.WebApp.Domain.Models.Enum;
-using DER.WebApp.Infra.DAL;
-using DER.WebApp.Infra.DAO;
-using DER.WebApp.ViewModels.GestaoInteressados;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace DER.WebApp.Domain.Business
 {
     public class UnidadeBLL
     {
-        private DerContext _context;
-        private DadosMestresDAO dadosMestresDAO;
+        private UnidadesBLL unidadesBLL;
 
         public UnidadeBLL()
         {
-            _context = new DerContext();
-            dadosMestresDAO = new DadosMestresDAO(_context);
+            unidadesBLL = new UnidadesBLL();
         }
 
         public List<ViewModels.UnidadeViewModel> ObtemUnidades()
         {
             var retorno = new List<ViewModels.UnidadeViewModel>();
-
-            var dominio = dadosMestresDAO.ObtemDominio((int)TabelaDadosMestresEnum.Unidade);
-
-            foreach (var d in dominio)
-            {
-                retorno.Add(new ViewModels.UnidadeViewModel() { UnidadeId = d.Id, Nome = d.Nome });
-            }
-
+            unidadesBLL.LoadView().ForEach(x => retorno.Add(new ViewModels.UnidadeViewModel() { unidade_id = x.unidade_id, nome = x.nome }));
             return retorno;
         }
     }

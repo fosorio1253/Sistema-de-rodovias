@@ -11,8 +11,8 @@ namespace DER.WebApp.Domain.Business
     public class PEPBLL
     {
         private DerContext _context;
-        private DadosMestresDAO dadosMestresDAO;
         private GestaoOcupacoesPEPDAO gestaoOcupacoesPEPDAO;
+        private UfespBLL ufespBLL;
 
         #region Calculos
         //Longitudinal
@@ -31,8 +31,8 @@ namespace DER.WebApp.Domain.Business
         public PEPBLL()
         {
             _context = new DerContext();
-            dadosMestresDAO = new DadosMestresDAO(_context);
             gestaoOcupacoesPEPDAO = new GestaoOcupacoesPEPDAO(_context);
+            ufespBLL = new UfespBLL();
         }
 
         public decimal CalcularPEP(decimal extensaoLongitudinal, decimal extensaoTransversal, decimal extensaoPontual)
@@ -221,7 +221,7 @@ namespace DER.WebApp.Domain.Business
         {
             try
             {
-                return dadosMestresDAO.ObterUFESP(true);
+                return (decimal)ufespBLL.LoadView().Select(x => x.p_calculado).FirstOrDefault();
             }
             catch (Exception e)
             {
@@ -233,7 +233,7 @@ namespace DER.WebApp.Domain.Business
         {
             try
             {
-                return dadosMestresDAO.ObterUFESP();
+                return (decimal)ufespBLL.LoadView().Select(x => x.valor).FirstOrDefault();
             }
             catch (Exception e)
             {

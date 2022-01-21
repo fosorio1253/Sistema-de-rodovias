@@ -2,6 +2,7 @@
 using DER.WebApp.Domain.Business;
 using DER.WebApp.Domain.Models.Constants;
 using DER.WebApp.Domain.Models.Enum;
+using DER.WebApp.Helper;
 using DER.WebApp.ViewModels;
 using DER.WebApp.ViewModels.GestaoInteressados;
 using DER.WebApp.ViewModels.Validadores;
@@ -30,6 +31,7 @@ namespace DER.WebApp.Controllers
         private TipoDeDocumentoBLL tipoDeDocumentoBLL;
         private TipoDeDocumentoInteressadoBLL tipoDeDocumentoInteressadoBLL;
         private PerfilBLL perfilBLL;
+        private Logger logger;
 
 
         public GestaoInteressadosController()
@@ -47,6 +49,8 @@ namespace DER.WebApp.Controllers
             tipoDeDocumentoBLL = new TipoDeDocumentoBLL();
             tipoDeDocumentoInteressadoBLL = new TipoDeDocumentoInteressadoBLL();
             perfilBLL = new PerfilBLL();
+            logger = new Logger("Gestão Interessado");
+
         }
 
         #endregion
@@ -99,6 +103,7 @@ namespace DER.WebApp.Controllers
         [HttpPost]
         public ActionResult Excluir(int id)
         {
+            logger.salvarLog(TipoAlteracao.Exclusao, id.ToString(), null, gestaoInteressadoBLL.ObtemId(id));
             try
             {
                 gestaoInteressadoBLL.Excluir(id);
@@ -137,6 +142,18 @@ namespace DER.WebApp.Controllers
             }
             
             valid = gestaoInteressadoBLL.Inserir(viewModel);
+            if (valid.valid)
+            {
+                if (viewModel.Id == 0)
+                {
+                    logger.salvarLog(TipoAlteracao.Criacao, valid.id.ToString(), gestaoInteressadoBLL.ObtemId(valid.id));
+                }
+                else
+                {
+                    logger.salvarLog(TipoAlteracao.Edicao, valid.id.ToString(), gestaoInteressadoBLL.ObtemId(valid.id));
+                }
+            }
+            
 
             return Json(new GestaoInteressadoValidatorViewModel { validCPF = true, validCNPJ = true, valid = valid.valid });
         }
@@ -197,7 +214,7 @@ namespace DER.WebApp.Controllers
             retorno.TiposDeConcessoes = ObtemTipoConcessao(id);
             retorno.Obs = new GestaoObservacaoViewModel();
             retorno.Endereco = new GestaoEnderecoViewModel();
-            retorno.Endereco.Municipios = new SelectList(ObtemMunicipio(), "MunicipioId", "Nome");
+            retorno.Endereco.Municipios = new SelectList(ObtemMunicipio(), "municipio_id", "municipio");
             retorno.Endereco.Estados = new SelectList(ObtemEstado(), "EstadoId", "Nome");
             retorno.Contato = new GestaoContatoViewModel();
             retorno.Contato.Estados = new SelectList(ObtemEstado(), "EstadoId", "Nome");
@@ -259,9 +276,7 @@ namespace DER.WebApp.Controllers
             var unidades = unidadeBLL.ObtemUnidades();
 
             foreach(var unidade in unidades)
-            {
-                retorno.Add(new EstadoViewModel() { EstadoId = unidade.UnidadeId, Nome = unidade.Nome });
-            }
+                retorno.Add(new EstadoViewModel() { EstadoId = unidade.unidade_id, Nome = unidade.nome });
             return retorno;
         }
 

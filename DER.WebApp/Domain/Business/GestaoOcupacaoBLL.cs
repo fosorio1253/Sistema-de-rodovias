@@ -293,8 +293,8 @@ namespace DER.WebApp.Domain.Business
                 this.AddRetificacao(viewModel.Retificacao, idOcupacao, update);
 
                 this.AddTransferencia(viewModel.Transferencia, idOcupacao, update);
-
-                return new GestaoOcupacaoValidatorViewModel() { valid = true };
+                
+                return new GestaoOcupacaoValidatorViewModel() { id = idOcupacao, valid = true };
             }
             catch (Exception ex)
             {
@@ -529,7 +529,7 @@ namespace DER.WebApp.Domain.Business
 
                         if (trecho.TipoOcupacao != null)
                         {
-                            tre.TipoOcupacaoId = trecho.TipoOcupacao.TipoOcupacaoId;
+                            tre.TipoOcupacaoId = trecho.TipoOcupacao.tipo_ocupacao_id;
                         }
 
                         var idTrecho = gestaoOcupacaoTrechoDAO.Inserir(tre);

@@ -15,11 +15,11 @@ namespace DER.WebApp.Domain.Business
     {
         private DerContext _context;
         private BancoBrasilBoletoDAO _bancoBrasilBoletoDAO;
-        private DadosMestresDAO _dadosMestresDAO;
         private BancoBrasilBoletoRespostaBLL _bancoBrasilBoletoRespostaBLL;
         private GestaoInteressadoBLL _gestaoInteressadoBLL;
         private ConfiguracaoSistemaBLL configuracaoSistemaBLL;
-        
+        private UFBLL uFBLL;
+        private MunicipiosBLL municipiosBLL;
 
         private GestaoInteressadosViewModel interessado;
         private decimal valorPep;
@@ -31,9 +31,10 @@ namespace DER.WebApp.Domain.Business
             _context = new DerContext();
             _bancoBrasilBoletoDAO = new BancoBrasilBoletoDAO(_context);
             _bancoBrasilBoletoRespostaBLL = new BancoBrasilBoletoRespostaBLL();
-            _dadosMestresDAO = new DadosMestresDAO(_context);
             _gestaoInteressadoBLL = new GestaoInteressadoBLL();
             configuracaoSistemaBLL = new ConfiguracaoSistemaBLL();
+            uFBLL = new UFBLL();
+            municipiosBLL = new MunicipiosBLL();
         }
 
         public byte[] GerarBoleto(int interessadoId, decimal valor, DateTime databoleto, int idFaturamento, bool remuneracao = false)
@@ -85,12 +86,12 @@ namespace DER.WebApp.Domain.Business
 
             boleto.indicadorPermissaoRecebimentoParcial = "N";
             boleto.nomeBairroPagador = interessado.Enderecos[0].Bairro;
-            boleto.nomeMunicipioPagador = _dadosMestresDAO.ObterMunicipio(interessado.Enderecos[0].EstadoId);
+            boleto.nomeMunicipioPagador = municipiosBLL.LoadView().Where(x => x.municipio_id.Equals(interessado.Enderecos[0].MunicipioId)).Select(x => x.municipio).FirstOrDefault();
             boleto.numeroCarteira = 17;
             boleto.numeroCepPagador = int.Parse(Regex.Match(interessado.Enderecos[0].CEP, @"\d+").Value);
             boleto.numeroConvenio = 0;//identificador
             boleto.numeroVariacaoCarteira = 0;
-            boleto.siglaUfPagador = _dadosMestresDAO.ObterUF(interessado.Enderecos[0].EstadoId);
+            boleto.siglaUfPagador = uFBLL.LoadView().Where(x => x.uf_id.Equals(interessado.Enderecos[0].EstadoId)).Select(x => x.sigla).FirstOrDefault();
             boleto.textoEnderecoPagador = interessado.Enderecos[0].Logradouro;
             boleto.textoNumeroTituloCliente = "000" + boleto.numeroConvenio.ToString() + idchar;
             boleto.valorOriginalTitulo = valorPep;

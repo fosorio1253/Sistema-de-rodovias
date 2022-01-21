@@ -13,11 +13,9 @@ namespace DER.WebApp.Infra.DAO
 {
     public class GestaoOcupacaoOcupacaoDAO : BaseDAO<GestaoOcupacaoOcupacao>
     {
-        private Logger _logger;
                 
         public GestaoOcupacaoOcupacaoDAO(DerContext context) : base(context)
         {
-            _logger = new Logger("Gestão Ocupação Ocupação", context);
         }
 
         public void ExcluirPorIdOcupacao(int idOcupacao)
@@ -39,7 +37,7 @@ namespace DER.WebApp.Infra.DAO
 
                 conexao.Close();
             }
-            //_logger.salvarLog(TipoAlteracao.Exclusao,oldValue.Id.ToString(), _logger.serializer.Serialize(oldValue) , "");
+           
         }
 
         public GestaoOcupacaoOcupacaoViewModel GetByOcupacaoId(int idOcupacao)
@@ -89,7 +87,6 @@ namespace DER.WebApp.Infra.DAO
 
                 conexao.Close();
             }
-            _logger.salvarLog(TipoAlteracao.Criacao, "", "" , _logger.serializer.Serialize(domain));
         }
     }
 }

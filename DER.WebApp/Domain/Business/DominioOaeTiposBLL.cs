@@ -36,6 +36,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(DominioOaeTipos model)
+        {
+            try
+            {
+                return ExistsById(model.oat_id) ?
+                    dominiooaetiposDAO.Update(model) :
+                    dominiooaetiposDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<DominioOaeTiposViewModel> LoadView()
         {
             try

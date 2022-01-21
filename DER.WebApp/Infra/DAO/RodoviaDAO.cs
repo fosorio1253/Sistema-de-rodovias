@@ -13,11 +13,11 @@ namespace DER.WebApp.Infra.DAO
 {
     public class RodoviaDAO : BaseDAO<Rodovia>
     {
-        Logger logger;
+        
 
         public RodoviaDAO(DerContext context) : base(context)
         {
-            logger = new Logger("Rodovia", context);
+            
         }
 
         public static void CadastrarRodovias(List<Rodovia> domains)

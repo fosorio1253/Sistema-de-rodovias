@@ -17,7 +17,7 @@ namespace DER.WebApp.Infra.DAO
 
         public TerceiraFaixaLevantamentoDAO(DerContext context) : base(context)
         {
-            logger = new Logger("TerceiraFaixaLevantamento", context);
+            logger = new Logger("TerceiraFaixaLevantamento");
         }
 
         public List<TerceiraFaixaLevantamento> ObtemTodos()
@@ -131,8 +131,6 @@ namespace DER.WebApp.Infra.DAO
                 }
 
                 var value = GetById(domain.terceira_faixa_levantamento_id);
-                if (!value.Equals(oldValue))
-                    logger.salvarLog(TipoAlteracao.Edicao, domain.terceira_faixa_levantamento_id.ToString(), logger.serializer.Serialize(oldValue), logger.serializer.Serialize(value));
                 return true;
             }
             catch (Exception ex)
@@ -197,7 +195,6 @@ namespace DER.WebApp.Infra.DAO
                     command.ExecuteNonQuery();
                     command.Parameters.Clear();
                     conn.Close();
-                    logger.salvarLog(TipoAlteracao.Exclusao, model.terceira_faixa_levantamento_id.ToString(), logger.serializer.Serialize(oldValue), "");
                 }
             }
             return true;

@@ -12,7 +12,7 @@ namespace DER.WebApp.Domain.Business
     {
         private DerContext _context;
         private GestaoOcupacoesRemuneracaoDAO gestaoOcupacoesRemuneracaoDAO;
-        private DadosMestresDAO dadosMestresDAO;
+        private IgpBLL igpBLL;
 
         #region Calculos
         private Func<decimal, decimal, decimal, decimal> calcRemuneracao = (E, PI, F) => E * PI * F;
@@ -22,7 +22,7 @@ namespace DER.WebApp.Domain.Business
         {
             _context = new DerContext();
             gestaoOcupacoesRemuneracaoDAO = new GestaoOcupacoesRemuneracaoDAO(_context);
-            dadosMestresDAO = new DadosMestresDAO(_context);
+            igpBLL = new IgpBLL();
         }
 
         public decimal CalcularRemuneracao(GestaoOcupacoesViewModel viewModel)
@@ -38,7 +38,7 @@ namespace DER.WebApp.Domain.Business
                     viewModel.TipoInteressadoId.Any(x => x.Value.Equals("28")) ?
                         (decimal)0.5 : 1 : 
                 1,
-                dadosMestresDAO.ObterIGP());
+                (decimal)igpBLL.LoadView().Select(x => x.valor).FirstOrDefault());
         }
 
         public bool Save(GestaoOcupacoesRemuneracaoViewModel viewModel)

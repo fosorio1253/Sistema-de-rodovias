@@ -8,26 +8,17 @@ namespace DER.WebApp.Domain.Business
 {
     public class OrigemDaSolicitacaoBLL
     {
-        private DerContext _context;
-        private DadosMestresDAO dadosMestresDAO;
+        private OrigemSolicitacaoBLL origemSolicitacaoBLL;
 
         public OrigemDaSolicitacaoBLL()
         {
-            _context = new DerContext();
-            dadosMestresDAO = new DadosMestresDAO(_context);
+            origemSolicitacaoBLL = new OrigemSolicitacaoBLL();
         }
 
         public List<GestaoOcupacoesOrigemSolicitacaoViewModel> ObtemOrigemSolicitacoes()
         {
             var retorno = new List<GestaoOcupacoesOrigemSolicitacaoViewModel>();
-
-            var dominio = dadosMestresDAO.ObtemDominio((int)TabelaDadosMestresEnum.OrigemDaSolicitacao);
-
-            foreach (var d in dominio)
-            {
-                retorno.Add(new GestaoOcupacoesOrigemSolicitacaoViewModel() { OrigemSolicitacaoId = d.Id, Nome = d.Nome });
-            }
-
+            origemSolicitacaoBLL.LoadView().ForEach(x => retorno.Add(new GestaoOcupacoesOrigemSolicitacaoViewModel() { OrigemSolicitacaoId = x.origem_da_solicitacao_id, Nome = x.nome }));
             return retorno;
         }
     }

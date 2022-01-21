@@ -29,8 +29,6 @@
                                 <th scope="row">@item.Nome</th>
                                 
                                 <td>
-                                    @*<button type="submit" onclick="location.href='/DadosMestres/Visualizar/@item.Codigo'" @(!User.IsInRole("DDM" + item.Codigo + "VIS") ? "disabled" : "") class="btn btn-link"><i class="fa fa-search"></i></button>
-                                    <button type="submit" onclick="location.href='/DadosMestres/Editar/@item.Codigo'" @(!User.IsInRole("DDM" + item.Codigo + "EDI") ? "disabled" : "") class="btn btn-link"><i class="fa fa-pencil"></i></button>*@
                                     <button type="submit" onclick="location.href='/DadosMestres/Visualizar/@item.Codigo'" @(!User.IsInRole("DDM" + item.Codigo + "VIS")) class="btn btn-link"><i class="fa fa-search"></i></button>
                                     <button type="submit" onclick="location.href='/DadosMestres/Editar/@item.Codigo'" @(!User.IsInRole("DDM" + item.Codigo + "EDI")) class="btn btn-link"><i class="fa fa-pencil"></i></button>
                                 </td>

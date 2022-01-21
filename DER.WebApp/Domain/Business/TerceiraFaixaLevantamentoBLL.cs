@@ -35,6 +35,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(TerceiraFaixaLevantamento model)
+        {
+            try
+            {
+                return ExistsById(model.terceira_faixa_levantamento_id) ?
+                    terceirafaixalevantamentoDAO.Update(model) :
+                    terceirafaixalevantamentoDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<TerceiraFaixaLevantamentoViewModel> LoadView()
         {
             try

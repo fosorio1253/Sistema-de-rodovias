@@ -36,6 +36,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(DominioCircunscricao model)
+        {
+            try
+            {
+                return ExistsById(model.rod_id) ?
+                    dominiocircunscricaoDAO.Update(model) :
+                    dominiocircunscricaoDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<DominioCircunscricaoViewModel> LoadView()
         {
             try

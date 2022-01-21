@@ -36,6 +36,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(DominioBueirosMateriais model)
+        {
+            try
+            {
+                return ExistsById(model.bmt_id) ?
+                    dominiobueirosmateriaisDAO.Update(model) :
+                    dominiobueirosmateriaisDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<DominioBueirosMateriaisViewModel> LoadView()
         {
             try

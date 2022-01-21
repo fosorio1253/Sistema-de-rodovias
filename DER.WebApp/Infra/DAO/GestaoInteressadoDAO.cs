@@ -17,12 +17,12 @@ namespace DER.WebApp.Infra.DAO
 {
     public class GestaoInteressadoDAO : BaseDAO<GestaoInteressado>
     {
-        private Logger _logger;
+        
         private GestaoInteressadoTipoDeConcessaoDAO gestaoInteressadoTipoDeConcessaoDAO;
 
         public GestaoInteressadoDAO(DerContext context) : base(context)
         {
-            _logger = new Logger("Gestão Interessado", context);
+            
             gestaoInteressadoTipoDeConcessaoDAO = new GestaoInteressadoTipoDeConcessaoDAO(context);
         }
 
@@ -164,9 +164,6 @@ namespace DER.WebApp.Infra.DAO
                         var result = command.ExecuteNonQuery();
 
                         conn.Close();
-                        var newValue = GetById(domain.Id);
-                        if (!newValue.Equals(oldValue))
-                            _logger.salvarLog(TipoAlteracao.Edicao, domain.Id.ToString(), _logger.serializer.Serialize(oldValue), _logger.serializer.Serialize(newValue));
                     }
                 }
             }
@@ -211,7 +208,7 @@ namespace DER.WebApp.Infra.DAO
 
                         var id = Convert.ToInt32(result);
                         var value = GetById(id);
-                        _logger.salvarLog(TipoAlteracao.Criacao, id.ToString(), "", _logger.serializer.Serialize(value));
+                        
                         return Convert.ToInt32(result);
                     }
                 }
@@ -313,7 +310,7 @@ namespace DER.WebApp.Infra.DAO
         {
             var connectionString = ConfigurationManager.ConnectionStrings["DerContext"].ConnectionString;
             var oldValue = GetById(id);
-            _logger.salvarLog(TipoAlteracao.Exclusao, id.ToString(), _logger.serializer.Serialize(oldValue), "");
+            
 
             using (var conn = new SqlConnection(connectionString))
             {

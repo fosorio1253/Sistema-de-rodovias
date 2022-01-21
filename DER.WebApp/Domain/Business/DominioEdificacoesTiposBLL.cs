@@ -36,6 +36,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(DominioEdificacoesTipos model)
+        {
+            try
+            {
+                return ExistsById(model.edt_id) ?
+                    dominioedificacoestiposDAO.Update(model) :
+                    dominioedificacoestiposDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<DominioEdificacoesTiposViewModel> LoadView()
         {
             try

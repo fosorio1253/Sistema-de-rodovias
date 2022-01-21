@@ -11,11 +11,11 @@ namespace DER.WebApp.Infra.DAO
 {
     public class GestaoOcupacoesRemuneracaoDAO : BaseDAO<GestaoOcupacoesRemuneracao>
     {
-        Logger logger;
+        
 
         public GestaoOcupacoesRemuneracaoDAO(DerContext context) : base(context)
         {
-            logger = new Logger("GestaoOcupacoesRemuneracao", context);
+            
         }
 
         public List<GestaoOcupacoesRemuneracao> ObtemTodos()
@@ -96,7 +96,7 @@ namespace DER.WebApp.Infra.DAO
         public bool Update(GestaoOcupacoesRemuneracao domain)
         {
             var connectionString = ConfigurationManager.ConnectionStrings["DerContext"].ConnectionString;
-            var oldValue = GetById(domain.IdGestaoOcupacoesRemuneracao);
+            
             try
             {
                 using (var conn = new SqlConnection(connectionString))
@@ -119,9 +119,7 @@ namespace DER.WebApp.Infra.DAO
                         conn.Close();
                     }
                 }
-                var value = GetById(domain.IdGestaoOcupacoesRemuneracao);
-                if (!value.Equals(oldValue))
-                    logger.salvarLog(TipoAlteracao.Edicao, domain.IdGestaoOcupacoesRemuneracao.ToString(), logger.serializer.Serialize(oldValue), logger.serializer.Serialize(value));
+                
                 return true;
             }
             catch (Exception ex)

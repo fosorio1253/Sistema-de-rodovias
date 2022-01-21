@@ -7,26 +7,17 @@ namespace DER.WebApp.Domain.Business
 {
     public class StatusBLL
     {
-        private DerContext _context;
-        private DadosMestresDAO dadosMestresDAO;
+        private OcorrenciaStatusBLL ocorrenciaStatusBLL;
 
         public StatusBLL()
         {
-            _context = new DerContext();
-            dadosMestresDAO = new DadosMestresDAO(_context);
+            ocorrenciaStatusBLL = new OcorrenciaStatusBLL();
         }
 
         public List<ViewModels.StatusOcorrenciaViewModel> ObtemStatus()
         {
             var retorno = new List<ViewModels.StatusOcorrenciaViewModel>();
-
-            var dominio = dadosMestresDAO.ObtemDominio((int)TabelaDadosMestresEnum.OcorrenciaStatus);
-
-            foreach (var d in dominio)
-            {
-                retorno.Add(new ViewModels.StatusOcorrenciaViewModel() { StatusId = d.Id, Nome = d.Nome });
-            }
-
+            ocorrenciaStatusBLL.LoadView().ForEach(x => retorno.Add(new ViewModels.StatusOcorrenciaViewModel() { StatusId = x.ocorrencia_status_id, Nome = x.nome }));
             return retorno;
         }
     }

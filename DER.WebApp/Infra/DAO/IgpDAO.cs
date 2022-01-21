@@ -17,7 +17,7 @@ namespace DER.WebApp.Infra.DAO
 
         public IgpDAO(DerContext context) : base(context)
         {
-            logger = new Logger("Igp", context);
+            logger = new Logger("Igp");
         }
 
         public List<Igp> ObtemTodos()
@@ -107,8 +107,6 @@ namespace DER.WebApp.Infra.DAO
                 }
 
                 var value = GetById(domain.IGP_id);
-                if (!value.Equals(oldValue))
-                    logger.salvarLog(TipoAlteracao.Edicao, domain.IGP_id.ToString(), logger.serializer.Serialize(oldValue), logger.serializer.Serialize(value));
                 return true;
             }
             catch (Exception ex)
@@ -165,7 +163,6 @@ namespace DER.WebApp.Infra.DAO
                     command.ExecuteNonQuery();
                     command.Parameters.Clear();
                     conn.Close();
-                    logger.salvarLog(TipoAlteracao.Exclusao, model.IGP_id.ToString(), logger.serializer.Serialize(oldValue), "");
                 }
             }
             return true;

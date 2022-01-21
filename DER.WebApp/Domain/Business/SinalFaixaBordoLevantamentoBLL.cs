@@ -36,6 +36,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(SinalFaixaBordoLevantamento model)
+        {
+            try
+            {
+                return ExistsById(model.rod_id) ?
+                    sinalfaixabordolevantamentoDAO.Update(model) :
+                    sinalfaixabordolevantamentoDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<SinalFaixaBordoLevantamentoViewModel> LoadView()
         {
             try

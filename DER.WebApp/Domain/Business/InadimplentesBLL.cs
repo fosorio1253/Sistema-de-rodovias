@@ -12,15 +12,15 @@ namespace DER.WebApp.Domain.Business
     {
         private DerContext              context;
         private InadimplentesDAO        inadimplentesDAO;
-        private DadosMestresDAO         dadosMestresDAO;
         private GestaoInteressadoBLL    gestaoInteressadoBLL;
+        private TipoOcupacaoBLL tipoOcupacaoBLL;
 
         public InadimplentesBLL()
         {
             context                 = new DerContext();
             inadimplentesDAO        = new InadimplentesDAO(context);
-            dadosMestresDAO         = new DadosMestresDAO(context);
             gestaoInteressadoBLL    = new GestaoInteressadoBLL();
+            tipoOcupacaoBLL = new TipoOcupacaoBLL();
         }
 
         public bool Save(InadimplentesTabelaViewModel viewModel)
@@ -114,7 +114,7 @@ namespace DER.WebApp.Domain.Business
                 retorno.ina_protocolo       = Convert.ToInt32(String.Concat(model.Protocolo.Where(c => "0123456789".Contains(c))));
                 retorno.ina_statusboleto    = model.StatusBoleto;
                 retorno.ina_tipofaturamento = model.TipoFaturamento;
-                retorno.ina_tipoocupacaoid  = dadosMestresDAO.ObtemTipoOcupacaoByName(model.TipoOcupacao).Id;
+                retorno.ina_tipoocupacaoid = tipoOcupacaoBLL.LoadView().Where(x => x.nome.Equals(model.TipoOcupacao)).Select(x => x.tipo_ocupacao_id).FirstOrDefault();
                 retorno.ina_valorprevisto   = model.ValorPrevisto;
                 retorno.ina_valortotal      = model.ValorTotal;
                 retorno.ina_cpfcnpj         = Convert.ToInt32(String.Concat(model.CpfCnjp.Where(c => "0123456789".Contains(c))));
@@ -142,8 +142,7 @@ namespace DER.WebApp.Domain.Business
                 retorno.Protocolo       = model.ina_protocolo.ToString();
                 retorno.StatusBoleto    = model.ina_statusboleto;
                 retorno.TipoFaturamento = model.ina_tipofaturamento;
-                retorno.TipoOcupacao    = dadosMestresDAO.ObtemTipoOcupacao(model.ina_tipoocupacaoid).Valor;
-                retorno.ValorPrevisto   = model.ina_valorprevisto;
+                retorno.TipoOcupacao = tipoOcupacaoBLL.LoadView().Where(x => x.tipo_ocupacao_id.Equals(model.ina_tipoocupacaoid)).Select(x => x.nome).FirstOrDefault();
                 retorno.ValorTotal      = model.ina_valortotal;
                 retorno.CpfCnjp         = model.ina_cpfcnpj.ToString();
                 retorno.Dias            = model.ina_dias.ToString();

@@ -36,6 +36,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(AreasGramadasLevantamento model)
+        {
+            try
+            {
+                return ExistsById(model.rod_id) ?
+                    areasgramadaslevantamentoDAO.Update(model) :
+                    areasgramadaslevantamentoDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<AreasGramadasLevantamentoViewModel> LoadView()
         {
             try

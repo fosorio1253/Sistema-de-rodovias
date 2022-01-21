@@ -44,7 +44,7 @@ namespace DER.WebApp.Domain.Business
             var grupoVM = Mapper.Map<Grupo, GrupoViewModel>(grupo);
             return grupoVM;
         }
-        public bool Salvar(GrupoViewModel Grupo)
+        public int Salvar(GrupoViewModel Grupo)
         {
             try
             {
@@ -66,11 +66,11 @@ namespace DER.WebApp.Domain.Business
                         grupo.Usuarios.Add(UsuarioDAO.Get(item));
 
                 GrupoDAO.AddOrUpdate(grupo);
-                return true;
+                return grupo.Id;
             }
             catch(Exception ex)
             {
-                return false;
+                return 0;
             }
             
         }

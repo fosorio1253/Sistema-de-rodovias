@@ -8,26 +8,17 @@ namespace DER.WebApp.Domain.Business
 {
     public class TipoDeDocumentoInteressadoBLL
     {
-        private DerContext _context;
-        private DadosMestresDAO dadosMestresDAO;
+        private TipoDocumentoInteressadoBLL tipoDocumentoInteressadoBLL;
 
         public TipoDeDocumentoInteressadoBLL()
         {
-            _context = new DerContext();
-            dadosMestresDAO = new DadosMestresDAO(_context);
+            tipoDocumentoInteressadoBLL = new TipoDocumentoInteressadoBLL();
         }
 
         public List<TipoDeDocumentoInteressadoViewModel> ObtemTipoDeDocumentosInteressado()
         {
             var retorno = new List<TipoDeDocumentoInteressadoViewModel>();
-
-            var dominio = dadosMestresDAO.ObtemDominio((int)TabelaDadosMestresEnum.TipodeDocumentoInteressado);
-
-            foreach (var d in dominio)
-            {
-                retorno.Add(new TipoDeDocumentoInteressadoViewModel() { TipoDeDocumentoInteressadoId = d.Id, Nome = d.Nome });
-            }
-
+            tipoDocumentoInteressadoBLL.LoadView().ForEach(x => retorno.Add(new TipoDeDocumentoInteressadoViewModel() { TipoDeDocumentoInteressadoId = x.tipo_documento_interessado_id, Nome = x.descricao }));
             return retorno;
         }
     }

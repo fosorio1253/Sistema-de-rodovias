@@ -36,6 +36,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(DominioDrenagensTipos model)
+        {
+            try
+            {
+                return ExistsById(model.drt_id) ?
+                    dominiodrenagenstiposDAO.Update(model) :
+                    dominiodrenagenstiposDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<DominioDrenagensTiposViewModel> LoadView()
         {
             try

@@ -36,6 +36,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(DominioDispositivosTipos model)
+        {
+            try
+            {
+                return ExistsById(model.dit_id) ?
+                    dominiodispositivostiposDAO.Update(model) :
+                    dominiodispositivostiposDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<DominioDispositivosTiposViewModel> LoadView()
         {
             try

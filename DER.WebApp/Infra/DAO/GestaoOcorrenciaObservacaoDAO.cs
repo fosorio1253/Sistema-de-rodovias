@@ -15,10 +15,10 @@ namespace DER.WebApp.Infra.DAO
 {
     public class GestaoOcorrenciaObservacaoDAO : BaseDAO<GestaoOcorrenciaObservacao>
     {
-        private Logger _logger;
+        
         public GestaoOcorrenciaObservacaoDAO(DerContext context) : base(context)
         {
-            _logger = new Logger("Gestão Ocorrência Observação", context);
+        
         }
 
         public void ExcluirPorIdGestao(int idOcorrencia)
@@ -41,7 +41,7 @@ namespace DER.WebApp.Infra.DAO
                         command.Parameters.Clear();
                         conn.Close();
 
-                        _logger.salvarLog(TipoAlteracao.Exclusao, idOcorrencia.ToString(), _logger.serializer.Serialize(oldValue), "");
+                        
 
                     }
                 }
@@ -98,7 +98,7 @@ namespace DER.WebApp.Infra.DAO
             }
         }
 
-        public void Inserir(GestaoOcorrenciaObservacao domain)
+        public List<GestaoObservacaoViewModel> Inserir(GestaoOcorrenciaObservacao domain)
         //-- Description:	Insere uma nova Observação em Gestão de Ocorrências.
         //PROC: [STP_INS_GESTAO_OCORRENCIA_OBSERVACAO]
         {
@@ -124,7 +124,7 @@ namespace DER.WebApp.Infra.DAO
 
                         conn.Close();
                         var value = GetByGestaoId(Convert.ToInt32(result));
-                        _logger.salvarLog(TipoAlteracao.Criacao, result.ToString(), "", _logger.serializer.Serialize(value));
+                        return value;
                         //return Convert.ToInt32(result);
                     }
                 }

@@ -9,26 +9,17 @@ namespace DER.WebApp.Domain.Business
 {
     public class TipoDeInterferenciaBLL
     {
-        private DerContext _context;
-        private DadosMestresDAO dadosMestresDAO;
+        private TipoInterferenciaBLL tipoInterferenciaBLL;
 
         public TipoDeInterferenciaBLL()
         {
-            _context = new DerContext();
-            dadosMestresDAO = new DadosMestresDAO(_context);
+            tipoInterferenciaBLL = new TipoInterferenciaBLL();
         }
 
         public List<TipoDeInterferenciaViewModel> ObtemTipoDeInterferencias()
         {
             var retorno = new List<TipoDeInterferenciaViewModel>();
-
-            var dominio = dadosMestresDAO.ObtemDominio((int)TabelaDadosMestresEnum.TipoDeInterferencia);
-
-            foreach (var d in dominio)
-            {
-                retorno.Add(new TipoDeInterferenciaViewModel() { TipoDeInterferenciaId = d.Id, Nome = d.Nome });
-            }
-
+            tipoInterferenciaBLL.LoadView().ForEach(x => retorno.Add(new TipoDeInterferenciaViewModel() { TipoDeInterferenciaId = (int)x.TipoInterferenciaId, Nome = x.Nome }));
             return retorno;
         }
     }

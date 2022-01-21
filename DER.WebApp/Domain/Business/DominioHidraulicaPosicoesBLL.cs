@@ -36,6 +36,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(DominioHidraulicaPosicoes model)
+        {
+            try
+            {
+                return ExistsById(model.hps_id) ?
+                    dominiohidraulicaposicoesDAO.Update(model) :
+                    dominiohidraulicaposicoesDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<DominioHidraulicaPosicoesViewModel> LoadView()
         {
             try

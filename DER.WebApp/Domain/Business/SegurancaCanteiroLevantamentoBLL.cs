@@ -36,6 +36,20 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(SegurancaCanteiroLevantamento model)
+        {
+            try
+            {
+                return ExistsById(model.rod_id) ?
+                    segurancacanteirolevantamentoDAO.Update(model) :
+                    segurancacanteirolevantamentoDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<SegurancaCanteiroLevantamentoViewModel> LoadView()
         {
             try

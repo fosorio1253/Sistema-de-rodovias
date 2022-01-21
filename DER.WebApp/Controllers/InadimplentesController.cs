@@ -12,10 +12,11 @@ namespace DER.WebApp.Controllers
     public class InadimplentesController : Controller
     {
         private InadimplentesViewBLL inadimplentesViewBLL;
-
+        private Logger logger;
         public InadimplentesController()
         {
             inadimplentesViewBLL = new InadimplentesViewBLL();
+            logger = new Logger("Inadimplentes");
         }
 
         public ActionResult Index()

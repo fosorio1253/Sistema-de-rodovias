@@ -17,7 +17,7 @@ namespace DER.WebApp.Infra.DAO
 
         public DominioGradacoesDAO(DerContext context) : base(context)
         {
-            logger = new Logger("DominioGradacoes", context);
+            logger = new Logger("DominioGradacoes");
         }
 
         public List<DominioGradacoes> ObtemTodos()
@@ -107,8 +107,6 @@ namespace DER.WebApp.Infra.DAO
                 }
 
                 var value = GetById(domain.gra_id);
-                if (!value.Equals(oldValue))
-                    logger.salvarLog(TipoAlteracao.Edicao, domain.gra_id.ToString(), logger.serializer.Serialize(oldValue), logger.serializer.Serialize(value));
                 return true;
             }
             catch (Exception ex)
@@ -165,7 +163,6 @@ namespace DER.WebApp.Infra.DAO
                     command.ExecuteNonQuery();
                     command.Parameters.Clear();
                     conn.Close();
-                    logger.salvarLog(TipoAlteracao.Exclusao, model.gra_id.ToString(), logger.serializer.Serialize(oldValue), "");
                 }
             }
             return true;

@@ -7,18 +7,14 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Data;
-using System.Linq;
-using System.Web;
-using DER.WebApp.Common.Helper;
 
 namespace DER.WebApp.Infra.DAO
 {
     public class EmailDAO : BaseDAO<Emails>
     {
-        private Logger _logger;
+
         public EmailDAO(DerContext context) : base(context)
         {
-            _logger = new Logger("Email", context);
         }
 
         public List<Emails> GetListEmails()
@@ -126,7 +122,6 @@ namespace DER.WebApp.Infra.DAO
                         conn.Close();
 
                         var id = Convert.ToInt32(result);
-                        _logger.salvarLog(TipoAlteracao.Criacao, id.ToString(), "", _logger.serializer.Serialize(email));
                     }
                 }
 
