@@ -3,6 +3,7 @@ using DER.WebApp.Infra.DAL;
 using DER.WebApp.Infra.DAO;
 using DER.WebApp.ViewModels;
 using DER.WebApp.ViewModels.GestaoInteressados;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -24,22 +25,18 @@ namespace DER.WebApp.Domain.Business
         public List<TipoDeConcessaoViewModel> ObtemTipoDeConcessao(int? idGestao)
         {
             var retorno = new List<TipoDeConcessaoViewModel>();
-            var concessoes = new List<TipoDeConcessaoViewModel>();
-
-            if (idGestao != null)
-                concessoes = gestaoInteressadoTipoDeConcessaoDAO.GetByGestaoId((int)idGestao);
+            var concessoes = idGestao.HasValue ? 
+                gestaoInteressadoTipoDeConcessaoDAO.GetByGestaoId((int)idGestao) : 
+                new List<TipoDeConcessaoViewModel>();
 
             tipoConcessaoBLL.LoadView().ForEach(x =>
             {
-                var marcado = false;
-
-                if (idGestao != null)
+                retorno.Add(new TipoDeConcessaoViewModel()
                 {
-                    var con = concessoes.FirstOrDefault(y => y.IdGestao == (int)idGestao && y.TipoConcessaoId == x.tipo_concessao_id);
-                    marcado = (con != null) ? con.Marcado : marcado;
-                }
-
-                retorno.Add(new TipoDeConcessaoViewModel() { TipoConcessaoId = x.tipo_concessao_id, Nome = " - " + x.Descricao, Marcado = marcado });
+                    TipoConcessaoId = x.tipo_concessao_id, Nome = " - " + x.Descricao, Marcado = idGestao.HasValue ? 
+                        Convert.ToBoolean(concessoes.FirstOrDefault(y => y.IdGestao == (int)idGestao && 
+                        y.TipoConcessaoId == x.tipo_concessao_id).Marcado.ToString() ?? false.ToString()) : false
+                });
             });
             return retorno;
         }

@@ -13,6 +13,7 @@ using System.Linq;
 
 namespace DER.WebApp.Infra.DAO
 {
+    //Classe inutlizada
     public class DadosMestresDAO : BaseDAO<DadosMestresTabela>
     {
         public DadosMestresDAO(DerContext context) : base(context)

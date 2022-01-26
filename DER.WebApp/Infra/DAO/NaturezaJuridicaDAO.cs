@@ -40,7 +40,7 @@ namespace DER.WebApp.Infra.DAO
                         {
                             var retorno = new NaturezaJuridica();
                             retorno.natureza_juridica_id = result["natureza_juridica_id"] is DBNull ? 0 : Convert.ToInt32(result["natureza_juridica_id"]);
-                            retorno.nome = result["nome"] is DBNull ? string.Empty : result["nome"].ToString();
+                            retorno.nome = result["descricao"] is DBNull ? string.Empty : result["descricao"].ToString();
 
                             lretorno.Add(retorno);
                         }

@@ -53,15 +53,12 @@ namespace DER.WebApp.Infra.DAO
                                     tipoConcessao.int_id as IdGestao,
                                     tipoConcessao.dmv_id_tipo_concessao as TipoConcessaoId,
                                     tipoConcessao.int_tipo_concessao_marcado as Marcado,
-                                    descricao.dmv_valor as Nome, 
-                                    documentos.dmv_valor as Documentos, 
-                                    profundidadeMinima.dmv_valor as ProfundidadeMinima,
-                                    alturaMinima.dmv_valor as AlturaMinima
+                                    con.Descricao as Nome, 
+                                    con.Documentos as Documentos, 
+                                    con.profundidade_minima as ProfundidadeMinima,
+                                    con.altura_minima as AlturaMinima
                                 FROM tab_gestao_interessado_tipo_de_concessao as tipoConcessao
-                                LEFT JOIN tab_dadosMestres_val as descricao ON tipoConcessao.dmv_id_tipo_concessao=descricao.dmv_id AND descricao.col_id=30
-                                LEFT JOIN tab_dadosMestres_val as documentos ON descricao.dmv_linha=documentos.dmv_linha AND documentos.col_id=489
-                                LEFT JOIN tab_dadosMestres_val as profundidadeMinima ON descricao.dmv_linha=profundidadeMinima.dmv_linha AND profundidadeMinima.col_id=490
-                                LEFT JOIN tab_dadosMestres_val as alturaMinima ON descricao.dmv_linha=alturaMinima.dmv_linha AND alturaMinima.col_id=491
+                                LEFT JOIN tab_tipo_concessao as con on tipoConcessao.dmv_id_tipo_concessao = con.tipo_concessao_id
                                 WHERE int_id = @idGestao AND int_tipo_concessao_marcado=1";
 
             using (SqlConnection conexao = new SqlConnection(connectionString))

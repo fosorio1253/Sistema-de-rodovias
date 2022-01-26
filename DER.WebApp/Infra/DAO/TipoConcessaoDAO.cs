@@ -29,7 +29,7 @@ namespace DER.WebApp.Infra.DAO
             {
                 using (var conn = new SqlConnection(connectionString))
                 {
-                    using (var command = new SqlCommand("STP_SEL_TIPOCONCESSAO", conn))
+                    using (var command = new SqlCommand("STP_SEL_TIPO_CONCESSAO", conn))
                     {
                         command.CommandType = CommandType.StoredProcedure;
                         conn.Open();
@@ -67,7 +67,7 @@ namespace DER.WebApp.Infra.DAO
             {
                 using (var conn = new SqlConnection(connectionString))
                 {
-                    using (var command = new SqlCommand("STP_INS_TIPOCONCESSAO", conn))
+                    using (var command = new SqlCommand("STP_INS_TIPO_CONCESSAO", conn))
                     {
                         command.CommandType = CommandType.StoredProcedure;
                         conn.Open();
@@ -96,7 +96,7 @@ namespace DER.WebApp.Infra.DAO
             {
                 using (var conn = new SqlConnection(connectionString))
                 {
-                    using (var command = new SqlCommand("STP_UPD_TIPOCONCESSAO", conn))
+                    using (var command = new SqlCommand("STP_UPD_TIPO_CONCESSAO", conn))
                     {
                         command.CommandType = CommandType.StoredProcedure;
                         conn.Open();
@@ -126,7 +126,7 @@ namespace DER.WebApp.Infra.DAO
             {
                 using (var conn = new SqlConnection(connectionString))
                 {
-                    using (var command = new SqlCommand("STP_SEL_TIPOCONCESSAO_ID", conn))
+                    using (var command = new SqlCommand("STP_SEL_TIPO_CONCESSAO_ID", conn))
                     {
                         command.CommandType = CommandType.StoredProcedure;
                         conn.Open();
@@ -159,7 +159,7 @@ namespace DER.WebApp.Infra.DAO
 
             using (var conn = new SqlConnection(connectionString))
             {
-                using (var command = new SqlCommand("STP_DEL_TIPOCONCESSAO", conn))
+                using (var command = new SqlCommand("STP_DEL_TIPO_CONCESSAO", conn))
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Add(new SqlParameter("@tipo_concessao_id", model.tipo_concessao_id));

@@ -56,25 +56,25 @@ namespace DER.WebApp.Infra.DAO
                                             trecho.ocu_tre_kmfinal_metragem as KmFinalMetragem,
                                             trecho.ocu_tre_extensao as Extensao,
                                             trecho.ocu_tre_lado as LadoId,
-                                            lado.dmv_valor as LadoNome,
+                                            lado.nome as LadoNome,
                                             trecho.ocu_tre_altura as Altura,
                                             trecho.ocu_tre_profundidade as Profundidade,
 			                                trecho.ocu_tre_rodovia_id as IdRodovia,
-			                                rodovia.dmv_valor as NomeRodovia,
+			                                rodovia.Nome as NomeRodovia,
 			                                trecho.ocu_tre_tipo_ocupacao_id as IdTipoOcupacao,
                                             trecho.ocu_tre_tipo_ocupacao_id as TipoOcupacaoId,
-			                                tipoocupacao.dmv_valor as NomeTipoOcupacao,
+			                                tipoocupacao.nome as NomeTipoOcupacao,
 			                                trecho.ocu_tre_tipo_implantacao_id as IdTipoImplantacao,
-			                                tipoimplantacao.dmv_valor as NomeTipoImplantacao,
+			                                tipoimplantacao.nome as NomeTipoImplantacao,
 			                                trecho.ocu_tre_localizacao as IdLocalizacao,
 			                                trecho.ocu_tre_tipo_passagem_id as IdTipoPassagem,
-			                                tipopassagem.dmv_valor as NomeTipoPassagem
-                                    from tab_gestao_ocupacao_trecho trecho
-	                                LEFT JOIN tab_dadosMestres_val rodovia on (rodovia.col_id = 13 and rodovia.dmv_id = trecho.ocu_tre_rodovia_id)
-	                                LEFT JOIN tab_dadosMestres_val tipoocupacao on (tipoocupacao.col_id = 30 and tipoocupacao.dmv_id = trecho.ocu_tre_tipo_ocupacao_id)
-	                                LEFT JOIN tab_dadosMestres_val tipoimplantacao on (tipoimplantacao.col_id = 39 and tipoimplantacao.dmv_id = trecho.ocu_tre_tipo_implantacao_id)
-	                                LEFT JOIN tab_dadosMestres_val tipopassagem on (tipopassagem.col_id = 38 and tipopassagem.dmv_id = trecho.ocu_tre_tipo_passagem_id)
-                                    LEFT JOIN tab_dadosMestres_val lado on (lado.col_id = 41 and lado.dmv_id = trecho.ocu_tre_lado)
+			                                tipopassagem.nome as NomeTipoPassagem
+                                from tab_gestao_ocupacao_trecho trecho
+                                LEFT JOIN tab_rodovia rodovia on rodovia.rodovia_id = trecho.ocu_tre_rodovia_id
+                                LEFT JOIN tab_tipo_ocupacao tipoocupacao on tipoocupacao.tipo_ocupacao_id = trecho.ocu_tre_tipo_ocupacao_id
+                                LEFT JOIN tab_tipo_implantacao tipoimplantacao on tipoimplantacao.tipo_implantacao_id = trecho.ocu_tre_tipo_implantacao_id
+                                LEFT JOIN tab_tipo_passagem tipopassagem on tipopassagem.tipo_passagem_id = trecho.ocu_tre_tipo_passagem_id
+                                LEFT JOIN tab_lado lado on lado.lado_id = trecho.ocu_tre_lado
                                 where trecho.ocu_id = @idOcupacao";
 
             using (SqlConnection db = new SqlConnection(connectionString))

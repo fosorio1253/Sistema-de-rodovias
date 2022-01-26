@@ -28,10 +28,10 @@ namespace DER.WebApp.Infra.DAO
 
             var retorno = new List<GestaoOcupacoesTipoOcupacaoViewModel>();
 
-            const string sql = @"select val.dmv_id as TipoOcupacaoId,
-		                                val.dmv_valor as Nome
-	                                from tab_gestao_interessado_tipo_de_concessao conc
-	                                inner join tab_dadosMestres_val val on conc.dmv_id_tipo_concessao = val.dmv_id
+            const string sql = @"select	con.tipo_concessao_id as TipoOcupacaoId,
+		                                con.Descricao as Nome
+                                from tab_gestao_interessado_tipo_de_concessao conc
+                                inner join tab_tipo_concessao con on conc.dmv_id_tipo_concessao = con.tipo_concessao_id
                                 where conc.int_id = @idInteressado";
 
             using (SqlConnection db = new SqlConnection(connectionString))

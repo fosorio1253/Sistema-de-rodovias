@@ -41,9 +41,9 @@ namespace DER.WebApp.Infra.DAO
                         while (result.Read())
                         {
                             var retorno = new Concessionaria();
-                            //retorno.concessionaria_id = result["concessionaria_id"] is DBNull ? 0 : Convert.ToInt32(result["concessionaria_id"]);
-                            //retorno.sigla = result["sigla"] is DBNull ? string.Empty : result["sigla").ToString();
-                            //retorno.nome = result["nome"] is DBNull ? string.Empty : result["nome").ToString();
+                            retorno.concessionaria_id = result["concessionaria_id"] is DBNull ? 0 : Convert.ToInt32(result["concessionaria_id"]);
+                            retorno.sigla = result["sigla"] is DBNull ? string.Empty : result["sigla"].ToString();
+                            retorno.nome = result["nome"] is DBNull ? string.Empty : result["nome"].ToString();
 
                             lretorno.Add(retorno);
                         }
