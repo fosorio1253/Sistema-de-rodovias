@@ -165,8 +165,7 @@ namespace DER.WebApp.Controllers
         {
             DisponibilizarArquivoRegulamento();
             DisponibilizarArquivoNorma();
-            ViewData["SomenteVisualizar"] = false;
-
+            ViewData["SomenteVisualizar"] = false;            
 
             var retorno = this.RetornaViewModelNovo();
             if (!regularizacao)
@@ -178,6 +177,7 @@ namespace DER.WebApp.Controllers
                 retorno.OrigemSolicitacaoId = Convert.ToInt32(retorno.OrigemSolicitacoes.Where(n => n.Text.Contains("Regularização")).FirstOrDefault().Value);
             }
 
+            ViewBag.novo = true;
             return View(retorno);
         }
 
@@ -267,7 +267,7 @@ namespace DER.WebApp.Controllers
                     model.CriarNovaOcupacao = false;
                     break;
             }
-
+            ViewBag.novo = false;
             return View("Novo", model);
         }
 

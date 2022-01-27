@@ -29,7 +29,7 @@ namespace DER.WebApp.Infra.DAO
             {
                 using (var conn = new SqlConnection(connectionString))
                 {
-                    using (var command = new SqlCommand("STP_SEL_DIVISAOREGIONAL", conn))
+                    using (var command = new SqlCommand("STP_SEL_DIVISAO_REGIONAL", conn))
                     {
                         command.CommandType = CommandType.StoredProcedure;
                         conn.Open();
@@ -67,13 +67,13 @@ namespace DER.WebApp.Infra.DAO
             {
                 using (var conn = new SqlConnection(connectionString))
                 {
-                    using (var command = new SqlCommand("STP_INS_DIVISAOREGIONAL", conn))
+                    using (var command = new SqlCommand("STP_INS_DIVISAO_REGIONAL", conn))
                     {
                         command.CommandType = CommandType.StoredProcedure;
                         conn.Open();
                         command.Parameters.Add(new SqlParameter("@divisao_regional_id", domain.divisao_regional_id));
                         command.Parameters.Add(new SqlParameter("@sigla", domain.sigla));
-                        command.Parameters.Add(new SqlParameter("@descri��o", domain.descricao));
+                        command.Parameters.Add(new SqlParameter("@descricao", domain.descricao));
                         command.Parameters.Add(new SqlParameter("@fator_regional", domain.fator_regional));
                         var result = command.ExecuteScalar();
                         command.Parameters.Clear();
@@ -96,13 +96,13 @@ namespace DER.WebApp.Infra.DAO
             {
                 using (var conn = new SqlConnection(connectionString))
                 {
-                    using (var command = new SqlCommand("STP_UPD_DIVISAOREGIONAL", conn))
+                    using (var command = new SqlCommand("STP_UPD_DIVISAO_REGIONAL", conn))
                     {
                         command.CommandType = CommandType.StoredProcedure;
                         conn.Open();
                         command.Parameters.Add(new SqlParameter("@divisao_regional_id", domain.divisao_regional_id));
                         command.Parameters.Add(new SqlParameter("@sigla", domain.sigla));
-                        command.Parameters.Add(new SqlParameter("@descri��o", domain.descricao));
+                        command.Parameters.Add(new SqlParameter("@descricao", domain.descricao));
                         command.Parameters.Add(new SqlParameter("@fator_regional", domain.fator_regional));
                         var result = command.ExecuteNonQuery();
                         conn.Close();
@@ -126,7 +126,7 @@ namespace DER.WebApp.Infra.DAO
             {
                 using (var conn = new SqlConnection(connectionString))
                 {
-                    using (var command = new SqlCommand("STP_SEL_DIVISAOREGIONAL_ID", conn))
+                    using (var command = new SqlCommand("STP_SEL_DIVISAO_REGIONAL_ID", conn))
                     {
                         command.CommandType = CommandType.StoredProcedure;
                         conn.Open();
@@ -138,7 +138,7 @@ namespace DER.WebApp.Infra.DAO
                         {
                             retorno.divisao_regional_id = result["divisao_regional_id"] is DBNull ? 0 : Convert.ToInt32(result["divisao_regional_id"]);
                             retorno.sigla = result["sigla"] is DBNull ? string.Empty : result["sigla"].ToString();
-                            retorno.descricao = result["descri��o"] is DBNull ? string.Empty : result["descricao"].ToString();
+                            retorno.descricao = result["descricao"] is DBNull ? string.Empty : result["descricao"].ToString();
                             retorno.fator_regional = result["fator_regional"] is DBNull ? 0 : Convert.ToDouble(result["fator_regional"]);
                         }
                         conn.Close();
@@ -159,7 +159,7 @@ namespace DER.WebApp.Infra.DAO
 
             using (var conn = new SqlConnection(connectionString))
             {
-                using (var command = new SqlCommand("STP_DEL_DIVISAOREGIONAL", conn))
+                using (var command = new SqlCommand("STP_DEL_DIVISAO_REGIONAL", conn))
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Add(new SqlParameter("@divisao_regional_id", model.divisao_regional_id));

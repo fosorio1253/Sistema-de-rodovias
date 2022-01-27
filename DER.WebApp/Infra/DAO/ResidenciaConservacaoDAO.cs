@@ -29,7 +29,7 @@ namespace DER.WebApp.Infra.DAO
             {
                 using (var conn = new SqlConnection(connectionString))
                 {
-                    using (var command = new SqlCommand("STP_SEL_RESIDENCIACONSERVACAO", conn))
+                    using (var command = new SqlCommand("STP_SEL_RESIDENCIA_CONSERVACAO", conn))
                     {
                         command.CommandType = CommandType.StoredProcedure;
                         conn.Open();
@@ -66,7 +66,7 @@ namespace DER.WebApp.Infra.DAO
             {
                 using (var conn = new SqlConnection(connectionString))
                 {
-                    using (var command = new SqlCommand("STP_INS_RESIDENCIACONSERVACAO", conn))
+                    using (var command = new SqlCommand("STP_INS_RESIDENCIA_CONSERVACAO", conn))
                     {
                         command.CommandType = CommandType.StoredProcedure;
                         conn.Open();
@@ -94,7 +94,7 @@ namespace DER.WebApp.Infra.DAO
             {
                 using (var conn = new SqlConnection(connectionString))
                 {
-                    using (var command = new SqlCommand("STP_UPD_RESIDENCIACONSERVACAO", conn))
+                    using (var command = new SqlCommand("STP_UPD_RESIDENCIA_CONSERVACAO", conn))
                     {
                         command.CommandType = CommandType.StoredProcedure;
                         conn.Open();
@@ -123,7 +123,7 @@ namespace DER.WebApp.Infra.DAO
             {
                 using (var conn = new SqlConnection(connectionString))
                 {
-                    using (var command = new SqlCommand("STP_SEL_RESIDENCIACONSERVACAO_ID", conn))
+                    using (var command = new SqlCommand("STP_SEL_RESIDENCIA_CONSERVACAO_ID", conn))
                     {
                         command.CommandType = CommandType.StoredProcedure;
                         conn.Open();
@@ -155,7 +155,7 @@ namespace DER.WebApp.Infra.DAO
 
             using (var conn = new SqlConnection(connectionString))
             {
-                using (var command = new SqlCommand("STP_DEL_RESIDENCIACONSERVACAO", conn))
+                using (var command = new SqlCommand("STP_DEL_RESIDENCIA_CONSERVACAO", conn))
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Add(new SqlParameter("@residencia_conservacao_id", model.residencia_conservacao_id));

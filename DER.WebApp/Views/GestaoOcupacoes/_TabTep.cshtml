@@ -9,7 +9,7 @@
                 <div class="card-body table-responsive p-0">
                     <table id="tablePep" class="table table-hover text-nowrap">
                         <tbody>
-                            @if (!ViewBag.SomenteVisualizar && ViewBag.situacao != "Deferida")
+                            @if (!ViewBag.SomenteVisualizar && ViewBag.situacao != "Deferida" && !ViewBag.novo)
                             {
                             <tr>
                                 <td><button class="btn btn-primary" id="btnCalcularPep" onclick="CalcularPep()" type="button"><i class="fa fa-money"> </i>Calcular PEP</button></td>
@@ -39,32 +39,35 @@
                         <div class="col-md-11" style="margin-top:5px;">
                             <fieldset>
                                 <legend>Anexar comprovante</legend>
-                                @if (!ViewBag.SomenteVisualizar && ViewBag.situacao != "Deferida")
+                                @if (!ViewBag.novo)
                                 {
-                                <div class="row" style="margin-left:5px;">
-                                    <div class="col-sm-4" style="margin-top:5px;">
-                                        <button class="btn btn-primary" id="btnAdicionarComprovante" onclick="" type="button"><i class="fa fa-archive"> </i>Selecionar Arquivo</button>
+                                    if (!ViewBag.SomenteVisualizar && ViewBag.situacao != "Deferida")
+                                    {
+                                        <div class="row" style="margin-left:5px;">
+                                            <div class="col-sm-4" style="margin-top:5px;">
+                                                <button class="btn btn-primary" id="btnAdicionarComprovante" onclick="" type="button"><i class="fa fa-archive"> </i>Selecionar Arquivo</button>
+                                            </div>
+                                            <div class="col-sm-8" style="margin-top:5px;">
+                                                <p id="comprovantePep"></p>
+                                            </div>
+                                        </div>
+                                    }
+                                    <div class="row" style="margin-left:5px;">
+                                        <div class="col-sm-4" style="margin-top:5px;">
+                                            <button class="btn btn-primary">
+                                                <i class="fa fa-download"></i>
+                                                @if (Model.PEP != null)
+                                                {
+                                                    @Html.ActionLink("Baixar boleto", "BaixarBoletoPEP", new { idocupacao = Model.Id }, new { @class = "customButton" })
+                                                }
+                                                else
+                                                {
+                                                    <a href="javascript:alert('Dados não preenchidos!');" class="customButton">Você precisa realizar o Upload do Regulamento Vigente</a>
+                                                }
+                                            </button>
+                                        </div>
                                     </div>
-                                    <div class="col-sm-8" style="margin-top:5px;">
-                                        <p id="comprovantePep"></p>
-                                    </div>
-                                </div>
                                 }
-                                <div class="row" style="margin-left:5px;">
-                                    <div class="col-sm-4" style="margin-top:5px;">
-                                        <button class="btn btn-primary">
-                                            <i class="fa fa-download"></i>
-                                            @if (Model.PEP != null)
-                                            {
-                                                @Html.ActionLink("Baixar boleto", "BaixarBoletoPEP", new { idocupacao = Model.Id }, new { @class = "customButton" })
-                                            }
-                                            else
-                                            {
-                                                <a href="javascript:alert('Dados não preenchidos!');" class="customButton">Você precisa realizar o Upload do Regulamento Vigente</a>
-                                            }
-                                        </button>
-                                    </div>
-                                </div>
                             </fieldset>
                         </div>
                     </div>

@@ -103,7 +103,7 @@ namespace DER.WebApp.Controllers
         [HttpPost]
         public ActionResult Excluir(int id)
         {
-            logger.salvarLog(TipoAlteracao.Exclusao, id.ToString(), null, gestaoInteressadoBLL.ObtemId(id));
+            logger.salvarLog(TipoAlteracao.Exclusao, id.ToString());
             try
             {
                 gestaoInteressadoBLL.Excluir(id);

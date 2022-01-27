@@ -31,12 +31,19 @@ namespace DER.WebApp.Domain.Business
 
             tipoConcessaoBLL.LoadView().ForEach(x =>
             {
-                retorno.Add(new TipoDeConcessaoViewModel()
-                {
-                    TipoConcessaoId = x.tipo_concessao_id, Nome = " - " + x.Descricao, Marcado = idGestao.HasValue ? 
-                        Convert.ToBoolean(concessoes.FirstOrDefault(y => y.IdGestao == (int)idGestao && 
-                        y.TipoConcessaoId == x.tipo_concessao_id).Marcado.ToString() ?? false.ToString()) : false
-                });
+                var ret = new TipoDeConcessaoViewModel();
+                ret.TipoConcessaoId = x.tipo_concessao_id;
+                ret.Nome = x.Descricao;
+
+                if (idGestao.HasValue)
+                    if (concessoes.Any(y => y.IdGestao == (int)idGestao && y.TipoConcessaoId == x.tipo_concessao_id))
+                        ret.Marcado = concessoes.Where(y => y.IdGestao == (int)idGestao && y.TipoConcessaoId == x.tipo_concessao_id).FirstOrDefault().Marcado;
+                    else
+                        ret.Marcado = false;
+                else
+                    ret.Marcado = false;
+
+                retorno.Add(ret);
             });
             return retorno;
         }
