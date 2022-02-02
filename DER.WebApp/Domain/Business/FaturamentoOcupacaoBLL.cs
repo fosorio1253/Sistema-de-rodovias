@@ -85,7 +85,7 @@ namespace DER.WebApp.Domain.Business
                 var faturamento = new FaturamentoPorOcupacaoViewModel();
                 faturamento.TipoFaturamento     = "PEP";
                 faturamento.TipoOcupacaoId      = ocupacao.Trechos.Count.Equals(0) ? "" : ocupacao.Trechos.First().TipoOcupacaoId.ToString();
-                faturamento.TipoOcupacao = tipoOcupacaoBLL.LoadView().Where(x => x.tipo_ocupacao_id.Equals(Convert.ToInt32(faturamento.TipoOcupacaoId))).Select(x => x.nome).FirstOrDefault();
+                faturamento.TipoOcupacao        = tipoOcupacaoBLL.LoadView().Where(x => x.tipo_ocupacao_id.Equals(string.IsNullOrEmpty(faturamento.TipoOcupacaoId) ? 0 : Convert.ToInt32(faturamento.TipoOcupacaoId))).Select(x => x.nome).FirstOrDefault();
                 faturamento.ValorTotal          = (double)pep.Valor;
                 faturamento.ValorPrevisto       = (double)pep.Valor + ((double)pep.Valor / 100 * 10.20);//ajustar calculo
                 faturamento.PeriodoInt          = pep.DataEmissãoPEP;

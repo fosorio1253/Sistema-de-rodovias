@@ -885,6 +885,7 @@
     <Compile Include="ViewModels\TerceiraFaixaLevantamentoViewModel.cs" />
     <Compile Include="ViewModels\TipoConcessaoViewModel.cs" />
     <Compile Include="ViewModels\TipoDeDocumentoInteressadoViewModel.cs" />
+    <Compile Include="ViewModels\TipoDeOcupacaoViewModel.cs" />
     <Compile Include="ViewModels\TipoDocumentoInteressadoViewModel.cs" />
     <Compile Include="ViewModels\TipoDocumentoViewModel.cs" />
     <Compile Include="ViewModels\TipoInteressadoViewModel.cs" />

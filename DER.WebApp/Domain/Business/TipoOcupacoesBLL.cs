@@ -16,15 +16,13 @@ namespace DER.WebApp.Domain.Business
             tipoOcupacaoBLL = new TipoOcupacaoBLL();
         }
 
-        public List<TipoOcupacaoViewModel> ObtemTipoOcupacoes()
+        public List<TipoDeOcupacaoViewModel> ObtemTipoOcupacoes()
         {
-            var retorno = new List<TipoOcupacaoViewModel>();
-            tipoOcupacaoBLL.LoadView().ForEach(x => retorno.Add(new TipoOcupacaoViewModel()
+            var retorno = new List<TipoDeOcupacaoViewModel>();
+            tipoOcupacaoBLL.LoadView().ForEach(x => retorno.Add(new TipoDeOcupacaoViewModel()
             {
-                tipo_ocupacao_id = x.tipo_ocupacao_id,
-                nome = x.nome,
-                altura_minima = x.altura_minima,
-                profundidade_minima = x.profundidade_minima
+                TipoOcupacaoId = x.tipo_ocupacao_id,
+                Nome = x.nome
             }));
             return retorno;
         }

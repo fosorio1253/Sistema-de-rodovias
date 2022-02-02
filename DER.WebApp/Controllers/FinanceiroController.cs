@@ -374,7 +374,7 @@ namespace DER.WebApp.Controllers
             return rodoviaBLL.ObtemRodovia();
         }
 
-        private List<TipoOcupacaoViewModel> ObtemOcupacoes()
+        private List<TipoDeOcupacaoViewModel> ObtemOcupacoes()
         {
             return tipoOcupacoesBLL.ObtemTipoOcupacoes();
         }

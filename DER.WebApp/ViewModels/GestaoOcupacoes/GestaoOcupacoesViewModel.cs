@@ -183,7 +183,7 @@ namespace DER.WebApp.ViewModels.GestaoOcupacoes
         public virtual SelectList TipoImplantacoes { get; set; }
         public virtual SelectList TipoPassagens { get; set; }
 
-        public virtual List<TipoOcupacaoViewModel> TipoOcupacoes { get; set; }
+        public virtual List<TipoDeOcupacaoViewModel> TipoOcupacoes { get; set; }
 
         public virtual SelectList TipoOcupacoesSelectList { get; set; }
         public virtual SelectList Lados { get; set; }

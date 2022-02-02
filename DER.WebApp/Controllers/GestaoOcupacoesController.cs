@@ -38,7 +38,7 @@ namespace DER.WebApp.Controllers
         List<ViewModels.ProjetosMelhorias.RodoviaViewModel> _ObtemRodovias = new List<ViewModels.ProjetosMelhorias.RodoviaViewModel>();
         List<GestaoOcupacoesTipoImplantacaoViewModel> _ObtemTipoImplantacoes = new List<GestaoOcupacoesTipoImplantacaoViewModel>();
         List<GestaoOcupacoesTipoPassagemViewModel> _ObtemTipoPassagens = new List<GestaoOcupacoesTipoPassagemViewModel>();
-        List<TipoOcupacaoViewModel> _ObtemTipoOcupacoes = new List<TipoOcupacaoViewModel>();
+        List<TipoDeOcupacaoViewModel> _ObtemTipoOcupacoes = new List<TipoDeOcupacaoViewModel>();
         List<LadoViewModel> _ObtemLados = new List<LadoViewModel>();
         List<TipoDeInterferenciaViewModel> _ObtemTipoDeInterferencias = new List<TipoDeInterferenciaViewModel>();
         List<GestaoOcupacoesMunicipioViewModel> _ObtemMunicipio = new List<GestaoOcupacoesMunicipioViewModel>();
@@ -515,7 +515,7 @@ namespace DER.WebApp.Controllers
             retorno.Regulamento = DisponibilizarArquivoRegulamento();
             retorno.Norma = DisponibilizarArquivoNorma();
             retorno.Rodovia = ObtemRodovias().Where(x => x.RodoviaId.Equals(retorno.RodoviaId)).Select(x => x.Nome).FirstOrDefault();
-            retorno.TipoOcupacao = retorno.TipoOcupacoes.Where(x => x.tipo_ocupacao_id.Equals(retorno.TipoOcupacaoId)).Select(x => x.nome).FirstOrDefault();
+            retorno.TipoOcupacao = retorno.TipoOcupacoes.Where(x => x.TipoOcupacaoId.Equals(retorno.TipoOcupacaoId)).Select(x => x.Nome).FirstOrDefault();
             retorno.Regionais = new SelectList(ObtemRegionais(), "RegionalId", "Nome");
             retorno.ResidenciaConservacoes = new SelectList(ObtemResidenciaConservacoes(), "ResidenciaConservacaoId", "Nome");
             retorno.OrigemSolicitacoes = new SelectList(ObtemOrigemSolicitacoes(), "OrigemSolicitacaoId", "Nome");
@@ -894,7 +894,7 @@ namespace DER.WebApp.Controllers
             return tipoDeDocumentoOcupacaoBLL.ObtemTipoDeDocumentosOcupacao();
         }
 
-        private List<TipoOcupacaoViewModel> ObtemTipoOcupacoes()
+        private List<TipoDeOcupacaoViewModel> ObtemTipoOcupacoes()
         {
             return tipoOcupacoesBLL.ObtemTipoOcupacoes();
         }

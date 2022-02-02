@@ -29,7 +29,7 @@ namespace DER.WebApp.Infra.DAO
             {
                 using (var conn = new SqlConnection(connectionString))
                 {
-                    using (var command = new SqlCommand("STP_SEL_TIPOOCUPACAO", conn))
+                    using (var command = new SqlCommand("STP_SEL_TIPO_OCUPACAO", conn))
                     {
                         command.CommandType = CommandType.StoredProcedure;
                         conn.Open();
@@ -67,7 +67,7 @@ namespace DER.WebApp.Infra.DAO
             {
                 using (var conn = new SqlConnection(connectionString))
                 {
-                    using (var command = new SqlCommand("STP_INS_TIPOOCUPACAO", conn))
+                    using (var command = new SqlCommand("STP_INS_TIPO_OCUPACAO", conn))
                     {
                         command.CommandType = CommandType.StoredProcedure;
                         conn.Open();
@@ -96,7 +96,7 @@ namespace DER.WebApp.Infra.DAO
             {
                 using (var conn = new SqlConnection(connectionString))
                 {
-                    using (var command = new SqlCommand("STP_UPD_TIPOOCUPACAO", conn))
+                    using (var command = new SqlCommand("STP_UPD_TIPO_OCUPACAO", conn))
                     {
                         command.CommandType = CommandType.StoredProcedure;
                         conn.Open();
@@ -126,7 +126,7 @@ namespace DER.WebApp.Infra.DAO
             {
                 using (var conn = new SqlConnection(connectionString))
                 {
-                    using (var command = new SqlCommand("STP_SEL_TIPOOCUPACAO_ID", conn))
+                    using (var command = new SqlCommand("STP_SEL_TIPO_OCUPACAO_ID", conn))
                     {
                         command.CommandType = CommandType.StoredProcedure;
                         conn.Open();
@@ -159,7 +159,7 @@ namespace DER.WebApp.Infra.DAO
 
             using (var conn = new SqlConnection(connectionString))
             {
-                using (var command = new SqlCommand("STP_DEL_TIPOOCUPACAO", conn))
+                using (var command = new SqlCommand("STP_DEL_TIPO_OCUPACAO", conn))
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Add(new SqlParameter("@tipo_ocupacao_id", model.tipo_ocupacao_id));

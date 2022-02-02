@@ -271,7 +271,7 @@ namespace DER.WebApp.Controllers
             return trechosBLL.ObtemTrechos();
         }
 
-        private List<TipoOcupacaoViewModel> ObtemTipoOcupacoes()
+        private List<TipoDeOcupacaoViewModel> ObtemTipoOcupacoes()
         {
             return tipoOcupacoesBLL.ObtemTipoOcupacoes();
         }

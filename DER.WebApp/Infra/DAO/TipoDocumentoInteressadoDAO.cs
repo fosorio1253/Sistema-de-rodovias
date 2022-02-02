@@ -29,7 +29,7 @@ namespace DER.WebApp.Infra.DAO
             {
                 using (var conn = new SqlConnection(connectionString))
                 {
-                    using (var command = new SqlCommand("STP_SEL_TIPODOCUMENTOINTERESSADO", conn))
+                    using (var command = new SqlCommand("STP_SEL_TIPO_DOCUMENTO_INTERESSADO", conn))
                     {
                         command.CommandType = CommandType.StoredProcedure;
                         conn.Open();
@@ -42,7 +42,7 @@ namespace DER.WebApp.Infra.DAO
                         {
                             var retorno = new TipoDocumentoInteressado();
                             retorno.tipo_documento_interessado_id = result["tipo_documento_interessado_id"] is DBNull ? 0 : Convert.ToInt32(result["tipo_documento_interessado_id"]);
-                            retorno.descricao = result["descri��o"] is DBNull ? string.Empty : result["descri��o"].ToString();
+                            retorno.descricao = result["descricao"] is DBNull ? string.Empty : result["descricao"].ToString();
                             retorno.tipo_interessado = result["tipo_interessado"] is DBNull ? 0 : Convert.ToInt32(result["tipo_interessado"]);
 
                             lretorno.Add(retorno);
@@ -66,12 +66,12 @@ namespace DER.WebApp.Infra.DAO
             {
                 using (var conn = new SqlConnection(connectionString))
                 {
-                    using (var command = new SqlCommand("STP_INS_TIPODOCUMENTOINTERESSADO", conn))
+                    using (var command = new SqlCommand("STP_INS_TIPO_DOCUMENTO_INTERESSADO", conn))
                     {
                         command.CommandType = CommandType.StoredProcedure;
                         conn.Open();
                         command.Parameters.Add(new SqlParameter("@tipo_documento_interessado_id", domain.tipo_documento_interessado_id));
-                        command.Parameters.Add(new SqlParameter("@descri��o", domain.descricao));
+                        command.Parameters.Add(new SqlParameter("@descricao", domain.descricao));
                         command.Parameters.Add(new SqlParameter("@tipo_interessado", domain.tipo_interessado));
                         var result = command.ExecuteScalar();
                         command.Parameters.Clear();
@@ -94,12 +94,12 @@ namespace DER.WebApp.Infra.DAO
             {
                 using (var conn = new SqlConnection(connectionString))
                 {
-                    using (var command = new SqlCommand("STP_UPD_TIPODOCUMENTOINTERESSADO", conn))
+                    using (var command = new SqlCommand("STP_UPD_TIPO_DOCUMENTO_INTERESSADO", conn))
                     {
                         command.CommandType = CommandType.StoredProcedure;
                         conn.Open();
                         command.Parameters.Add(new SqlParameter("@tipo_documento_interessado_id", domain.tipo_documento_interessado_id));
-                        command.Parameters.Add(new SqlParameter("@descri��o", domain.descricao));
+                        command.Parameters.Add(new SqlParameter("@descricao", domain.descricao));
                         command.Parameters.Add(new SqlParameter("@tipo_interessado", domain.tipo_interessado));
                         var result = command.ExecuteNonQuery();
                         conn.Close();
@@ -123,7 +123,7 @@ namespace DER.WebApp.Infra.DAO
             {
                 using (var conn = new SqlConnection(connectionString))
                 {
-                    using (var command = new SqlCommand("STP_SEL_TIPODOCUMENTOINTERESSADO_ID", conn))
+                    using (var command = new SqlCommand("STP_SEL_TIPO_DOCUMENTO_INTERESSADO_ID", conn))
                     {
                         command.CommandType = CommandType.StoredProcedure;
                         conn.Open();
@@ -134,7 +134,7 @@ namespace DER.WebApp.Infra.DAO
                         while (result.Read())
                         {
                             retorno.tipo_documento_interessado_id = result["tipo_documento_interessado_id"] is DBNull ? 0 : Convert.ToInt32(result["tipo_documento_interessado_id"]);
-                            retorno.descricao = result["descri��o"] is DBNull ? string.Empty : result["descricao"].ToString();
+                            retorno.descricao = result["descricao"] is DBNull ? string.Empty : result["descricao"].ToString();
                             retorno.tipo_interessado = result["tipo_interessado"] is DBNull ? 0 : Convert.ToInt32(result["tipo_interessado"]);
                         }
                         conn.Close();
@@ -155,7 +155,7 @@ namespace DER.WebApp.Infra.DAO
 
             using (var conn = new SqlConnection(connectionString))
             {
-                using (var command = new SqlCommand("STP_DEL_TIPODOCUMENTOINTERESSADO", conn))
+                using (var command = new SqlCommand("STP_DEL_TIPO_DOCUMENTO_INTERESSADO", conn))
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Add(new SqlParameter("@tipo_documento_interessado_id", model.tipo_documento_interessado_id));
