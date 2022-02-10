@@ -24,7 +24,23 @@ namespace DER.WebApp.Domain.Business
         {
             try
             {
-                var model = ViewModelToModel(viewModel);
+                var model = ConvertModel(viewModel);
+
+                return ExistsById(model.ua_id) ?
+                    uaDAO.Update(model) :
+                    uaDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        public bool Save(List<DadoMestreTabelaValoresViewModel> viewModel)
+        {
+            try
+            {
+                var model = ConvertModel(ConvertModel(viewModel));
 
                 return ExistsById(model.ua_id) ?
                     uaDAO.Update(model) :
@@ -40,7 +56,7 @@ namespace DER.WebApp.Domain.Business
         {
             try
             {
-                return Load().Select(x => ModelToViewModel(x)).ToList();
+                return Load().Select(x => ConvertModel(x)).ToList();
             }
             catch (Exception e)
             {
@@ -64,7 +80,7 @@ namespace DER.WebApp.Domain.Business
         {
             try
             {
-                var model = ViewModelToModel(viewModel);
+                var model = ConvertModel(viewModel);
                 return ExistsById(model.ua_id) ?
                     uaDAO.Delete(model) : false;
             }
@@ -100,7 +116,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private Ua ViewModelToModel(UaViewModel model)
+        private Ua ConvertModel(UaViewModel model)
         {
             try
             {
@@ -119,7 +135,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private UaViewModel ModelToViewModel(Ua model)
+        private UaViewModel ConvertModel(Ua model)
         {
             try
             {
@@ -131,6 +147,25 @@ namespace DER.WebApp.Domain.Business
                 retorno.regional = model.regional;
 
                 return retorno;
+            }
+            catch (Exception e)
+            {
+                return new UaViewModel();
+            }
+        }
+
+        private UaViewModel ConvertModel(List<DadoMestreTabelaValoresViewModel> lmodel)
+        {
+            try
+            {
+                return new UaViewModel()
+                {
+                    ua_id = Convert.ToInt32(lmodel.Where(y => y.nome_coluna.Equals("ua_id")).Select(y => y.valor).FirstOrDefault()),
+                    nome_ua = lmodel.Where(y => y.nome_coluna.Equals("nome_ua")).Select(y => y.valor).FirstOrDefault(),
+                    regional = lmodel.Where(y => y.nome_coluna.Equals("regional")).Select(y => y.valor).FirstOrDefault(),
+                    sigla = lmodel.Where(y => y.nome_coluna.Equals("sigla")).Select(y => y.valor).FirstOrDefault(),
+                    unidade = lmodel.Where(y => y.nome_coluna.Equals("unidade")).Select(y => y.valor).FirstOrDefault()
+                };
             }
             catch (Exception e)
             {

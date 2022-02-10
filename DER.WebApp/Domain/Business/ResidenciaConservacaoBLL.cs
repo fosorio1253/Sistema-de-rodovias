@@ -24,7 +24,23 @@ namespace DER.WebApp.Domain.Business
         {
             try
             {
-                var model = ViewModelToModel(viewModel);
+                var model = ConvertModel(viewModel);
+
+                return ExistsById(model.residencia_conservacao_id) ?
+                    residenciaconservacaoDAO.Update(model) :
+                    residenciaconservacaoDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        public bool Save(List<DadoMestreTabelaValoresViewModel> viewModel)
+        {
+            try
+            {
+                var model = ConvertModel(ConvertModel(viewModel));
 
                 return ExistsById(model.residencia_conservacao_id) ?
                     residenciaconservacaoDAO.Update(model) :
@@ -40,7 +56,7 @@ namespace DER.WebApp.Domain.Business
         {
             try
             {
-                return Load().Select(x => ModelToViewModel(x)).ToList();
+                return Load().Select(x => ConvertModel(x)).ToList();
             }
             catch (Exception e)
             {
@@ -64,7 +80,7 @@ namespace DER.WebApp.Domain.Business
         {
             try
             {
-                var model = ViewModelToModel(viewModel);
+                var model = ConvertModel(viewModel);
                 return ExistsById(model.residencia_conservacao_id) ?
                     residenciaconservacaoDAO.Delete(model) : false;
             }
@@ -100,7 +116,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private ResidenciaConservacao ViewModelToModel(ResidenciaConservacaoViewModel model)
+        private ResidenciaConservacao ConvertModel(ResidenciaConservacaoViewModel model)
         {
             try
             {
@@ -117,7 +133,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private ResidenciaConservacaoViewModel ModelToViewModel(ResidenciaConservacao model)
+        private ResidenciaConservacaoViewModel ConvertModel(ResidenciaConservacao model)
         {
             try
             {
@@ -127,6 +143,23 @@ namespace DER.WebApp.Domain.Business
                 retorno.Sigla = model.Sigla;
 
                 return retorno;
+            }
+            catch (Exception e)
+            {
+                return new ResidenciaConservacaoViewModel();
+            }
+        }
+
+        private ResidenciaConservacaoViewModel ConvertModel(List<DadoMestreTabelaValoresViewModel> lmodel)
+        {
+            try
+            {
+                return new ResidenciaConservacaoViewModel()
+                {
+                    residencia_conservacao_id = Convert.ToInt32(lmodel.Where(y => y.nome_coluna.Equals("residencia_conservacao_id")).Select(y => y.valor).FirstOrDefault()),
+                    Nome = lmodel.Where(y => y.nome_coluna.Equals("Nome")).Select(y => y.valor).FirstOrDefault(),
+                    Sigla = lmodel.Where(y => y.nome_coluna.Equals("Sigla")).Select(y => y.valor).FirstOrDefault()
+                };
             }
             catch (Exception e)
             {

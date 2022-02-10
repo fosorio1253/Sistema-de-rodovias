@@ -24,7 +24,23 @@ namespace DER.WebApp.Domain.Business
         {
             try
             {
-                var model = ViewModelToModel(viewModel);
+                var model = ConvertModel(viewModel);
+
+                return ExistsById(model.unidade_id) ?
+                    unidadeDAO.Update(model) :
+                    unidadeDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        public bool Save(List<DadoMestreTabelaValoresViewModel> viewModel)
+        {
+            try
+            {
+                var model = ConvertModel(ConvertModel(viewModel));
 
                 return ExistsById(model.unidade_id) ?
                     unidadeDAO.Update(model) :
@@ -40,7 +56,7 @@ namespace DER.WebApp.Domain.Business
         {
             try
             {
-                return Load().Select(x => ModelToViewModel(x)).ToList();
+                return Load().Select(x => ConvertModel(x)).ToList();
             }
             catch (Exception e)
             {
@@ -64,7 +80,7 @@ namespace DER.WebApp.Domain.Business
         {
             try
             {
-                var model = ViewModelToModel(viewModel);
+                var model = ConvertModel(viewModel);
                 return ExistsById(model.unidade_id) ?
                     unidadeDAO.Delete(model) : false;
             }
@@ -100,7 +116,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private Unidade ViewModelToModel(UnidadeViewModel model)
+        private Unidade ConvertModel(UnidadeViewModel model)
         {
             try
             {
@@ -117,7 +133,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private UnidadeViewModel ModelToViewModel(Unidade model)
+        private UnidadeViewModel ConvertModel(Unidade model)
         {
             try
             {
@@ -127,6 +143,22 @@ namespace DER.WebApp.Domain.Business
                 retorno.nome = model.nome;
 
                 return retorno;
+            }
+            catch (Exception e)
+            {
+                return new UnidadeViewModel();
+            }
+        }
+
+        private UnidadeViewModel ConvertModel(List<DadoMestreTabelaValoresViewModel> lmodel)
+        {
+            try
+            {
+                return new UnidadeViewModel()
+                {
+                    unidade_id = Convert.ToInt32(lmodel.Where(y => y.nome_coluna.Equals("unidade_id")).Select(y => y.valor).FirstOrDefault()),
+                    nome = lmodel.Where(y => y.nome_coluna.Equals("nome")).Select(y => y.valor).FirstOrDefault()
+                };
             }
             catch (Exception e)
             {

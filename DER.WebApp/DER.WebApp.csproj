@@ -252,6 +252,7 @@
     <Compile Include="Domain\Business\ConcessionariaBLL.cs" />
     <Compile Include="Domain\Business\ConfiguracaoSistemaBLL.cs" />
     <Compile Include="Domain\Business\ConsultarRodoviasBLL.cs" />
+    <Compile Include="Domain\Business\DadoMestreBLL.cs" />
     <Compile Include="Domain\Business\DispositivoBLL.cs" />
     <Compile Include="Domain\Business\DispositivosBLL.cs" />
     <Compile Include="Domain\Business\DivisaoRegionalBLL.cs" />
@@ -409,6 +410,7 @@
     <Compile Include="Domain\Models\Concessionaria.cs" />
     <Compile Include="Domain\Models\ConfiguracoesSistema.cs" />
     <Compile Include="Domain\Models\Constants\EnumUtility.cs" />
+    <Compile Include="Domain\Models\DadoMestre.cs" />
     <Compile Include="Domain\Models\DivisaoRegional.cs" />
     <Compile Include="Domain\Models\DominioAdministradores.cs" />
     <Compile Include="Domain\Models\DominioCircunscricao.cs" />
@@ -588,6 +590,7 @@
     <Compile Include="Infra\DAO\CercasLevantamentoDAO.cs" />
     <Compile Include="Infra\DAO\ConcessionariaDAO.cs" />
     <Compile Include="Infra\DAO\ConfiguracoesSistemaDAO.cs" />
+    <Compile Include="Infra\DAO\DadoMestreDAO.cs" />
     <Compile Include="Infra\DAO\DadosMestresDAO.cs" />
     <Compile Include="Infra\DAO\DispositivoDAO.cs" />
     <Compile Include="Infra\DAO\DivisaoRegionalDAO.cs" />
@@ -790,6 +793,8 @@
     <Compile Include="ViewModels\AssuntoViewModel.cs" />
     <Compile Include="ViewModels\CercasLevantamentoViewModel.cs" />
     <Compile Include="ViewModels\ConcessionariaViewModel.cs" />
+    <Compile Include="ViewModels\DadoMestreTabelaViewModel.cs" />
+    <Compile Include="ViewModels\DadoMestreViewModel.cs" />
     <Compile Include="ViewModels\DispositivoViewModel.cs" />
     <Compile Include="ViewModels\DivisaoRegionalViewModel.cs" />
     <Compile Include="ViewModels\DominioAdministradoresViewModel.cs" />
@@ -1191,7 +1196,6 @@
     <Content Include="Views\NaoAutorizado\Index.cshtml" />
     <Content Include="Views\Login\NovoUsuario.cshtml" />
     <Content Include="Views\Login\AlteraSenha.cshtml" />
-    <Content Include="Views\DadosMestres\List.cshtml" />
     <Content Include="Views\DadosMestres\Novo.cshtml" />
     <Content Include="Views\UsuarioExterno\Novo.cshtml" />
     <Content Include="web.config" />
@@ -1232,6 +1236,9 @@
     <Content Include="Views\GestaoOcupacoes\_TabAutorizacao.cshtml" />
     <Content Include="Views\GestaoOcupacoes\_TabAcoesJudiciais.cshtml" />
     <Content Include="Views\GestaoOcupacoes\Novo - Cópia .cshtml" />
+    <Content Include="Views\DadosMestres\NovoOld.cshtml" />
+    <Content Include="Views\DadosMestres\List.cshtml" />
+    <Content Include="Views\DadosMestres\ListOld.cshtml" />
     <None Include="Views\GestaoOcupacoes\_TabsRegularizacao.cshtml" />
     <Content Include="Views\GestaoOcupacoes\_TabsAcoesJudiciais.cshtml" />
     <Content Include="Views\Inadimplentes\Index.cshtml" />

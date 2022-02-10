@@ -36,6 +36,22 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(List<DadoMestreTabelaValoresViewModel> viewModel)
+        {
+            try
+            {
+                var model = ConvertModel(ConvertModel(viewModel));
+
+                return ExistsById(model.tipo_implantacao_id) ?
+                    tipoImplantacaoDAO.Update(model) :
+                    tipoImplantacaoDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<TipoImplantacaoViewModel> LoadView()
         {
             try
@@ -125,6 +141,22 @@ namespace DER.WebApp.Domain.Business
                 retorno.Nome = model.nome;
 
                 return retorno;
+            }
+            catch (Exception e)
+            {
+                return new TipoImplantacaoViewModel();
+            }
+        }
+
+        private TipoImplantacaoViewModel ConvertModel(List<DadoMestreTabelaValoresViewModel> lmodel)
+        {
+            try
+            {
+                return new TipoImplantacaoViewModel()
+                {
+                    TipoImplantacaoId = Convert.ToInt32(lmodel.Where(y => y.nome_coluna.Equals("TipoImplantacaoId")).Select(y => y.valor).FirstOrDefault()),
+                    Nome = lmodel.Where(y => y.nome_coluna.Equals("Nome")).Select(y => y.valor).FirstOrDefault()
+                };
             }
             catch (Exception e)
             {

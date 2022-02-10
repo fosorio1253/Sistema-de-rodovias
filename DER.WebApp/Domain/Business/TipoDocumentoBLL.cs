@@ -37,6 +37,22 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(List<DadoMestreTabelaValoresViewModel> viewModel)
+        {
+            try
+            {
+                var model = ConvertModel(ConvertModel(viewModel));
+
+                return ExistsById(model.tipo_documento_id) ?
+                    tipoDocumentoDAO.Update(model) :
+                    tipoDocumentoDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<TipoDocumentoViewModel> LoadView()
         {
             try
@@ -126,6 +142,22 @@ namespace DER.WebApp.Domain.Business
                 retorno.descricao = model.descricao;
 
                 return retorno;
+            }
+            catch (Exception e)
+            {
+                return new TipoDocumentoViewModel();
+            }
+        }
+
+        private TipoDocumentoViewModel ConvertModel(List<DadoMestreTabelaValoresViewModel> lmodel)
+        {
+            try
+            {
+                return new TipoDocumentoViewModel()
+                {
+                    tipo_documento_id = Convert.ToInt32(lmodel.Where(y => y.nome_coluna.Equals("tipo_documento_id")).Select(y => y.valor).FirstOrDefault()),
+                    descricao = lmodel.Where(y => y.nome_coluna.Equals("descricao")).Select(y => y.valor).FirstOrDefault()
+                };
             }
             catch (Exception e)
             {

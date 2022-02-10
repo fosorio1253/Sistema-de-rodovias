@@ -18,7 +18,8 @@ namespace DER.WebApp.Controllers
         // GET: DadosMaster
         public ActionResult List()
         {
-            var tabelas = dadosMestresBLL.obtemTodasTabelas();
+            //var tabelas = dadosMestresBLL.obtemTodasTabelas();
+            var tabelas = dadosMestresBLL.ObtemDadoMestre();
             return View(tabelas);
         }
 
@@ -26,18 +27,20 @@ namespace DER.WebApp.Controllers
         public ActionResult Editar(string id)
         {
             obtemPermissoes(Permissoes.DadosMestresCodigo + id);
-            var tabela = dadosMestresBLL.obtemTabela(id);
+            //var tabela = dadosMestresBLL.obtemTabela(id);
+            var tabela = dadosMestresBLL.ObtemDadoMestreTabela(id);
             return View("novo", tabela);
         }
 
         public ActionResult Visualizar(string id)
         {
             obtemPermissoes(Permissoes.DadosMestresCodigo + id);
-            var tabela = dadosMestresBLL.obtemTabela(id);
+            //var tabela = dadosMestresBLL.obtemTabela(id);
+            var tabela = dadosMestresBLL.ObtemDadoMestreTabela(id);
             return View("novo", tabela);
         }
 
-        public ActionResult Salvar(DadosMestresRetornoViewModel dadosMestres)
+        public ActionResult Salvar(DadoMestreTabelaViewModel dadosMestres)
         {
             var valid = dadosMestresBLL.Salvar(dadosMestres);
             return Json(new { status = valid });

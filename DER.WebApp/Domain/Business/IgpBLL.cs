@@ -24,7 +24,23 @@ namespace DER.WebApp.Domain.Business
         {
             try
             {
-                var model = ViewModelToModel(viewModel);
+                var model = ConvertModel(viewModel);
+
+                return ExistsById(model.IGP_id) ?
+                    igpDAO.Update(model) :
+                    igpDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        public bool Save(List<DadoMestreTabelaValoresViewModel> viewModel)
+        {
+            try
+            {
+                var model = ConvertModel(ConvertModel(viewModel));
 
                 return ExistsById(model.IGP_id) ?
                     igpDAO.Update(model) :
@@ -40,7 +56,7 @@ namespace DER.WebApp.Domain.Business
         {
             try
             {
-                return Load().Select(x => ModelToViewModel(x)).ToList();
+                return Load().Select(x => ConvertModel(x)).ToList();
             }
             catch (Exception e)
             {
@@ -64,7 +80,7 @@ namespace DER.WebApp.Domain.Business
         {
             try
             {
-                var model = ViewModelToModel(viewModel);
+                var model = ConvertModel(viewModel);
                 return ExistsById(model.IGP_id) ?
                     igpDAO.Delete(model) : false;
             }
@@ -100,7 +116,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private Igp ViewModelToModel(IgpViewModel model)
+        private Igp ConvertModel(IgpViewModel model)
         {
             try
             {
@@ -117,7 +133,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private IgpViewModel ModelToViewModel(Igp model)
+        private IgpViewModel ConvertModel(Igp model)
         {
             try
             {
@@ -127,6 +143,23 @@ namespace DER.WebApp.Domain.Business
                 retorno.valor = model.valor;
 
                 return retorno;
+            }
+            catch (Exception e)
+            {
+                return new IgpViewModel();
+            }
+        }
+
+        private IgpViewModel ConvertModel(List<DadoMestreTabelaValoresViewModel> lmodel)
+        {
+            try
+            {
+                return new IgpViewModel()
+                {
+                    IGP_id = Convert.ToInt32(lmodel.Where(y => y.nome_coluna.Equals("IGP_id")).Select(y => y.valor).FirstOrDefault()),
+                    mes_ano = Convert.ToDateTime(lmodel.Where(y => y.nome_coluna.Equals("mes_ano")).Select(y => y.valor).FirstOrDefault()),
+                    valor = Convert.ToDouble(lmodel.Where(y => y.nome_coluna.Equals("valor")).Select(y => y.valor).FirstOrDefault())
+                };
             }
             catch (Exception e)
             {

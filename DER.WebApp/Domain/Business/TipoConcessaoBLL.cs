@@ -23,7 +23,23 @@ namespace DER.WebApp.Domain.Business
         {
             try
             {
-                var model = ViewModelToModel(viewModel);
+                var model = ConvertModel(viewModel);
+
+                return ExistsById(model.tipo_concessao_id) ?
+                    tipoconcessaoDAO.Update(model) :
+                    tipoconcessaoDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        public bool Save(List<DadoMestreTabelaValoresViewModel> viewModel)
+        {
+            try
+            {
+                var model = ConvertModel(ConvertModel(viewModel));
 
                 return ExistsById(model.tipo_concessao_id) ?
                     tipoconcessaoDAO.Update(model) :
@@ -39,7 +55,7 @@ namespace DER.WebApp.Domain.Business
         {
             try
             {
-                return Load().Select(x => ModelToViewModel(x)).ToList();
+                return Load().Select(x => ConvertModel(x)).ToList();
             }
             catch (Exception e)
             {
@@ -63,7 +79,7 @@ namespace DER.WebApp.Domain.Business
         {
             try
             {
-                var model = ViewModelToModel(viewModel);
+                var model = ConvertModel(viewModel);
                 return ExistsById(model.tipo_concessao_id) ?
                     tipoconcessaoDAO.Delete(model) : false;
             }
@@ -99,7 +115,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private TipoConcessao ViewModelToModel(TipoConcessaoViewModel model)
+        private TipoConcessao ConvertModel(TipoConcessaoViewModel model)
         {
             try
             {
@@ -117,7 +133,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private TipoConcessaoViewModel ModelToViewModel(TipoConcessao model)
+        private TipoConcessaoViewModel ConvertModel(TipoConcessao model)
         {
             try
             {
@@ -128,6 +144,24 @@ namespace DER.WebApp.Domain.Business
                 retorno.profundidade_minima = model.profundidade_minima;
 
                 return retorno;
+            }
+            catch (Exception e)
+            {
+                return new TipoConcessaoViewModel();
+            }
+        }
+
+        private TipoConcessaoViewModel ConvertModel(List<DadoMestreTabelaValoresViewModel> lmodel)
+        {
+            try
+            {
+                return new TipoConcessaoViewModel()
+                {
+                    tipo_concessao_id = Convert.ToInt32(lmodel.Where(y => y.nome_coluna.Equals("tipo_concessao_id")).Select(y => y.valor).FirstOrDefault()),
+                    Descricao = lmodel.Where(y => y.nome_coluna.Equals("Descricao")).Select(y => y.valor).FirstOrDefault(),
+                    Documentos = lmodel.Where(y => y.nome_coluna.Equals("Documentos")).Select(y => y.valor).FirstOrDefault(),
+                    profundidade_minima = Convert.ToDouble(lmodel.Where(y => y.nome_coluna.Equals("profundidade_minima")).Select(y => y.valor).FirstOrDefault())
+                };
             }
             catch (Exception e)
             {

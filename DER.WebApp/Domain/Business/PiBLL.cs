@@ -24,7 +24,23 @@ namespace DER.WebApp.Domain.Business
         {
             try
             {
-                var model = ViewModelToModel(viewModel);
+                var model = ConvertModel(viewModel);
+
+                return ExistsById(model.pi_id) ?
+                    piDAO.Update(model) :
+                    piDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        public bool Save(List<DadoMestreTabelaValoresViewModel> viewModel)
+        {
+            try
+            {
+                var model = ConvertModel(ConvertModel(viewModel));
 
                 return ExistsById(model.pi_id) ?
                     piDAO.Update(model) :
@@ -40,7 +56,7 @@ namespace DER.WebApp.Domain.Business
         {
             try
             {
-                return Load().Select(x => ModelToViewModel(x)).ToList();
+                return Load().Select(x => ConvertModel(x)).ToList();
             }
             catch (Exception e)
             {
@@ -64,7 +80,7 @@ namespace DER.WebApp.Domain.Business
         {
             try
             {
-                var model = ViewModelToModel(viewModel);
+                var model = ConvertModel(viewModel);
                 return ExistsById(model.pi_id) ?
                     piDAO.Delete(model) : false;
             }
@@ -100,7 +116,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private Pi ViewModelToModel(PiViewModel model)
+        private Pi ConvertModel(PiViewModel model)
         {
             try
             {
@@ -117,7 +133,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private PiViewModel ModelToViewModel(Pi model)
+        private PiViewModel ConvertModel(Pi model)
         {
             try
             {
@@ -127,6 +143,23 @@ namespace DER.WebApp.Domain.Business
                 retorno.Valor_PI = model.Valor_PI;
 
                 return retorno;
+            }
+            catch (Exception e)
+            {
+                return new PiViewModel();
+            }
+        }
+
+        private PiViewModel ConvertModel(List<DadoMestreTabelaValoresViewModel> lmodel)
+        {
+            try
+            {
+                return new PiViewModel()
+                {
+                    pi_id = Convert.ToInt32(lmodel.Where(y => y.nome_coluna.Equals("pi_id")).Select(y => y.valor).FirstOrDefault()),
+                    Mes_Ano = Convert.ToDateTime(lmodel.Where(y => y.nome_coluna.Equals("Mes_Ano")).Select(y => y.valor).FirstOrDefault()),
+                    Valor_PI = Convert.ToDouble(lmodel.Where(y => y.nome_coluna.Equals("Valor_PI")).Select(y => y.valor).FirstOrDefault())
+                };
             }
             catch (Exception e)
             {

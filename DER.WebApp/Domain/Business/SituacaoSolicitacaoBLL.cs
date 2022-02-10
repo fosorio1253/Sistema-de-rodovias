@@ -37,6 +37,22 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(List<DadoMestreTabelaValoresViewModel> viewModel)
+        {
+            try
+            {
+                var model = ConvertModel(ConvertModel(viewModel));
+
+                return ExistsById(model.situacao_solicitacao_id) ?
+                    situacaoSolicitacaoDAO.Update(model) :
+                    situacaoSolicitacaoDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<GestaoOcupacoesSituacaoSolicitacaoViewModel> LoadView()
         {
             try
@@ -126,6 +142,23 @@ namespace DER.WebApp.Domain.Business
                 retorno.Nome = model.nome;
 
                 return retorno;
+            }
+            catch (Exception e)
+            {
+                return new GestaoOcupacoesSituacaoSolicitacaoViewModel();
+            }
+        }
+
+        private GestaoOcupacoesSituacaoSolicitacaoViewModel ConvertModel(List<DadoMestreTabelaValoresViewModel> lmodel)
+        {
+            try
+            {
+                return new GestaoOcupacoesSituacaoSolicitacaoViewModel()
+                {
+                    SituacaoSolicitacaoId = Convert.ToInt32(lmodel.Where(y => y.nome_coluna.Equals("SituacaoSolicitacaoId")).Select(y => y.valor).FirstOrDefault()),
+                    Nome = lmodel.Where(y => y.nome_coluna.Equals("Nome")).Select(y => y.valor).FirstOrDefault(),
+                    Sigla = lmodel.Where(y => y.nome_coluna.Equals("Sigla")).Select(y => y.valor).FirstOrDefault()
+                };
             }
             catch (Exception e)
             {

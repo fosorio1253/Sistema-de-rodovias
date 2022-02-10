@@ -24,7 +24,23 @@ namespace DER.WebApp.Domain.Business
         {
             try
             {
-                var model = ViewModelToModel(viewModel);
+                var model = ConvertModel(viewModel);
+
+                return ExistsById(model.divisao_regional_id) ?
+                    divisaoregionalDAO.Update(model) :
+                    divisaoregionalDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        public bool Save(List<DadoMestreTabelaValoresViewModel> viewModel)
+        {
+            try
+            {
+                var model = ConvertModel(ConvertModel(viewModel));
 
                 return ExistsById(model.divisao_regional_id) ?
                     divisaoregionalDAO.Update(model) :
@@ -40,7 +56,7 @@ namespace DER.WebApp.Domain.Business
         {
             try
             {
-                return Load().Select(x => ModelToViewModel(x)).ToList();
+                return Load().Select(x => ConvertModel(x)).ToList();
             }
             catch (Exception e)
             {
@@ -64,7 +80,7 @@ namespace DER.WebApp.Domain.Business
         {
             try
             {
-                var model = ViewModelToModel(viewModel);
+                var model = ConvertModel(viewModel);
                 return ExistsById(model.divisao_regional_id) ?
                     divisaoregionalDAO.Delete(model) : false;
             }
@@ -100,7 +116,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private DivisaoRegional ViewModelToModel(DivisaoRegionalViewModel model)
+        private DivisaoRegional ConvertModel(DivisaoRegionalViewModel model)
         {
             try
             {
@@ -118,7 +134,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private DivisaoRegionalViewModel ModelToViewModel(DivisaoRegional model)
+        private DivisaoRegionalViewModel ConvertModel(DivisaoRegional model)
         {
             try
             {
@@ -129,6 +145,24 @@ namespace DER.WebApp.Domain.Business
                 retorno.fator_regional = model.fator_regional;
 
                 return retorno;
+            }
+            catch (Exception e)
+            {
+                return new DivisaoRegionalViewModel();
+            }
+        }
+
+        private DivisaoRegionalViewModel ConvertModel(List<DadoMestreTabelaValoresViewModel> lmodel)
+        {
+            try
+            {
+                return new DivisaoRegionalViewModel()
+                {
+                    divisao_regional_id = Convert.ToInt32(lmodel.Where(y => y.nome_coluna.Equals("divisao_regional_id")).Select(y => y.valor).FirstOrDefault()),
+                    descricao = lmodel.Where(y => y.nome_coluna.Equals("descricao")).Select(y => y.valor).FirstOrDefault(),
+                    sigla = lmodel.Where(y => y.nome_coluna.Equals("sigla")).Select(y => y.valor).FirstOrDefault(),
+                    fator_regional = Convert.ToDouble(lmodel.Where(y => y.nome_coluna.Equals("fator_regional")).Select(y => y.valor).FirstOrDefault())
+                };
             }
             catch (Exception e)
             {

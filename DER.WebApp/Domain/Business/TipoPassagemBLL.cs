@@ -36,6 +36,22 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(List<DadoMestreTabelaValoresViewModel> viewModel)
+        {
+            try
+            {
+                var model = ConvertModel(ConvertModel(viewModel));
+
+                return ExistsById(model.tipo_passagem_id) ?
+                    tipoPassagemDAO.Update(model) :
+                    tipoPassagemDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<TipoPassagemViewModel> LoadView()
         {
             try
@@ -125,6 +141,22 @@ namespace DER.WebApp.Domain.Business
                 retorno.Nome = model.nome;
 
                 return retorno;
+            }
+            catch (Exception e)
+            {
+                return new TipoPassagemViewModel();
+            }
+        }
+
+        private TipoPassagemViewModel ConvertModel(List<DadoMestreTabelaValoresViewModel> lmodel)
+        {
+            try
+            {
+                return new TipoPassagemViewModel()
+                {
+                    TipoPassagemId = Convert.ToInt32(lmodel.Where(y => y.nome_coluna.Equals("TipoPassagemId")).Select(y => y.valor).FirstOrDefault()),
+                    Nome = lmodel.Where(y => y.nome_coluna.Equals("Nome")).Select(y => y.valor).FirstOrDefault()
+                };
             }
             catch (Exception e)
             {

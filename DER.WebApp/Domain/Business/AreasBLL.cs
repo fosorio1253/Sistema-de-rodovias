@@ -37,6 +37,22 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(List<DadoMestreTabelaValoresViewModel> viewModel)
+        {
+            try
+            {
+                var model = ConvertModel(ConvertModel(viewModel));
+
+                return ExistsById(model.area_id) ?
+                    areaDAO.Update(model) :
+                    areaDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<AreaViewModel> LoadView()
         {
             try
@@ -126,6 +142,22 @@ namespace DER.WebApp.Domain.Business
                 retorno.Nome = model.nome;
 
                 return retorno;
+            }
+            catch (Exception e)
+            {
+                return new AreaViewModel();
+            }
+        }
+
+        private AreaViewModel ConvertModel(List<DadoMestreTabelaValoresViewModel> lmodel)
+        {
+            try
+            {
+                return new AreaViewModel()
+                {
+                    AreaId = Convert.ToInt32(lmodel.Where(y => y.nome_coluna.Equals("AreaId")).Select(y => y.valor).FirstOrDefault()),
+                    Nome = lmodel.Where(y => y.nome_coluna.Equals("Nome")).Select(y => y.valor).FirstOrDefault()
+                };
             }
             catch (Exception e)
             {

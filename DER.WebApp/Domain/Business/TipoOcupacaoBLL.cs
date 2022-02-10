@@ -24,7 +24,23 @@ namespace DER.WebApp.Domain.Business
         {
             try
             {
-                var model = ViewModelToModel(viewModel);
+                var model = ConvertModel(viewModel);
+
+                return ExistsById(model.tipo_ocupacao_id) ?
+                    tipoocupacaoDAO.Update(model) :
+                    tipoocupacaoDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        public bool Save(List<DadoMestreTabelaValoresViewModel> viewModel)
+        {
+            try
+            {
+                var model = ConvertModel(ConvertModel(viewModel));
 
                 return ExistsById(model.tipo_ocupacao_id) ?
                     tipoocupacaoDAO.Update(model) :
@@ -40,7 +56,7 @@ namespace DER.WebApp.Domain.Business
         {
             try
             {
-                return Load().Select(x => ModelToViewModel(x)).ToList();
+                return Load().Select(x => ConvertModel(x)).ToList();
             }
             catch (Exception e)
             {
@@ -64,7 +80,7 @@ namespace DER.WebApp.Domain.Business
         {
             try
             {
-                var model = ViewModelToModel(viewModel);
+                var model = ConvertModel(viewModel);
                 return ExistsById(model.tipo_ocupacao_id) ?
                     tipoocupacaoDAO.Delete(model) : false;
             }
@@ -100,7 +116,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private TipoOcupacao ViewModelToModel(TipoOcupacaoViewModel model)
+        private TipoOcupacao ConvertModel(TipoOcupacaoViewModel model)
         {
             try
             {
@@ -118,7 +134,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private TipoOcupacaoViewModel ModelToViewModel(TipoOcupacao model)
+        private TipoOcupacaoViewModel ConvertModel(TipoOcupacao model)
         {
             try
             {
@@ -129,6 +145,24 @@ namespace DER.WebApp.Domain.Business
                 retorno.profundidade_minima = model.profundidade_minima;
 
                 return retorno;
+            }
+            catch (Exception e)
+            {
+                return new TipoOcupacaoViewModel();
+            }
+        }
+
+        private TipoOcupacaoViewModel ConvertModel(List<DadoMestreTabelaValoresViewModel> lmodel)
+        {
+            try
+            {
+                return new TipoOcupacaoViewModel()
+                {
+                    tipo_ocupacao_id = Convert.ToInt32(lmodel.Where(y => y.nome_coluna.Equals("tipo_ocupacao_id")).Select(y => y.valor).FirstOrDefault()),
+                    nome = lmodel.Where(y => y.nome_coluna.Equals("nome")).Select(y => y.valor).FirstOrDefault(),
+                    altura_minima = Convert.ToDouble(lmodel.Where(y => y.nome_coluna.Equals("altura_minima")).Select(y => y.valor).FirstOrDefault()),
+                    profundidade_minima = Convert.ToDouble(lmodel.Where(y => y.nome_coluna.Equals("profundidade_minima")).Select(y => y.valor).FirstOrDefault())
+                };
             }
             catch (Exception e)
             {

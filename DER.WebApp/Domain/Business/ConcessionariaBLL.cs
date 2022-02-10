@@ -24,7 +24,23 @@ namespace DER.WebApp.Domain.Business
         {
             try
             {
-                var model = ViewModelToModel(viewModel);
+                var model = ConvertModel(viewModel);
+
+                return ExistsById(model.concessionaria_id) ?
+                    concessionariaDAO.Update(model) :
+                    concessionariaDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        public bool Save(List<DadoMestreTabelaValoresViewModel> viewModel)
+        {
+            try
+            {
+                var model = ConvertModel(ConvertModel(viewModel));
 
                 return ExistsById(model.concessionaria_id) ?
                     concessionariaDAO.Update(model) :
@@ -40,7 +56,7 @@ namespace DER.WebApp.Domain.Business
         {
             try
             {
-                return Load().Select(x => ModelToViewModel(x)).ToList();
+                return Load().Select(x => ConvertModel(x)).ToList();
             }
             catch (Exception e)
             {
@@ -64,7 +80,7 @@ namespace DER.WebApp.Domain.Business
         {
             try
             {
-                var model = ViewModelToModel(viewModel);
+                var model = ConvertModel(viewModel);
                 return ExistsById(model.concessionaria_id) ?
                     concessionariaDAO.Delete(model) : false;
             }
@@ -100,7 +116,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private Concessionaria ViewModelToModel(ConcessionariaViewModel model)
+        private Concessionaria ConvertModel(ConcessionariaViewModel model)
         {
             try
             {
@@ -117,7 +133,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private ConcessionariaViewModel ModelToViewModel(Concessionaria model)
+        private ConcessionariaViewModel ConvertModel(Concessionaria model)
         {
             try
             {
@@ -127,6 +143,23 @@ namespace DER.WebApp.Domain.Business
                 retorno.nome = model.nome;
 
                 return retorno;
+            }
+            catch (Exception e)
+            {
+                return new ConcessionariaViewModel();
+            }
+        }
+
+        private ConcessionariaViewModel ConvertModel(List<DadoMestreTabelaValoresViewModel> lmodel)
+        {
+            try
+            {
+                return new ConcessionariaViewModel()
+                {
+                    concessionaria_id = Convert.ToInt32(lmodel.Where(y => y.nome_coluna.Equals("concessionaria_id")).Select(y => y.valor).FirstOrDefault()),
+                    nome = lmodel.Where(y => y.nome_coluna.Equals("nome")).Select(y => y.valor).FirstOrDefault(),
+                    sigla = lmodel.Where(y => y.nome_coluna.Equals("sigla")).Select(y => y.valor).FirstOrDefault()
+                };
             }
             catch (Exception e)
             {

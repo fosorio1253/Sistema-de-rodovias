@@ -24,7 +24,23 @@ namespace DER.WebApp.Domain.Business
         {
             try
             {
-                var model = ViewModelToModel(viewModel);
+                var model = ConvertModel(viewModel);
+
+                return ExistsById(model.municipio_id) ?
+                    municipioDAO.Update(model) :
+                    municipioDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        public bool Save(List<DadoMestreTabelaValoresViewModel> viewModel)
+        {
+            try
+            {
+                var model = ConvertModel(ConvertModel(viewModel));
 
                 return ExistsById(model.municipio_id) ?
                     municipioDAO.Update(model) :
@@ -40,7 +56,7 @@ namespace DER.WebApp.Domain.Business
         {
             try
             {
-                return Load().Select(x => ModelToViewModel(x)).ToList();
+                return Load().Select(x => ConvertModel(x)).ToList();
             }
             catch (Exception e)
             {
@@ -64,7 +80,7 @@ namespace DER.WebApp.Domain.Business
         {
             try
             {
-                var model = ViewModelToModel(viewModel);
+                var model = ConvertModel(viewModel);
                 return ExistsById(model.municipio_id) ?
                     municipioDAO.Delete(model) : false;
             }
@@ -100,7 +116,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private Municipio ViewModelToModel(MunicipioViewModel model)
+        private Municipio ConvertModel(MunicipioViewModel model)
         {
             try
             {
@@ -118,7 +134,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private MunicipioViewModel ModelToViewModel(Municipio model)
+        private MunicipioViewModel ConvertModel(Municipio model)
         {
             try
             {
@@ -129,6 +145,24 @@ namespace DER.WebApp.Domain.Business
                 retorno.regional = model.regional;
 
                 return retorno;
+            }
+            catch (Exception e)
+            {
+                return new MunicipioViewModel();
+            }
+        }
+
+        private MunicipioViewModel ConvertModel(List<DadoMestreTabelaValoresViewModel> lmodel)
+        {
+            try
+            {
+                return new MunicipioViewModel()
+                {
+                    municipio_id = Convert.ToInt32(lmodel.Where(y => y.nome_coluna.Equals("municipio_id")).Select(y => y.valor).FirstOrDefault()),
+                    municipio = lmodel.Where(y => y.nome_coluna.Equals("municipio")).Select(y => y.valor).FirstOrDefault(),
+                    regional = lmodel.Where(y => y.nome_coluna.Equals("regional")).Select(y => y.valor).FirstOrDefault(),
+                    codigo = lmodel.Where(y => y.nome_coluna.Equals("codigo")).Select(y => y.valor).FirstOrDefault()
+                };
             }
             catch (Exception e)
             {

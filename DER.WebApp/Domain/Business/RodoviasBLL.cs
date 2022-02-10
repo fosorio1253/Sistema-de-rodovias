@@ -24,7 +24,23 @@ namespace DER.WebApp.Domain.Business
         {
             try
             {
-                var model = ViewModelToModel(viewModel);
+                var model = ConvertModel(viewModel);
+
+                return ExistsById(model.rodovia_id) ?
+                    rodoviaDAO.Update(model) :
+                    rodoviaDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        public bool Save(List<DadoMestreTabelaValoresViewModel> viewModel)
+        {
+            try
+            {
+                var model = ConvertModel(ConvertModel(viewModel));
 
                 return ExistsById(model.rodovia_id) ?
                     rodoviaDAO.Update(model) :
@@ -68,7 +84,7 @@ namespace DER.WebApp.Domain.Business
         {
             try
             {
-                return Load().Select(x => ModelToViewModel(x)).ToList();
+                return Load().Select(x => ConvertModel(x)).ToList();
             }
             catch (Exception e)
             {
@@ -92,7 +108,7 @@ namespace DER.WebApp.Domain.Business
         {
             try
             {
-                var model = ViewModelToModel(viewModel);
+                var model = ConvertModel(viewModel);
                 return ExistsById(model.rodovia_id) ?
                     rodoviaDAO.Delete(model) : false;
             }
@@ -140,7 +156,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private Rodovia ViewModelToModel(RodoviaViewModel model)
+        private Rodovia ConvertModel(RodoviaViewModel model)
         {
             try
             {
@@ -164,7 +180,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private RodoviaViewModel ModelToViewModel(Rodovia model)
+        private RodoviaViewModel ConvertModel(Rodovia model)
         {
             try
             {
@@ -181,6 +197,30 @@ namespace DER.WebApp.Domain.Business
                 retorno.rod_km_extensao = model.rod_km_extensao;
 
                 return retorno;
+            }
+            catch (Exception e)
+            {
+                return new RodoviaViewModel();
+            }
+        }
+
+        private RodoviaViewModel ConvertModel(List<DadoMestreTabelaValoresViewModel> lmodel)
+        {
+            try
+            {
+                return new RodoviaViewModel()
+                {
+                    rodovia_id = Convert.ToInt32(lmodel.Where(y => y.nome_coluna.Equals("rodovia_id")).Select(y => y.valor).FirstOrDefault()),
+                    Nome = lmodel.Where(y => y.nome_coluna.Equals("Nome")).Select(y => y.valor).FirstOrDefault(),
+                    jur_id_origem = Convert.ToInt32(lmodel.Where(y => y.nome_coluna.Equals("jur_id_origem")).Select(y => y.valor).FirstOrDefault()),
+                    rod_codigo = lmodel.Where(y => y.nome_coluna.Equals("rod_codigo")).Select(y => y.valor).FirstOrDefault(),
+                    rod_id = Convert.ToInt32(lmodel.Where(y => y.nome_coluna.Equals("rod_id")).Select(y => y.valor).FirstOrDefault()),
+                    rod_km_extensao = Convert.ToDouble(lmodel.Where(y => y.nome_coluna.Equals("rod_km_extensao")).Select(y => y.valor).FirstOrDefault()),
+                    rod_km_final = Convert.ToDouble(lmodel.Where(y => y.nome_coluna.Equals("rod_km_final")).Select(y => y.valor).FirstOrDefault()),
+                    rod_km_inicial = Convert.ToDouble(lmodel.Where(y => y.nome_coluna.Equals("rod_km_inicial")).Select(y => y.valor).FirstOrDefault()),
+                    ror_id = Convert.ToInt32(lmodel.Where(y => y.nome_coluna.Equals("ror_id")).Select(y => y.valor).FirstOrDefault()),
+                    rte_id = Convert.ToInt32(lmodel.Where(y => y.nome_coluna.Equals("rte_id")).Select(y => y.valor).FirstOrDefault())
+                };
             }
             catch (Exception e)
             {

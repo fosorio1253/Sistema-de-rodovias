@@ -10,11 +10,13 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.Reflection;
 using DER.WebApp.ViewModels.GestaoOcupacoes;
+using System.Text;
 
 namespace DER.WebApp.Domain.Business
 {
     public class DadosMestresBLL
     {
+        private DadoMestreBLL dadoMestreBLL;
         private AreasBLL areaBLL;
         private ConcessionariaBLL concessionariaBLL;
         private DivisaoRegionalBLL divisaoRegionalBLL;
@@ -46,6 +48,7 @@ namespace DER.WebApp.Domain.Business
 
         public DadosMestresBLL()
         {
+            dadoMestreBLL = new DadoMestreBLL();
             areaBLL = new AreasBLL();
             concessionariaBLL = new ConcessionariaBLL();
             divisaoRegionalBLL = new DivisaoRegionalBLL();
@@ -75,6 +78,156 @@ namespace DER.WebApp.Domain.Business
             ufespBLL = new UfespBLL();
             unidadeBLL = new UnidadesBLL();
         }
+
+        public List<DadoMestreViewModel> ObtemDadoMestre()
+        {
+            return dadoMestreBLL.LoadView();
+        }
+
+        public DadoMestreTabelaViewModel ObtemDadoMestreTabela(string tabelaId)
+        {
+            var tabela = new DadoMestreTabelaViewModel();
+            tabela.valores = new List<List<DadoMestreTabelaValoresViewModel>>();
+            tabela.nome_tabela = dadoMestreBLL.LoadView().Where(x => x.sigla.Equals(tabelaId)).Select(x => x.nome).FirstOrDefault();
+            tabela.sigla = tabelaId;
+
+            if (tabelaId == "ARE")
+                areaBLL.LoadView().ForEach(x => tabela.valores.Add(CreateDadoMestre(x)));
+            else if (tabelaId == "COS")
+                concessionariaBLL.LoadView().ForEach(x => tabela.valores.Add(CreateDadoMestre(x)));
+            else if (tabelaId == "DRG")
+                divisaoRegionalBLL.LoadView().ForEach(x => tabela.valores.Add(CreateDadoMestre(x)));
+            else if (tabelaId == "IGP")
+                igpBLL.LoadView().ForEach(x => tabela.valores.Add(CreateDadoMestre(x)));
+            else if (tabelaId == "MUN")
+                municipioBLL.LoadView().ForEach(x => tabela.valores.Add(CreateDadoMestre(x)));
+            else if (tabelaId == "NAT")
+                naturezaJuridicaBLL.LoadView().ForEach(x => tabela.valores.Add(CreateDadoMestre(x)));
+            else if (tabelaId == "OAS")
+                assuntoBLL.LoadView().ForEach(x => tabela.valores.Add(CreateDadoMestre(x)));
+            else if (tabelaId == "ORS")
+                origemSolicitacaoBLL.LoadView().ForEach(x => tabela.valores.Add(CreateDadoMestre(x)));
+            else if (tabelaId == "OSE")
+                ocorrenciaSeveridadeBLL.LoadView().ForEach(x => tabela.valores.Add(CreateDadoMestre(x)));
+            else if (tabelaId == "OST")
+                ocorrenciaStatusBLL.LoadView().ForEach(x => tabela.valores.Add(CreateDadoMestre(x)));
+            else if (tabelaId == "OTR")
+                ocorrenciaTrechoBLL.LoadView().ForEach(x => tabela.valores.Add(CreateDadoMestre(x)));
+            else if (tabelaId == "PI")
+                piBLL.LoadView().ForEach(x => tabela.valores.Add(CreateDadoMestre(x)));
+            else if (tabelaId == "REC")
+                residenciaConservacaoBLL.LoadView().ForEach(x => tabela.valores.Add(CreateDadoMestre(x)));
+            else if (tabelaId == "ROD")
+                rodoviaBLL.LoadView().ForEach(x => tabela.valores.Add(CreateDadoMestre(x)));
+            else if (tabelaId == "SIS")
+                situacaoSolicitacaoBLL.LoadView().ForEach(x => tabela.valores.Add(CreateDadoMestre(x)));
+            else if (tabelaId == "SOC")
+                situacaoOcupacaoBLL.LoadView().ForEach(x => tabela.valores.Add(CreateDadoMestre(x)));
+            else if (tabelaId == "TDC")
+                tipoConcessaoBLL.LoadView().ForEach(x => tabela.valores.Add(CreateDadoMestre(x)));
+            else if (tabelaId == "TDD")
+                tipoDocumentoBLL.LoadView().ForEach(x => tabela.valores.Add(CreateDadoMestre(x)));
+            else if (tabelaId == "TDI")
+                tipoImplantacaoBLL.LoadView().ForEach(x => tabela.valores.Add(CreateDadoMestre(x)));
+            else if (tabelaId == "TDP")
+                tipoPassagemBLL.LoadView().ForEach(x => tabela.valores.Add(CreateDadoMestre(x)));
+            else if (tabelaId == "TEM")
+                tipoEmpresaBLL.LoadView().ForEach(x => tabela.valores.Add(CreateDadoMestre(x)));
+            else if (tabelaId == "TIN")
+                tipoInteressadoBLL.LoadView().ForEach(x => tabela.valores.Add(CreateDadoMestre(x)));
+            else if (tabelaId == "TOC")
+                tipoOcupacaoBLL.LoadView().ForEach(x => tabela.valores.Add(CreateDadoMestre(x)));
+            else if (tabelaId == "TPI")
+                tipoDocumentoInteressadoBLL.LoadView().ForEach(x => tabela.valores.Add(CreateDadoMestre(x)));
+            else if (tabelaId == "TPO")
+                tipoDocumentoOcupacaoBLL.LoadView().ForEach(x => tabela.valores.Add(CreateDadoMestre(x)));
+            else if (tabelaId == "UA")
+                uaBLL.LoadView().ForEach(x => tabela.valores.Add(CreateDadoMestre(x)));
+            else if (tabelaId == "UFE")
+                ufespBLL.LoadView().ForEach(x => tabela.valores.Add(CreateDadoMestre(x)));
+            else if (tabelaId == "UNI")
+                unidadeBLL.LoadView().ForEach(x => tabela.valores.Add(CreateDadoMestre(x)));
+
+            return tabela;
+        }
+
+        private List<DadoMestreTabelaValoresViewModel> CreateDadoMestre(object obj)
+        {
+            var lvalor = new List<DadoMestreTabelaValoresViewModel>();
+            obj.GetType().GetProperties().ToList().ForEach(x => lvalor.Add(new DadoMestreTabelaValoresViewModel() { nome_coluna = x.Name, valor = x.GetValue(obj, null).ToString() }));
+            return lvalor;
+        }
+
+        public bool Salvar(DadoMestreTabelaViewModel dadosMestres)
+        {
+            try
+            {
+                if (dadosMestres.sigla == "ARE")
+                    dadosMestres.valores.ForEach(x => areaBLL.Save(x));
+                else if (dadosMestres.sigla == "COS")
+                    dadosMestres.valores.ForEach(x => concessionariaBLL.Save(x));
+                else if (dadosMestres.sigla == "DRG")
+                    dadosMestres.valores.ForEach(x => divisaoRegionalBLL.Save(x));
+                else if (dadosMestres.sigla == "IGP")
+                    dadosMestres.valores.ForEach(x => igpBLL.Save(x));
+                else if (dadosMestres.sigla == "MUN")
+                    dadosMestres.valores.ForEach(x => municipioBLL.Save(x));
+                else if (dadosMestres.sigla == "NAT")
+                    dadosMestres.valores.ForEach(x => naturezaJuridicaBLL.Save(x));
+                else if (dadosMestres.sigla == "OAS")
+                    dadosMestres.valores.ForEach(x => assuntoBLL.Save(x));
+                else if (dadosMestres.sigla == "ORS")
+                    dadosMestres.valores.ForEach(x => origemSolicitacaoBLL.Save(x));
+                else if (dadosMestres.sigla == "OSE")
+                    dadosMestres.valores.ForEach(x => ocorrenciaSeveridadeBLL.Save(x));
+                else if (dadosMestres.sigla == "OST")
+                    dadosMestres.valores.ForEach(x => ocorrenciaStatusBLL.Save(x));
+                else if (dadosMestres.sigla == "OTR")
+                    dadosMestres.valores.ForEach(x => ocorrenciaTrechoBLL.Save(x));
+                else if (dadosMestres.sigla == "PI")
+                    dadosMestres.valores.ForEach(x => piBLL.Save(x));
+                else if (dadosMestres.sigla == "REC")
+                    dadosMestres.valores.ForEach(x => residenciaConservacaoBLL.Save(x));
+                else if (dadosMestres.sigla == "ROD")
+                    dadosMestres.valores.ForEach(x => rodoviaBLL.Save(x));
+                else if (dadosMestres.sigla == "SIS")
+                    dadosMestres.valores.ForEach(x => situacaoSolicitacaoBLL.Save(x));
+                else if (dadosMestres.sigla == "SOC")
+                    dadosMestres.valores.ForEach(x => situacaoOcupacaoBLL.Save(x));
+                else if (dadosMestres.sigla == "TDC")
+                    dadosMestres.valores.ForEach(x => tipoConcessaoBLL.Save(x));
+                else if (dadosMestres.sigla == "TDD")
+                    dadosMestres.valores.ForEach(x => tipoDocumentoBLL.Save(x));
+                else if (dadosMestres.sigla == "TDI")
+                    dadosMestres.valores.ForEach(x => tipoImplantacaoBLL.Save(x));
+                else if (dadosMestres.sigla == "TDP")
+                    dadosMestres.valores.ForEach(x => tipoPassagemBLL.Save(x));
+                else if (dadosMestres.sigla == "TEM")
+                    dadosMestres.valores.ForEach(x => tipoEmpresaBLL.Save(x));
+                else if (dadosMestres.sigla == "TIN")
+                    dadosMestres.valores.ForEach(x => tipoInteressadoBLL.Save(x));
+                else if (dadosMestres.sigla == "TOC")
+                    dadosMestres.valores.ForEach(x => tipoOcupacaoBLL.Save(x));
+                else if (dadosMestres.sigla == "TPI")
+                    dadosMestres.valores.ForEach(x => tipoDocumentoInteressadoBLL.Save(x));
+                else if (dadosMestres.sigla == "TPO")
+                    dadosMestres.valores.ForEach(x => tipoDocumentoOcupacaoBLL.Save(x));
+                else if (dadosMestres.sigla == "UA")
+                    dadosMestres.valores.ForEach(x => uaBLL.Save(x));
+                else if (dadosMestres.sigla == "UFE")
+                    dadosMestres.valores.ForEach(x => ufespBLL.Save(x));
+                else if (dadosMestres.sigla == "UNI")
+                    dadosMestres.valores.ForEach(x => unidadeBLL.Save(x));
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /*
 
         public List<DadosMestresTabela> obtemTodasTabelas()
         {
@@ -587,6 +740,8 @@ namespace DER.WebApp.Domain.Business
                 return false;
             }
         }
+
+        */
 
         public bool Excluir(string tabelaId, int id)
         {

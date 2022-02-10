@@ -37,6 +37,22 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(List<DadoMestreTabelaValoresViewModel> viewModel)
+        {
+            try
+            {
+                var model = ConvertModel(ConvertModel(viewModel));
+
+                return ExistsById(model.ocorrencia_severidade_id) ?
+                    ocorrenciaSeveridadeDAO.Update(model) :
+                    ocorrenciaSeveridadeDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<OcorrenciaSeveridadeViewModel> LoadView()
         {
             try
@@ -126,6 +142,22 @@ namespace DER.WebApp.Domain.Business
                 retorno.nome = model.nome;
 
                 return retorno;
+            }
+            catch (Exception e)
+            {
+                return new OcorrenciaSeveridadeViewModel();
+            }
+        }
+
+        private OcorrenciaSeveridadeViewModel ConvertModel(List<DadoMestreTabelaValoresViewModel> lmodel)
+        {
+            try
+            {
+                return new OcorrenciaSeveridadeViewModel()
+                {
+                    ocorrencia_severidade_id = Convert.ToInt32(lmodel.Where(y => y.nome_coluna.Equals("ocorrencia_severidade_id")).Select(y => y.valor).FirstOrDefault()),
+                    nome = lmodel.Where(y => y.nome_coluna.Equals("nome")).Select(y => y.valor).FirstOrDefault()
+                };
             }
             catch (Exception e)
             {

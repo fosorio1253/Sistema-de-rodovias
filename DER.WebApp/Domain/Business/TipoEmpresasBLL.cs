@@ -37,6 +37,22 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
+        public bool Save(List<DadoMestreTabelaValoresViewModel> viewModel)
+        {
+            try
+            {
+                var model = ConvertModel(ConvertModel(viewModel));
+
+                return ExistsById(model.tipo_empresa_id) ?
+                    tipoEmpresaDAO.Update(model) :
+                    tipoEmpresaDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<TipoEmpresaViewModel> LoadView()
         {
             try
@@ -126,6 +142,22 @@ namespace DER.WebApp.Domain.Business
                 retorno.Nome = model.descricao;
 
                 return retorno;
+            }
+            catch (Exception e)
+            {
+                return new TipoEmpresaViewModel();
+            }
+        }
+
+        private TipoEmpresaViewModel ConvertModel(List<DadoMestreTabelaValoresViewModel> lmodel)
+        {
+            try
+            {
+                return new TipoEmpresaViewModel()
+                {
+                    TipoEmpresaId = Convert.ToInt32(lmodel.Where(y => y.nome_coluna.Equals("TipoEmpresaId")).Select(y => y.valor).FirstOrDefault()),
+                    Nome = lmodel.Where(y => y.nome_coluna.Equals("Nome")).Select(y => y.valor).FirstOrDefault()
+                };
             }
             catch (Exception e)
             {

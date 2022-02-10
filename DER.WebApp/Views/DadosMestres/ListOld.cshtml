@@ -1,4 +1,4 @@
-﻿@model List<DER.WebApp.ViewModels.DadoMestreViewModel>
+﻿@model List < DER.WebApp.Domain.Models.DadosMestresTabela>
 @{
     ViewBag.Title = "SGFD - Tabelas de domínio";
 }
@@ -23,14 +23,14 @@
                 <tbody>
                     @foreach (var item in Model)
                     {
-                        if (User.IsInRole("DDM" + item.sigla))
+                        if(User.IsInRole("DDM"+item.Codigo))
                         {
-                            <tr data-id="@item.sigla">
-                                <th scope="row">@item.nome</th>
-
+                            <tr data-id="@item.Codigo">
+                                <th scope="row">@item.Nome</th>
+                                
                                 <td>
-                                    <button type="submit" onclick="location.href='/DadosMestres/Visualizar/@item.sigla'" @(!User.IsInRole("DDM" + item.sigla + "VIS")) class="btn btn-link"><i class="fa fa-search"></i></button>
-                                    <button type="submit" onclick="location.href='/DadosMestres/Editar/@item.sigla'" @(!User.IsInRole("DDM" + item.sigla + "EDI")) class="btn btn-link"><i class="fa fa-pencil"></i></button>
+                                    <button type="submit" onclick="location.href='/DadosMestres/Visualizar/@item.Codigo'" @(!User.IsInRole("DDM" + item.Codigo + "VIS")) class="btn btn-link"><i class="fa fa-search"></i></button>
+                                    <button type="submit" onclick="location.href='/DadosMestres/Editar/@item.Codigo'" @(!User.IsInRole("DDM" + item.Codigo + "EDI")) class="btn btn-link"><i class="fa fa-pencil"></i></button>
                                 </td>
                             </tr>
                         }

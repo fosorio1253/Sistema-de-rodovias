@@ -23,7 +23,23 @@ namespace DER.WebApp.Domain.Business
         {
             try
             {
-                var model = ViewModelToModel(viewModel);
+                var model = ConvertModel(viewModel);
+
+                return ExistsById(model.tipo_documento_interessado_id) ?
+                    tipodocumentointeressadoDAO.Update(model) :
+                    tipodocumentointeressadoDAO.Inserir(model);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        public bool Save(List<DadoMestreTabelaValoresViewModel> viewModel)
+        {
+            try
+            {
+                var model = ConvertModel(ConvertModel(viewModel));
 
                 return ExistsById(model.tipo_documento_interessado_id) ?
                     tipodocumentointeressadoDAO.Update(model) :
@@ -39,7 +55,7 @@ namespace DER.WebApp.Domain.Business
         {
             try
             {
-                return Load().Select(x => ModelToViewModel(x)).ToList();
+                return Load().Select(x => ConvertModel(x)).ToList();
             }
             catch (Exception e)
             {
@@ -63,7 +79,7 @@ namespace DER.WebApp.Domain.Business
         {
             try
             {
-                var model = ViewModelToModel(viewModel);
+                var model = ConvertModel(viewModel);
                 return ExistsById(model.tipo_documento_interessado_id) ?
                     tipodocumentointeressadoDAO.Delete(model) : false;
             }
@@ -99,7 +115,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private TipoDocumentoInteressado ViewModelToModel(TipoDocumentoInteressadoViewModel model)
+        private TipoDocumentoInteressado ConvertModel(TipoDocumentoInteressadoViewModel model)
         {
             try
             {
@@ -116,7 +132,7 @@ namespace DER.WebApp.Domain.Business
             }
         }
 
-        private TipoDocumentoInteressadoViewModel ModelToViewModel(TipoDocumentoInteressado model)
+        private TipoDocumentoInteressadoViewModel ConvertModel(TipoDocumentoInteressado model)
         {
             try
             {
@@ -126,6 +142,23 @@ namespace DER.WebApp.Domain.Business
                 retorno.tipo_interessado = model.tipo_interessado;
 
                 return retorno;
+            }
+            catch (Exception e)
+            {
+                return new TipoDocumentoInteressadoViewModel();
+            }
+        }
+
+        private TipoDocumentoInteressadoViewModel ConvertModel(List<DadoMestreTabelaValoresViewModel> lmodel)
+        {
+            try
+            {
+                return new TipoDocumentoInteressadoViewModel()
+                {
+                    tipo_documento_interessado_id = Convert.ToInt32(lmodel.Where(y => y.nome_coluna.Equals("tipo_documento_interessado_id")).Select(y => y.valor).FirstOrDefault()),
+                    descricao = lmodel.Where(y => y.nome_coluna.Equals("descricao")).Select(y => y.valor).FirstOrDefault(),
+                    tipo_interessado = Convert.ToInt32(lmodel.Where(y => y.nome_coluna.Equals("tipo_interessado")).Select(y => y.valor).FirstOrDefault())
+                };
             }
             catch (Exception e)
             {
