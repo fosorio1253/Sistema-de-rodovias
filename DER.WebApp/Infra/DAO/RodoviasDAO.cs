@@ -103,7 +103,6 @@ namespace DER.WebApp.Infra.DAO
         public bool Update(Rodovia domain)
         {
             var connectionString = ConfigurationManager.ConnectionStrings["DerContext"].ConnectionString;
-            var oldValue = GetById(domain.rodovia_id);
             try
             {
                 using (var conn = new SqlConnection(connectionString))
@@ -126,49 +125,7 @@ namespace DER.WebApp.Infra.DAO
                         conn.Close();
                     }
                 }
-
-                var value = GetById(domain.rodovia_id);
                 return true;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        public Rodovia GetById(int id)
-        {
-            var connectionString = ConfigurationManager.ConnectionStrings["DerContext"].ConnectionString;
-            var retorno = new Rodovia();
-            try
-            {
-                using (var conn = new SqlConnection(connectionString))
-                {
-                    using (var command = new SqlCommand("STP_SEL_RODOVIA_ID", conn))
-                    {
-                        command.CommandType = CommandType.StoredProcedure;
-                        conn.Open();
-                        command.Parameters.Add(new SqlParameter("@{ Entidade.Campos.First().Nome }", id));
-                        SqlDataReader result = command.ExecuteReader();
-
-                        var dtnull = new DateTime();
-                        while (result.Read())
-                        {
-                            retorno.rodovia_id = result["rodovia_id"] is DBNull ? 0 : Convert.ToInt32(result["rodovia_id"]);
-                            retorno.rod_codigo = result["rod_codigo"] is DBNull ? string.Empty : result["rod_codigo"].ToString();
-                            retorno.Nome = result["Nome"] is DBNull ? string.Empty : result["Nome"].ToString();
-                            retorno.rod_id = result["rod_id"] is DBNull ? 0 : Convert.ToInt32(result["rod_id"]);
-                            retorno.jur_id_origem = result["jur_id_origem"] is DBNull ? 0 : Convert.ToInt32(result["jur_id_origem"]);
-                            retorno.rte_id = result["rte_id"] is DBNull ? 0 : Convert.ToInt32(result["rte_id"]);
-                            retorno.ror_id = result["ror_id"] is DBNull ? 0 : Convert.ToInt32(result["ror_id"]);
-                            retorno.rod_km_inicial = result["rod_km_inicial"] is DBNull ? 0 : Convert.ToDouble(result["rod_km_inicial"]);
-                            retorno.rod_km_final = result["rod_km_final"] is DBNull ? 0 : Convert.ToDouble(result["rod_km_final"]);
-                            retorno.rod_km_extensao = result["rod_km_extensao"] is DBNull ? 0 : Convert.ToDouble(result["rod_km_extensao"]);
-                        }
-                        conn.Close();
-                    }
-                }
-                return retorno;
             }
             catch (Exception ex)
             {
@@ -178,7 +135,6 @@ namespace DER.WebApp.Infra.DAO
 
         public bool Delete(Rodovia model)
         {
-            var oldValue = GetById(model.rodovia_id);
             var connectionString = ConfigurationManager.ConnectionStrings["DerContext"].ConnectionString;
 
             using (var conn = new SqlConnection(connectionString))

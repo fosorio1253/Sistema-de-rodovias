@@ -91,7 +91,6 @@ namespace DER.WebApp.Infra.DAO
         public bool Update(Ufesp domain)
         {
             var connectionString = ConfigurationManager.ConnectionStrings["DerContext"].ConnectionString;
-            var oldValue = GetById(domain.ufesp_id);
             try
             {
                 using (var conn = new SqlConnection(connectionString))
@@ -108,43 +107,7 @@ namespace DER.WebApp.Infra.DAO
                         conn.Close();
                     }
                 }
-
-                var value = GetById(domain.ufesp_id);
                 return true;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        public Ufesp GetById(int id)
-        {
-            var connectionString = ConfigurationManager.ConnectionStrings["DerContext"].ConnectionString;
-            var retorno = new Ufesp();
-            try
-            {
-                using (var conn = new SqlConnection(connectionString))
-                {
-                    using (var command = new SqlCommand("STP_SEL_UFESP_ID", conn))
-                    {
-                        command.CommandType = CommandType.StoredProcedure;
-                        conn.Open();
-                        command.Parameters.Add(new SqlParameter("@{ Entidade.Campos.First().Nome }", id));
-                        SqlDataReader result = command.ExecuteReader();
-
-                        var dtnull = new DateTime();
-                        while (result.Read())
-                        {
-                            retorno.ufesp_id = result["ufesp_id"] is DBNull ? 0 : Convert.ToInt32(result["ufesp_id"]);
-                            retorno.mes_ano = result["mes_ano"] is DBNull ? dtnull : Convert.ToDateTime(result["mes_ano"]);
-                            retorno.valor = result["valor"] is DBNull ? 0 : Convert.ToDouble(result["valor"]);
-                            retorno.p_calculado = result["p_calculado"] is DBNull ? 0 : Convert.ToDouble(result["p_calculado"]);
-                        }
-                        conn.Close();
-                    }
-                }
-                return retorno;
             }
             catch (Exception ex)
             {
@@ -154,7 +117,6 @@ namespace DER.WebApp.Infra.DAO
 
         public bool Delete(Ufesp model)
         {
-            var oldValue = GetById(model.ufesp_id);
             var connectionString = ConfigurationManager.ConnectionStrings["DerContext"].ConnectionString;
 
             using (var conn = new SqlConnection(connectionString))

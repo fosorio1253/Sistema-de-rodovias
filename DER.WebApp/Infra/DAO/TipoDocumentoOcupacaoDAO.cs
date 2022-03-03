@@ -84,7 +84,6 @@ namespace DER.WebApp.Infra.DAO
         public bool Update(TipoDocumentoOcupacao domain)
         {
             var connectionString = ConfigurationManager.ConnectionStrings["DerContext"].ConnectionString;
-            var oldValue = GetById(domain.tipo_documento_ocupao_id);
             try
             {
                 using (var conn = new SqlConnection(connectionString))
@@ -99,41 +98,7 @@ namespace DER.WebApp.Infra.DAO
                         conn.Close();
                     }
                 }
-
-                var value = GetById(domain.tipo_documento_ocupao_id);
                 return true;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        public TipoDocumentoOcupacao GetById(int id)
-        {
-            var connectionString = ConfigurationManager.ConnectionStrings["DerContext"].ConnectionString;
-            var retorno = new TipoDocumentoOcupacao();
-            try
-            {
-                using (var conn = new SqlConnection(connectionString))
-                {
-                    using (var command = new SqlCommand("STP_SEL_TIPO_DOCUMENTO_OCUPACAO_ID", conn))
-                    {
-                        command.CommandType = CommandType.StoredProcedure;
-                        conn.Open();
-                        command.Parameters.Add(new SqlParameter("@{ Entidade.Campos.First().Nome }", id));
-                        SqlDataReader result = command.ExecuteReader();
-
-                        var dtnull = new DateTime();
-                        while (result.Read())
-                        {
-                            retorno.tipo_documento_ocupao_id = result["tipo_documento_ocupao_id"] is DBNull ? 0 : Convert.ToInt32(result["tipo_documento_ocupao_id"]);
-                            retorno.descricao = result["descricao"] is DBNull ? string.Empty : result["nome"].ToString();
-                        }
-                        conn.Close();
-                    }
-                }
-                return retorno;
             }
             catch (Exception ex)
             {
@@ -143,7 +108,6 @@ namespace DER.WebApp.Infra.DAO
 
         public bool Delete(TipoDocumentoOcupacao model)
         {
-            var oldValue = GetById(model.tipo_documento_ocupao_id);
             var connectionString = ConfigurationManager.ConnectionStrings["DerContext"].ConnectionString;
 
             using (var conn = new SqlConnection(connectionString))

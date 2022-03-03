@@ -93,7 +93,6 @@ namespace DER.WebApp.Infra.DAO
         public bool Update(Ua domain)
         {
             var connectionString = ConfigurationManager.ConnectionStrings["DerContext"].ConnectionString;
-            var oldValue = GetById(domain.ua_id);
             try
             {
                 using (var conn = new SqlConnection(connectionString))
@@ -111,44 +110,7 @@ namespace DER.WebApp.Infra.DAO
                         conn.Close();
                     }
                 }
-
-                var value = GetById(domain.ua_id);
                 return true;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        public Ua GetById(int id)
-        {
-            var connectionString = ConfigurationManager.ConnectionStrings["DerContext"].ConnectionString;
-            var retorno = new Ua();
-            try
-            {
-                using (var conn = new SqlConnection(connectionString))
-                {
-                    using (var command = new SqlCommand("STP_SEL_UA_ID", conn))
-                    {
-                        command.CommandType = CommandType.StoredProcedure;
-                        conn.Open();
-                        command.Parameters.Add(new SqlParameter("@{ Entidade.Campos.First().Nome }", id));
-                        SqlDataReader result = command.ExecuteReader();
-
-                        var dtnull = new DateTime();
-                        while (result.Read())
-                        {
-                            retorno.ua_id = result["ua_id"] is DBNull ? 0 : Convert.ToInt32(result["ua_id"]);
-                            retorno.sigla = result["sigla"] is DBNull ? string.Empty : result["sigla"].ToString();
-                            retorno.nome_ua = result["nome_ua"] is DBNull ? string.Empty : result["nome_ua"].ToString();
-                            retorno.unidade = result["unidade"] is DBNull ? string.Empty : result["unidade"].ToString();
-                            retorno.regional = result["regional"] is DBNull ? string.Empty : result["regional"].ToString();
-                        }
-                        conn.Close();
-                    }
-                }
-                return retorno;
             }
             catch (Exception ex)
             {
@@ -158,7 +120,6 @@ namespace DER.WebApp.Infra.DAO
 
         public bool Delete(Ua model)
         {
-            var oldValue = GetById(model.ua_id);
             var connectionString = ConfigurationManager.ConnectionStrings["DerContext"].ConnectionString;
 
             using (var conn = new SqlConnection(connectionString))

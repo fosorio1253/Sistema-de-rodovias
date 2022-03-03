@@ -227,6 +227,7 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="Controllers\APIController.cs" />
+    <Compile Include="Controllers\ApiSgfdController.cs" />
     <Compile Include="Controllers\ConsultarRodoviasController.cs" />
     <Compile Include="Controllers\EmailController.cs" />
     <Compile Include="Controllers\FinanceiroController.cs" />
@@ -241,6 +242,7 @@
     <Compile Include="Domain\Business\ApiDispositivoBLL.cs" />
     <Compile Include="Domain\Business\ApiDrenagemBLL.cs" />
     <Compile Include="Domain\Business\ApiEdificacoesBLL.cs" />
+    <Compile Include="Domain\Business\ApiGetOcupacaoBLL.cs" />
     <Compile Include="Domain\Business\AreaBLL.cs" />
     <Compile Include="Domain\Business\AreasBLL.cs" />
     <Compile Include="Domain\Business\AreasGramadasLevantamentoBLL.cs" />
@@ -787,6 +789,7 @@
     <Compile Include="ViewModels\ApiDispositivoViewModel.cs" />
     <Compile Include="ViewModels\ApiDrenagemViewModel.cs" />
     <Compile Include="ViewModels\ApiEdificacoesViewModel.cs" />
+    <Compile Include="ViewModels\ApiGetOcupacaoRetornoViewModel.cs" />
     <Compile Include="ViewModels\API\APIViewModel.cs" />
     <Compile Include="ViewModels\AreasGramadasLevantamentoViewModel.cs" />
     <Compile Include="ViewModels\ArquivoViewModel.cs" />
@@ -1196,7 +1199,7 @@
     <Content Include="Views\NaoAutorizado\Index.cshtml" />
     <Content Include="Views\Login\NovoUsuario.cshtml" />
     <Content Include="Views\Login\AlteraSenha.cshtml" />
-    <Content Include="Views\DadosMestres\Novo.cshtml" />
+    <Content Include="Views\DadosMestres\novo.cshtml" />
     <Content Include="Views\UsuarioExterno\Novo.cshtml" />
     <Content Include="web.config" />
     <Content Include="Views\ProjetosMelhorias\List.cshtml" />
@@ -1259,6 +1262,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Arquivos\" />
+    <Folder Include="Views\ApiSgfd\" />
     <Folder Include="Views\Job\" />
   </ItemGroup>
   <ItemGroup>

@@ -85,7 +85,6 @@ namespace DER.WebApp.Infra.DAO
         public bool Update(OcorrenciaStatus domain)
         {
             var connectionString = ConfigurationManager.ConnectionStrings["DerContext"].ConnectionString;
-            var oldValue = GetById(domain.ocorrencia_status_id);
             try
             {
                 using (var conn = new SqlConnection(connectionString))
@@ -100,41 +99,7 @@ namespace DER.WebApp.Infra.DAO
                         conn.Close();
                     }
                 }
-
-                var value = GetById(domain.ocorrencia_status_id);
                 return true;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        public OcorrenciaStatus GetById(int id)
-        {
-            var connectionString = ConfigurationManager.ConnectionStrings["DerContext"].ConnectionString;
-            var retorno = new OcorrenciaStatus();
-            try
-            {
-                using (var conn = new SqlConnection(connectionString))
-                {
-                    using (var command = new SqlCommand("STP_SEL_OCORRENCIA_STATUS_ID", conn))
-                    {
-                        command.CommandType = CommandType.StoredProcedure;
-                        conn.Open();
-                        command.Parameters.Add(new SqlParameter("@{ Entidade.Campos.First().Nome }", id));
-                        SqlDataReader result = command.ExecuteReader();
-
-                        var dtnull = new DateTime();
-                        while (result.Read())
-                        {
-                            retorno.ocorrencia_status_id = result["ocorrencia_status_id"] is DBNull ? 0 : Convert.ToInt32(result["ocorrencia_status_id"]);
-                            retorno.nome = result["nome"] is DBNull ? string.Empty : result["nome"].ToString();
-                        }
-                        conn.Close();
-                    }
-                }
-                return retorno;
             }
             catch (Exception ex)
             {
@@ -144,7 +109,6 @@ namespace DER.WebApp.Infra.DAO
 
         public bool Delete(OcorrenciaStatus model)
         {
-            var oldValue = GetById(model.ocorrencia_status_id);
             var connectionString = ConfigurationManager.ConnectionStrings["DerContext"].ConnectionString;
 
             using (var conn = new SqlConnection(connectionString))

@@ -91,7 +91,6 @@ namespace DER.WebApp.Infra.DAO
         public bool Update(DivisaoRegional domain)
         {
             var connectionString = ConfigurationManager.ConnectionStrings["DerContext"].ConnectionString;
-            var oldValue = GetById(domain.divisao_regional_id);
             try
             {
                 using (var conn = new SqlConnection(connectionString))
@@ -108,43 +107,7 @@ namespace DER.WebApp.Infra.DAO
                         conn.Close();
                     }
                 }
-
-                var value = GetById(domain.divisao_regional_id);
                 return true;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        public DivisaoRegional GetById(int id)
-        {
-            var connectionString = ConfigurationManager.ConnectionStrings["DerContext"].ConnectionString;
-            var retorno = new DivisaoRegional();
-            try
-            {
-                using (var conn = new SqlConnection(connectionString))
-                {
-                    using (var command = new SqlCommand("STP_SEL_DIVISAO_REGIONAL_ID", conn))
-                    {
-                        command.CommandType = CommandType.StoredProcedure;
-                        conn.Open();
-                        command.Parameters.Add(new SqlParameter("@{ Entidade.Campos.First().Nome }", id));
-                        SqlDataReader result = command.ExecuteReader();
-
-                        var dtnull = new DateTime();
-                        while (result.Read())
-                        {
-                            retorno.divisao_regional_id = result["divisao_regional_id"] is DBNull ? 0 : Convert.ToInt32(result["divisao_regional_id"]);
-                            retorno.sigla = result["sigla"] is DBNull ? string.Empty : result["sigla"].ToString();
-                            retorno.descricao = result["descricao"] is DBNull ? string.Empty : result["descricao"].ToString();
-                            retorno.fator_regional = result["fator_regional"] is DBNull ? 0 : Convert.ToDouble(result["fator_regional"]);
-                        }
-                        conn.Close();
-                    }
-                }
-                return retorno;
             }
             catch (Exception ex)
             {
@@ -154,7 +117,6 @@ namespace DER.WebApp.Infra.DAO
 
         public bool Delete(DivisaoRegional model)
         {
-            var oldValue = GetById(model.divisao_regional_id);
             var connectionString = ConfigurationManager.ConnectionStrings["DerContext"].ConnectionString;
 
             using (var conn = new SqlConnection(connectionString))

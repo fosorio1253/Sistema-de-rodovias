@@ -85,7 +85,6 @@ namespace DER.WebApp.Infra.DAO
         public bool Update(NaturezaJuridica domain)
         {
             var connectionString = ConfigurationManager.ConnectionStrings["DerContext"].ConnectionString;
-            var oldValue = GetById(domain.natureza_juridica_id);
             try
             {
                 using (var conn = new SqlConnection(connectionString))
@@ -100,41 +99,7 @@ namespace DER.WebApp.Infra.DAO
                         conn.Close();
                     }
                 }
-
-                var value = GetById(domain.natureza_juridica_id);
                 return true;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        public NaturezaJuridica GetById(int id)
-        {
-            var connectionString = ConfigurationManager.ConnectionStrings["DerContext"].ConnectionString;
-            var retorno = new NaturezaJuridica();
-            try
-            {
-                using (var conn = new SqlConnection(connectionString))
-                {
-                    using (var command = new SqlCommand("STP_SEL_NATUREZA_JURIDICA_ID", conn))
-                    {
-                        command.CommandType = CommandType.StoredProcedure;
-                        conn.Open();
-                        command.Parameters.Add(new SqlParameter("@{ Entidade.Campos.First().Nome }", id));
-                        SqlDataReader result = command.ExecuteReader();
-
-                        var dtnull = new DateTime();
-                        while (result.Read())
-                        {
-                            retorno.natureza_juridica_id = result["natureza_juridica_id"] is DBNull ? 0 : Convert.ToInt32(result["natureza_juridica_id"]);
-                            retorno.nome = result["nome"] is DBNull ? string.Empty : result["nome"].ToString();
-                        }
-                        conn.Close();
-                    }
-                }
-                return retorno;
             }
             catch (Exception ex)
             {
@@ -144,7 +109,6 @@ namespace DER.WebApp.Infra.DAO
 
         public bool Delete(NaturezaJuridica model)
         {
-            var oldValue = GetById(model.natureza_juridica_id);
             var connectionString = ConfigurationManager.ConnectionStrings["DerContext"].ConnectionString;
 
             using (var conn = new SqlConnection(connectionString))

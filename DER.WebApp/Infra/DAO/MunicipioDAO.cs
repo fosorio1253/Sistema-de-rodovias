@@ -91,7 +91,6 @@ namespace DER.WebApp.Infra.DAO
         public bool Update(Municipio domain)
         {
             var connectionString = ConfigurationManager.ConnectionStrings["DerContext"].ConnectionString;
-            var oldValue = GetById(domain.municipio_id);
             try
             {
                 using (var conn = new SqlConnection(connectionString))
@@ -108,43 +107,7 @@ namespace DER.WebApp.Infra.DAO
                         conn.Close();
                     }
                 }
-
-                var value = GetById(domain.municipio_id);
                 return true;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        public Municipio GetById(int id)
-        {
-            var connectionString = ConfigurationManager.ConnectionStrings["DerContext"].ConnectionString;
-            var retorno = new Municipio();
-            try
-            {
-                using (var conn = new SqlConnection(connectionString))
-                {
-                    using (var command = new SqlCommand("STP_SEL_MUNICIPIO_ID", conn))
-                    {
-                        command.CommandType = CommandType.StoredProcedure;
-                        conn.Open();
-                        command.Parameters.Add(new SqlParameter("@{ Entidade.Campos.First().Nome }", id));
-                        SqlDataReader result = command.ExecuteReader();
-
-                        var dtnull = new DateTime();
-                        while (result.Read())
-                        {
-                            retorno.municipio_id = result["municipio_id"] is DBNull ? 0 : Convert.ToInt32(result["municipio_id"]);
-                            retorno.codigo = result["codigo"] is DBNull ? string.Empty : result["codigo"].ToString();
-                            retorno.municipio = result["municipio"] is DBNull ? string.Empty : result["municipio"].ToString();
-                            retorno.regional = result["regional"] is DBNull ? string.Empty : result["regional"].ToString();
-                        }
-                        conn.Close();
-                    }
-                }
-                return retorno;
             }
             catch (Exception ex)
             {
@@ -154,7 +117,6 @@ namespace DER.WebApp.Infra.DAO
 
         public bool Delete(Municipio model)
         {
-            var oldValue = GetById(model.municipio_id);
             var connectionString = ConfigurationManager.ConnectionStrings["DerContext"].ConnectionString;
 
             using (var conn = new SqlConnection(connectionString))

@@ -89,7 +89,6 @@ namespace DER.WebApp.Infra.DAO
         public bool Update(Pi domain)
         {
             var connectionString = ConfigurationManager.ConnectionStrings["DerContext"].ConnectionString;
-            var oldValue = GetById(domain.pi_id);
             try
             {
                 using (var conn = new SqlConnection(connectionString))
@@ -105,42 +104,7 @@ namespace DER.WebApp.Infra.DAO
                         conn.Close();
                     }
                 }
-
-                var value = GetById(domain.pi_id);
                 return true;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        public Pi GetById(int id)
-        {
-            var connectionString = ConfigurationManager.ConnectionStrings["DerContext"].ConnectionString;
-            var retorno = new Pi();
-            try
-            {
-                using (var conn = new SqlConnection(connectionString))
-                {
-                    using (var command = new SqlCommand("STP_SEL_PI_ID", conn))
-                    {
-                        command.CommandType = CommandType.StoredProcedure;
-                        conn.Open();
-                        command.Parameters.Add(new SqlParameter("@{ Entidade.Campos.First().Nome }", id));
-                        SqlDataReader result = command.ExecuteReader();
-
-                        var dtnull = new DateTime();
-                        while (result.Read())
-                        {
-                            retorno.pi_id = result["pi_id"] is DBNull ? 0 : Convert.ToInt32(result["pi_id"]);
-                            retorno.Mes_Ano = result["Mes_Ano"] is DBNull ? dtnull : Convert.ToDateTime(result["Mes_Ano"]);
-                            retorno.Valor_PI = result["Valor_PI"] is DBNull ? 0 : Convert.ToDouble(result["Valor_PI"]);
-                        }
-                        conn.Close();
-                    }
-                }
-                return retorno;
             }
             catch (Exception ex)
             {
@@ -150,7 +114,6 @@ namespace DER.WebApp.Infra.DAO
 
         public bool Delete(Pi model)
         {
-            var oldValue = GetById(model.pi_id);
             var connectionString = ConfigurationManager.ConnectionStrings["DerContext"].ConnectionString;
 
             using (var conn = new SqlConnection(connectionString))

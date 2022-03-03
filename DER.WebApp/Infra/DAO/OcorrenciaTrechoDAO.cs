@@ -85,7 +85,6 @@ namespace DER.WebApp.Infra.DAO
         public bool Update(OcorrenciaTrecho domain)
         {
             var connectionString = ConfigurationManager.ConnectionStrings["DerContext"].ConnectionString;
-            var oldValue = GetById(domain.ocorrencia_trecho_id);
             try
             {
                 using (var conn = new SqlConnection(connectionString))
@@ -100,41 +99,7 @@ namespace DER.WebApp.Infra.DAO
                         conn.Close();
                     }
                 }
-
-                var value = GetById(domain.ocorrencia_trecho_id);
                 return true;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        public OcorrenciaTrecho GetById(int id)
-        {
-            var connectionString = ConfigurationManager.ConnectionStrings["DerContext"].ConnectionString;
-            var retorno = new OcorrenciaTrecho();
-            try
-            {
-                using (var conn = new SqlConnection(connectionString))
-                {
-                    using (var command = new SqlCommand("STP_SEL_OCORRENCIA_TRECHO_ID", conn))
-                    {
-                        command.CommandType = CommandType.StoredProcedure;
-                        conn.Open();
-                        command.Parameters.Add(new SqlParameter("@{ Entidade.Campos.First().Nome }", id));
-                        SqlDataReader result = command.ExecuteReader();
-
-                        var dtnull = new DateTime();
-                        while (result.Read())
-                        {
-                            retorno.ocorrencia_trecho_id = result["ocorrencia_trecho_id"] is DBNull ? 0 : Convert.ToInt32(result["ocorrencia_trecho_id"]);
-                            retorno.nome = result["nome"] is DBNull ? string.Empty : result["nome"].ToString();
-                        }
-                        conn.Close();
-                    }
-                }
-                return retorno;
             }
             catch (Exception ex)
             {
@@ -144,7 +109,6 @@ namespace DER.WebApp.Infra.DAO
 
         public bool Delete(OcorrenciaTrecho model)
         {
-            var oldValue = GetById(model.ocorrencia_trecho_id);
             var connectionString = ConfigurationManager.ConnectionStrings["DerContext"].ConnectionString;
 
             using (var conn = new SqlConnection(connectionString))

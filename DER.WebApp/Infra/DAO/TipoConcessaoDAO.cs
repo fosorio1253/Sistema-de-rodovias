@@ -91,7 +91,6 @@ namespace DER.WebApp.Infra.DAO
         public bool Update(TipoConcessao domain)
         {
             var connectionString = ConfigurationManager.ConnectionStrings["DerContext"].ConnectionString;
-            var oldValue = GetById(domain.tipo_concessao_id);
             try
             {
                 using (var conn = new SqlConnection(connectionString))
@@ -108,43 +107,7 @@ namespace DER.WebApp.Infra.DAO
                         conn.Close();
                     }
                 }
-
-                var value = GetById(domain.tipo_concessao_id);
                 return true;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        public TipoConcessao GetById(int id)
-        {
-            var connectionString = ConfigurationManager.ConnectionStrings["DerContext"].ConnectionString;
-            var retorno = new TipoConcessao();
-            try
-            {
-                using (var conn = new SqlConnection(connectionString))
-                {
-                    using (var command = new SqlCommand("STP_SEL_TIPO_CONCESSAO_ID", conn))
-                    {
-                        command.CommandType = CommandType.StoredProcedure;
-                        conn.Open();
-                        command.Parameters.Add(new SqlParameter("@{ Entidade.Campos.First().Nome }", id));
-                        SqlDataReader result = command.ExecuteReader();
-
-                        var dtnull = new DateTime();
-                        while (result.Read())
-                        {
-                            retorno.tipo_concessao_id = result["tipo_concessao_id"] is DBNull ? 0 : Convert.ToInt32(result["tipo_concessao_id"]);
-                            retorno.Descricao = result["Descricao"] is DBNull ? string.Empty : result["Descricao"].ToString();
-                            retorno.Documentos = result["Documentos"] is DBNull ? string.Empty : result["Documentos"].ToString();
-                            retorno.profundidade_minima = result["profundidade_minima"] is DBNull ? 0 : Convert.ToDouble(result["profundidade_minima"]);
-                        }
-                        conn.Close();
-                    }
-                }
-                return retorno;
             }
             catch (Exception ex)
             {
@@ -154,7 +117,6 @@ namespace DER.WebApp.Infra.DAO
 
         public bool Delete(TipoConcessao model)
         {
-            var oldValue = GetById(model.tipo_concessao_id);
             var connectionString = ConfigurationManager.ConnectionStrings["DerContext"].ConnectionString;
 
             using (var conn = new SqlConnection(connectionString))

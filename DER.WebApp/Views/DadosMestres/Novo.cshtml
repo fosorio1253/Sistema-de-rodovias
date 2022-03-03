@@ -141,7 +141,18 @@
         data = {};
         data.Valores = Valores;
         data.TabelaId = $('#hdnTabela').val()
-        var response = POST('/DadosMestres/Salvar', JSON.stringify(data))
+
+        var dados = []
+        
+        for (var i = 0; i < data.Valores.length; i++) {
+            var xx = { "valor": data.Valores[i]["valor"], "nome_coluna": data.Valores[i]["colunaId"] } 
+            dados.push(xx);
+        }
+
+        console.log(data.Valores)
+        console.log(dados)
+
+        var response = POST('/DadosMestres/Salvar', JSON.stringify({ nome_tabela: data.TabelaId, sigla: data.TabelaId, valores: [dados] }))
 
         if (response.status == true) {
             swal({
@@ -164,58 +175,29 @@
 
     function geraForm(tabela, linha) {
         var json = JSON.parse("[" + $('#hdnColunas').val() + "]");
+
+        
         inputs = [];
         $('.form-body').html("");
-        $('.form-body').append($('<input/>', { type: 'hidden', value: tabela, id: 'hdnTabela' }));
-        $('.form-body').append($('<input/>', { type: 'hidden', value: linha, id: 'hdnLinha' }));
+        $('.form-body').append($('<input/>', { type: 'text', value: tabela, hidden: true, id: 'hdnTabela' }));
+        $('.form-body').append($('<input/>', { type: 'text', value: linha, hidden: true, id: 'hdnLinha' }));
+
+        console.log(json)
         json.forEach((e, i) => {
 
 
-            var valor = $($('[data-linha=' + linha + ']')[i])
             var div = "";
-            if (e.tipodadocoluna == 1) {
-                div =
-                    $('<div>', { class: "form-group row" }).append(
-                        $('<label>', { class: 'col-sm-4 col-form-label', html: e.nome }),
-                        $('<div>', { class: 'col-sm-8' }).append(
-                            $('<input>', { required: 'true', name: (valor != null ? valor.attr('data-id') : ""), 'data-coluna': e.id, class: 'form-control', 'data-input': '', value: (valor != null ? valor.html() : ""), maxlength: 100 }),
-                            $('<span>', { id: 'spanerro' + e.id, style: "color:red" })
-                        )
-                    );
-            }
-            if (e.tipodadocoluna == 2) {
-                div =
-                    $('<div>', { class: "form-group row" }).append(
-                        $('<label>', { class: 'col-sm-4 col-form-label', html: e.nome }),
-                        $('<div>', { class: 'col-sm-8' }).append(
-                            $('<input>', { required: 'true', onkeyup: 'moeda(this)', name: (valor != null ? valor.attr('data-id') : ""), 'data-coluna': e.id, class: 'form-control', 'data-input': '', value: (valor != null ? valor.html() : ""), maxlength: 14 }),
-                            $('<span>', { id: 'spanerro' + e.id, style: "color:red" })
-                        )
-                    );
-            }
-            //if (e.tipodadocoluna == 3) {
-            //    div =
-            //        $('<div>', { class: "form-group row" }).append(
-            //            $('<label>', { class: 'col-sm-4 col-form-label', html: e.nome }),
-            //            $('<div>', { class: 'col-sm-8' }).append(
-            //                $('<input>', { required: 'true', id: e.id, onkeyup: 'dataMesAno(this, event)', onkeypress: 'return enumero(event)', 'placeholder': 'MM/AAAA', name: (valor != null ? valor.attr('data-id') : ""), 'data-coluna': e.id, class: 'form-control', 'data-input': '', value: (valor != null ? valor.html() : ""), maxlength: 7 }),
-            //                $('<span>', { id: 'spanerro' + e.id, style: "color:red" })
-            //            )
-            //        );
-            //}
-            if (e.tipodadocoluna == 3) {
-                div =
-                    $('<div>', { class: "form-group row" }).append(
-                        $('<label>', { class: 'col-sm-4 col-form-label', html: e.nome }),
-                        $('<div>', { class: 'col-sm-8' }).append(
-                            $('<input>', { required: 'true', id: e.id, onkeyup: "validarData(this);", 'placeholder': 'MM/AAAA', name: (valor != null ? valor.attr('data-id') : ""), 'data-coluna': e.id, class: 'form-control', 'data-input': '', value: (valor != null ? valor.html() : "") }),
-                            $('<span>', { id: 'spanerro' + e.id, style: "color:red" })
-                        )
-                    );
-            }
-            //onkeyup: 'formata_data(this)',
+
+            div = $('<div>', { class: "form-group row" }).append(
+                $('<label>', { class: 'col-sm-4 col-form-label', html: e.nome }),
+                $('<div>', { class: 'col-sm-8' }).append(
+                    $('<input>', { required: 'true', 'data-coluna': e.nome, class: 'form-control', 'data-input': '', maxlength: 100 }),
+                    $('<span>', { id: 'spanerro' + e.id, style: "color:red" })
+                )
+            );
 
             $('.form-body').append(div)
+            
         });
 
         $('#11').mask('00/0000', { 'translation': { 0: { pattern: /[0-9]/ } } })

@@ -89,7 +89,6 @@ namespace DER.WebApp.Infra.DAO
         public bool Update(Igp domain)
         {
             var connectionString = ConfigurationManager.ConnectionStrings["DerContext"].ConnectionString;
-            var oldValue = GetById(domain.IGP_id);
             try
             {
                 using (var conn = new SqlConnection(connectionString))
@@ -105,42 +104,7 @@ namespace DER.WebApp.Infra.DAO
                         conn.Close();
                     }
                 }
-
-                var value = GetById(domain.IGP_id);
                 return true;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        public Igp GetById(int id)
-        {
-            var connectionString = ConfigurationManager.ConnectionStrings["DerContext"].ConnectionString;
-            var retorno = new Igp();
-            try
-            {
-                using (var conn = new SqlConnection(connectionString))
-                {
-                    using (var command = new SqlCommand("STP_SEL_IGP_ID", conn))
-                    {
-                        command.CommandType = CommandType.StoredProcedure;
-                        conn.Open();
-                        command.Parameters.Add(new SqlParameter("@{ Entidade.Campos.First().Nome }", id));
-                        SqlDataReader result = command.ExecuteReader();
-
-                        var dtnull = new DateTime();
-                        while (result.Read())
-                        {
-                            retorno.IGP_id = result["IGP_id"] is DBNull ? 0 : Convert.ToInt32(result["IGP_id"]);
-                            retorno.mes_ano = result["mes_ano"] is DBNull ? dtnull : Convert.ToDateTime(result["mes_ano"]);
-                            retorno.valor = result["valor"] is DBNull ? 0 : Convert.ToDouble(result["valor"]);
-                        }
-                        conn.Close();
-                    }
-                }
-                return retorno;
             }
             catch (Exception ex)
             {
@@ -150,7 +114,6 @@ namespace DER.WebApp.Infra.DAO
 
         public bool Delete(Igp model)
         {
-            var oldValue = GetById(model.IGP_id);
             var connectionString = ConfigurationManager.ConnectionStrings["DerContext"].ConnectionString;
 
             using (var conn = new SqlConnection(connectionString))
