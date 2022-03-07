@@ -108,9 +108,9 @@ namespace DER.WebApp.Domain.Business
             return retorno;
         }
 
-        public GestaoInteressado ObtemId(int id)
+        public GestaoInteressadosViewModel ObtemId(int id)
         {
-            return gestaoInteressadoDAO.Get(id);
+            return gestaoInteressadoDAO.GetById(id);
         }
 
         public GestaoInteressadoValidatorViewModel Inserir(GestaoInteressadosViewModel viewModel)

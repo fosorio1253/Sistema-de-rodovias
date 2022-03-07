@@ -23,7 +23,6 @@ namespace DER.WebApp.Infra.DAL
         public DbSet<DadosMestresTabela> DadosMestresTabela { get; set; }
         public DbSet<DadosMestresValores> DadosMestresValores { get; set; }
         public DbSet<Emails> Emails { get; set; }
-        public DbSet<GestaoInteressado> GestaoInteressados { get; set; }
         public DbSet<GestaoInteressadoContato> GestaoInteressadosContatos { get; set; }
         public DbSet<GestaoInteressadoEndereco> GestaoInteressadoEnderecos { get; set; }
         public DbSet<GestaoInteressadoDocumento> GestaoInteressadosDocumentos { get; set; }
@@ -55,7 +54,6 @@ namespace DER.WebApp.Infra.DAL
             modelBuilder.Configurations.Add(new GestaoInteressadoContatoMap());
             modelBuilder.Configurations.Add(new GestaoInteressadoDocumentoMap());
             modelBuilder.Configurations.Add(new GestaoInteressadoEnderecoMap());
-            modelBuilder.Configurations.Add(new GestaoInteressadoMap());
             modelBuilder.Configurations.Add(new GestaoInteressadoObservacaoMap());
             modelBuilder.Configurations.Add(new GestaoInteressadoTipoDeConcessaoMap());
             modelBuilder.Configurations.Add(new GrupoMap());

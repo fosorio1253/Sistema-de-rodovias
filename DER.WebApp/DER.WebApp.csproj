@@ -569,7 +569,6 @@
     <Compile Include="Infra\DAL\Map\TipoDocumentoMap.cs" />
     <Compile Include="Infra\DAL\Map\GestaoInteressadoDocumentoMap.cs" />
     <Compile Include="Infra\DAL\Map\GestaoInteressadoEnderecoMap.cs" />
-    <Compile Include="Infra\DAL\Map\GestaoInteressadoMap.cs" />
     <Compile Include="Infra\DAL\Map\GestaoInteressadoObservacaoMap.cs" />
     <Compile Include="Infra\DAL\Map\GestaoInteressadoTipoDeConcessaoMap.cs" />
     <Compile Include="Infra\DAL\Map\GrupoMap.cs" />
